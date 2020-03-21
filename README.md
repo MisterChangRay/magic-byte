@@ -99,8 +99,9 @@ void main() {
 本人目前也是做物联网相关领域的(共享充电宝), 开始的时候也是走了不少弯路,这个项目算是在这工作了1年多的工作总结;
 写完之后才发现谷歌早在13年前就开源了类似框架, 真是学习使人进步; 又重复造轮子了。
 附上谷歌的链接:
-[JavaStract](http://code.google.com/p/javastruct/wiki/HowToUseJavaStruct)
-[Javolution](http://javolution.org/)
+
+- [JavaStract](http://code.google.com/p/javastruct/wiki/HowToUseJavaStruct)
+- [Javolution](http://javolution.org/)
 
 
 
