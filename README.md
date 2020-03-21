@@ -100,4 +100,8 @@ void main() {
 写完之后才发现谷歌早在13年前就开源了类似框架, 真是学习使人进步; 又重复造轮子了。
 附上谷歌的链接:
 
+- [JavaStract](http://code.google.com/p/javastruct/wiki/HowToUseJavaStruct)
+- [Javolution](http://javolution.org/)
+
+
 
