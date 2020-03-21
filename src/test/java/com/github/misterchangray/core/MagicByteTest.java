@@ -1,17 +1,13 @@
 package com.github.misterchangray.core;
 
 
-import com.github.misterchangray.core.entity.Phone;
-import com.github.misterchangray.core.entity.School;
-import com.github.misterchangray.core.entity.Student;
-import com.github.misterchangray.core.entity.Teacher;
+import com.github.misterchangray.core.entity.*;
+import com.github.misterchangray.core.exception.MagicByteException;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class MagicByteTest {
 
@@ -29,7 +25,7 @@ public class MagicByteTest {
 
         byte[] tmp = MagicByte.unpackToByte(student);
 
-        tmp = Arrays.copyOf(tmp, 13);
+        tmp = Arrays.copyOf(tmp, 25);
         Student student1 = MagicByte.pack(tmp, Student.class);
 
 
@@ -46,7 +42,27 @@ public class MagicByteTest {
      * List嵌套
      */
     @Test
-    public void testUnKownField() {
+    public void testUnknownField() throws UnsupportedEncodingException, InstantiationException {
+        UnknownField unknownField = new UnknownField();
+        unknownField.setaDouble(1.2);
+        unknownField.setaFloat((float) 2.3);
+        unknownField.setName("FUCK");
+        unknownField.setStringBuffer(new StringBuffer("bufer"));
+        unknownField.setStringBuilder(new StringBuilder("build"));
+        unknownField.setTime(new Date());
+        unknownField.setTmo(new HashMap<>());
+
+
+        boolean hasException = false;
+        try {
+            byte[] b = MagicByte.unpackToByte(unknownField);
+            UnknownField unknownField1 = MagicByte.pack(b, UnknownField.class);
+
+        } catch (MagicByteException ae) {
+            hasException= true;
+        }
+
+        Assert.assertTrue(hasException);
 
     }
 

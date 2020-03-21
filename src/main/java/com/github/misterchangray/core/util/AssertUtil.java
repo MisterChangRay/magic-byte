@@ -5,11 +5,19 @@ import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 public class AssertUtil {
+
+    public static void assertTypeNotNormalType(Class clazz) {
+        if(Object.class.equals(clazz) || Date.class.equals(clazz) || StringBuilder.class.equals(clazz) ||
+        StringBuffer.class.equals(clazz) || java.sql.Date.class.equals(clazz) || File.class.equals(clazz) ||
+        CalcUtil.isSubClass(clazz, Map.class)) {
+            throw new MagicByteException(String.format("Unsupported data type; %s", clazz.getTypeName()));
+        }
+    }
+
 
     public static void assertSizeNotNull(FieldMetaInfo fieldMetaInfo) {
         MagicField magicField1 = fieldMetaInfo.getMagicField();

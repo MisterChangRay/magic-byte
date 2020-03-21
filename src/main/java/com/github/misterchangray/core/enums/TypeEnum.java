@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.enums;
 
 
+import com.github.misterchangray.core.util.AssertUtil;
 import com.github.misterchangray.core.util.CalcUtil;
 
 import java.util.HashMap;
@@ -63,6 +64,7 @@ public enum TypeEnum {
      * @return
      */
     public static TypeEnum getType(Class clazz) {
+        AssertUtil.assertTypeNotNormalType(clazz);
         if(null != FAST_MAPPING.get(clazz)) return FAST_MAPPING.get(clazz);
         if(clazz.equals(String.class)) return TypeEnum.STRING;
         if(clazz.isArray()) return TypeEnum.ARRAY;
