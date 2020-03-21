@@ -21,7 +21,7 @@ asdasd
 1. 引入Jar包;
 2. `@MagicClass`对当前类进行全局配置
 2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象嵌套
-3. 使用`Magic.pack()`或则`Magic.unpack()`对数据或对象进行快速的序列化或反序列化
+3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 
 
 ##### 4. 注意事项
@@ -58,18 +58,27 @@ asdasd
 |||String|custom|
 
 ##### 5. 使用示例
+下面的对象中, Student 总共分配 27 个字节; School 总共分配 67 个字节
 ```java
 // declare class must use public
+@MagicClass(enableAutoTrim = true)
 public class School {
+    @MagicField(order = 1, size = 10)
 	private String name;
+    @MagicField(order = 2, size = 2)
     private Student[] students;
+    @MagicField(order = 3)
     private byte age;
     // getter and setter ...
 }
 
+@MagicClass(enableAutoTrim = true)
 public class Student {
+    @MagicField(order = 1, size = 10)
 	private String name;
+    @MagicField(order = 2, size = 2)
     private List<Long> phones;
+    @MagicField(order = 3)
     private byte age;
     // getter and setter ...
 }
