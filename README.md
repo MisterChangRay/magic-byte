@@ -51,8 +51,8 @@ wait
 ##### 6. 默认数据类型字节大小;
 | 数据类型 |数据类型 | 数据类型 |字节大小|
 |--------|--------|--------|--------|
-|byte|boolean|char|1
-|||short|2|
+|byte|boolean||1|
+|||short|char|2|
 ||int|float|4|
 ||long|double|8|
 |||String|custom|
