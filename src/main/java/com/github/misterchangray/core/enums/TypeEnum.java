@@ -2,7 +2,6 @@ package com.github.misterchangray.core.enums;
 
 
 import com.github.misterchangray.core.util.CalcUtil;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.HashMap;
 import java.util.List;
