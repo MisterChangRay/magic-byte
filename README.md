@@ -13,7 +13,7 @@
 
 maven项目可直接导入:
 ```
-asdasd
+wait
 ```
 
 
