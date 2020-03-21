@@ -52,7 +52,7 @@ wait
 | 数据类型 |数据类型 | 数据类型 |字节大小|
 |--------|--------|--------|--------|
 |byte|boolean||1|
-|||short|char|2|
+||short|char|2|
 ||int|float|4|
 ||long|double|8|
 |||String|custom|
