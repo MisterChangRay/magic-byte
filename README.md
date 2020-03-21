@@ -49,13 +49,13 @@ wait
 7. 二进制协议不建议单包超过1KB
 
 ##### 6. 默认数据类型字节大小;
-| 数据类型 |数据类型 | 数据类型 |字节大小|
-|--------|--------|--------|--------|
-|byte|boolean||1|
-||short|char|2|
-||int|float|4|
-||long|double|8|
-|||String|custom|
+| 数据类型 |数据类型 |字节大小|
+|--------|--------|--------|
+|byte|boolean|1|
+|short|char|2|
+|int|float|4|
+|long|double|8|
+||String|custom|
 
 ##### 5. 使用示例
 下面的对象中, Student 总共分配 27 个字节; School 总共分配 67 个字节
