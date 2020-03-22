@@ -13,7 +13,7 @@ public class AssertUtil {
     public static void assertTypeNotNormalType(Class clazz) {
         if(Object.class.equals(clazz) || Date.class.equals(clazz) || StringBuilder.class.equals(clazz) ||
         StringBuffer.class.equals(clazz) || java.sql.Date.class.equals(clazz) || File.class.equals(clazz) ||
-        CalcUtil.isSubClass(clazz, Map.class)) {
+        ClassUtil.isSubClass(clazz, Map.class)) {
             throw new MagicByteException(String.format("Unsupported data type; %s", clazz.getTypeName()));
         }
     }

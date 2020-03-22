@@ -78,14 +78,14 @@ public class PackUtil {
             case DOUBLE:
             case LONG:
                 Object value = getBaseFieldValue(fieldMetaInfo.getType(), data);
-                CalcUtil.setValue(object, value, fieldMetaInfo.getField());
+                ClassUtil.setValue(object, value, fieldMetaInfo.getField());
                 break;
             case STRING:
                 bytes = new byte[fieldMetaInfo.getTotalBytes()];
                 data.get(bytes);
                 String s = new String(bytes, fieldMetaInfo.getCharset());
                 if(classMetaInfo.isAutoTrim()) s = s.trim();
-                CalcUtil.setValue(object,s, fieldMetaInfo.getField());
+                ClassUtil.setValue(object,s, fieldMetaInfo.getField());
                 break;
             case ARRAY:
                 count = fieldMetaInfo.getSize();
@@ -100,7 +100,7 @@ public class PackUtil {
                     if(TypeEnum.OBJECT == typeEnum) {
                         bytes = new byte[unitBytes];
                         data.get(bytes);
-                        if(classMetaInfo.isAutoTrim() && CalcUtil.isEmptyData(bytes)) continue;
+                        if(classMetaInfo.isAutoTrim() && ClassUtil.isEmptyData(bytes)) continue;
 
                         Array.set(array, i, packObject(bytes, fieldMetaInfo.getClazz()));
                     } else {
@@ -109,7 +109,7 @@ public class PackUtil {
                     }
                 }
 
-                CalcUtil.setValue(object, array, fieldMetaInfo.getField());
+                ClassUtil.setValue(object, array, fieldMetaInfo.getField());
                 break;
             case LIST:
                 count = fieldMetaInfo.getSize();
@@ -124,7 +124,7 @@ public class PackUtil {
                     if(TypeEnum.OBJECT == typeEnum) {
                         bytes = new byte[unitBytes];
                         data.get(bytes);
-                        if(classMetaInfo.isAutoTrim() && CalcUtil.isEmptyData(bytes)) continue;
+                        if(classMetaInfo.isAutoTrim() && ClassUtil.isEmptyData(bytes)) continue;
 
                         list.add( packObject(bytes, fieldMetaInfo.getClazz()));
                     } else {
@@ -132,12 +132,12 @@ public class PackUtil {
                     }
                 }
 
-                CalcUtil.setValue(object, list, fieldMetaInfo.getField());
+                ClassUtil.setValue(object, list, fieldMetaInfo.getField());
                 break;
             case OBJECT:
                 bytes = new byte[fieldMetaInfo.getTotalBytes()];
                 data.get(bytes);
-                CalcUtil.setValue(object, packObject(bytes, fieldMetaInfo.getClazz()), fieldMetaInfo.getField());
+                ClassUtil.setValue(object, packObject(bytes, fieldMetaInfo.getClazz()), fieldMetaInfo.getField());
                 break;
         }
 
@@ -145,7 +145,7 @@ public class PackUtil {
 
 
     public static Integer convertToInt(Object object, FieldMetaInfo field) {
-        Object o =  CalcUtil.readValue(object, field.getField());
+        Object o =  ClassUtil.readValue(object, field.getField());
 
         switch (field.getType()) {
             case BYTE:

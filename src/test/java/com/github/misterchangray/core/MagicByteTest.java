@@ -3,17 +3,24 @@ package com.github.misterchangray.core;
 
 import com.github.misterchangray.core.entity.*;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.util.CalcUtil;
+import com.github.misterchangray.core.util.ClassUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.*;
 
 public class MagicByteTest {
 
     @Test
-    public void test() {
-        System.out.println((byte)0xa8);
+    public void testUtil() {
+        BigInteger bigInteger = new BigInteger("-12");
+
+        System.out.println(CalcUtil.byteToHexString(bigInteger.toByteArray()));;
+
+        System.out.println(CalcUtil.hexStringToByte("ABCD0F"));
     }
 
     /**

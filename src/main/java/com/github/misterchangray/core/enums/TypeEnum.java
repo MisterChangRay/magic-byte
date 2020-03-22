@@ -2,7 +2,7 @@ package com.github.misterchangray.core.enums;
 
 
 import com.github.misterchangray.core.util.AssertUtil;
-import com.github.misterchangray.core.util.CalcUtil;
+import com.github.misterchangray.core.util.ClassUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +68,7 @@ public enum TypeEnum {
         if(null != FAST_MAPPING.get(clazz)) return FAST_MAPPING.get(clazz);
         if(clazz.equals(String.class)) return TypeEnum.STRING;
         if(clazz.isArray()) return TypeEnum.ARRAY;
-        if(CalcUtil.isSubClass(clazz, List.class)) return TypeEnum.LIST;
+        if(ClassUtil.isSubClass(clazz, List.class)) return TypeEnum.LIST;
         return TypeEnum.OBJECT;
 
     }

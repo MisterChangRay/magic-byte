@@ -13,9 +13,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.github.misterchangray.core.enums.TypeEnum.BOOLEAN;
-import static com.github.misterchangray.core.enums.TypeEnum.CHAR;
-
 public class UnpackUtil {
 
 
@@ -47,7 +44,7 @@ public class UnpackUtil {
      */
     private static ByteBuffer encodeField(FieldMetaInfo fieldMetaInfo, Object object, ByteOrder byteOrder) throws UnsupportedEncodingException {
         ByteBuffer res = ByteBuffer.allocate(fieldMetaInfo.getTotalBytes()).order(byteOrder);
-        Object val = CalcUtil.readValue(object, fieldMetaInfo.getField());
+        Object val = ClassUtil.readValue(object, fieldMetaInfo.getField());
         if(null == val) return res;
 
         List objectList = new ArrayList(20);
