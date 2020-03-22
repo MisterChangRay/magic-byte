@@ -53,13 +53,13 @@ wait
 ##### 5. 注解和属性说明
 工具存在两个注解:
 1. `@MagicClass()` 类注解; 主要用于报文全局配置
- - byteOrder 配置序列化大小端
- - autoTrim 自动裁剪, 对于字符串和`List`将会出现将`0x00`或`0xff`裁剪现象
+	- byteOrder 配置序列化大小端
+	- autoTrim 自动裁剪, 对于字符串和`List`将会出现将`0x00`或`0xff`裁剪现象
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
- - order 序列化顺序(重要, 投入使用后请勿修改, 依次递增)
- - size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
- - charset 字符集设置, 仅`String`设置有效; 默认ASCII
- - dynamicSizeFromOrder 从数据中获取`List或Array`的大小, 仅`List和Array`有效
+	- order 序列化顺序(重要, 投入使用后请勿修改, 依次递增)
+	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
+	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
+	- dynamicSizeFromOrder 从数据中获取`List或Array`的大小, 仅`List和Array`有效
 
 
 ##### 6. 使用示例
