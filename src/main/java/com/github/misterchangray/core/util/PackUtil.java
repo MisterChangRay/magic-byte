@@ -14,7 +14,7 @@ import java.util.List;
 public class PackUtil {
 
 
-    public static <T> T packObject(byte[] bytes, Class clazz) throws  InstantiationException, UnsupportedEncodingException {
+    public static <T> T packObject(byte[] bytes, Class clazz) {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(clazz);
         ByteBuffer res = ByteBuffer.allocate(bytes.length).order(classMetaInfo.getByteOrder());
         res.put(bytes);
@@ -26,6 +26,8 @@ public class PackUtil {
             object = clazz.newInstance();
         } catch (IllegalAccessException e) {
             throw new MagicByteException(String.format("class must be declared public; inner class is not supported; \r\n%s", e));
+        } catch (InstantiationException e) {
+            throw new MagicByteException(String.format("no public and no arguments constructor; \r\n%s", e));
         }
 
         int end = 0;
@@ -61,7 +63,7 @@ public class PackUtil {
         return null;
     }
 
-    private static void decodeField(Object object, FieldMetaInfo fieldMetaInfo, ByteBuffer data, ClassMetaInfo classMetaInfo) throws UnsupportedEncodingException, InstantiationException {
+    private static void decodeField(Object object, FieldMetaInfo fieldMetaInfo, ByteBuffer data, ClassMetaInfo classMetaInfo) {
         byte[] bytes = null;
         int count = 0;
 
@@ -83,7 +85,12 @@ public class PackUtil {
             case STRING:
                 bytes = new byte[fieldMetaInfo.getTotalBytes()];
                 data.get(bytes);
-                String s = new String(bytes, fieldMetaInfo.getCharset());
+                String s = null;
+                try {
+                    s = new String(bytes, fieldMetaInfo.getCharset());
+                } catch (UnsupportedEncodingException e) {
+                    throw new MagicByteException(String.format("UnsupportedEncoding; ", fieldMetaInfo.getCharset() ));
+                }
                 if(classMetaInfo.isAutoTrim()) s = s.trim();
                 ClassUtil.setValue(object,s, fieldMetaInfo.getField());
                 break;

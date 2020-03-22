@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.util;
 
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
@@ -23,7 +24,7 @@ public class UnpackUtil {
      * @param <T>
      * @return
      */
-    public static <T> ByteBuffer unpackObject(T object) throws UnsupportedEncodingException {
+    public static <T> ByteBuffer unpackObject(T object)  {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(object.getClass());
 
         ByteBuffer res = ByteBuffer.allocate(classMetaInfo.getTotalBytes()).order(classMetaInfo.getByteOrder());
@@ -42,7 +43,7 @@ public class UnpackUtil {
      * @param byteOrder
      * @return
      */
-    private static ByteBuffer encodeField(FieldMetaInfo fieldMetaInfo, Object object, ByteOrder byteOrder) throws UnsupportedEncodingException {
+    private static ByteBuffer encodeField(FieldMetaInfo fieldMetaInfo, Object object, ByteOrder byteOrder) {
         ByteBuffer res = ByteBuffer.allocate(fieldMetaInfo.getTotalBytes()).order(byteOrder);
         Object val = ClassUtil.readValue(object, fieldMetaInfo.getField());
         if(null == val) return res;
@@ -60,7 +61,12 @@ public class UnpackUtil {
                 putBaseFieldValue(fieldMetaInfo.getType(), object, val ,  res);
                 break;
             case STRING:
-                byte[] bytes = ((String) val).getBytes(fieldMetaInfo.getCharset());
+                byte[] bytes = new byte[0];
+                try {
+                    bytes = ((String) val).getBytes(fieldMetaInfo.getCharset());
+                } catch (UnsupportedEncodingException e) {
+                    throw new MagicByteException(String.format("UnsupportedEncoding; %s", fieldMetaInfo.getCharset()));
+                }
                 if(bytes.length > fieldMetaInfo.getTotalBytes()) {
                     bytes = Arrays.copyOf(bytes, fieldMetaInfo.getTotalBytes());
                 }

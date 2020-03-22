@@ -13,12 +13,27 @@ public class CalcUtil {
     public static BigInteger QWORD = new BigInteger("FFFFFFFF", 16);
 
 
+
     /**
      * 16进制转换为字节;这里16进制是无符号的
      * @param aint
      * @return
      */
-    public static byte[] intToHexString(int aint) {
+    public static String intToHexString(int aint) {
+        if(aint < 0) {
+            throw new MagicByteException("Cannot convert negative");
+        }
+        BigInteger bigInteger = new BigInteger(String.valueOf(aint));
+        return bigInteger.toString(16);
+    }
+
+
+    /**
+     * 整数转换为byte数组, 只转换无符号整数
+     * @param aint
+     * @return
+     */
+    public static byte[] intToByte(int aint) {
         if(aint < 0) {
             throw new MagicByteException("Cannot convert negative");
         }
