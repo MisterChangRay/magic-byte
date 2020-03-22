@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MagicClass {
-    ByteOrder byteOrder() default ByteOrder.LITTLE_ENDIAN;
+    ByteOrder byteOrder() default ByteOrder.BIG_ENDIAN;
 
     boolean autoTrim() default false;
 

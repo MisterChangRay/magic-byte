@@ -63,7 +63,7 @@ public class PackUtil {
 
     private static void decodeField(Object object, FieldMetaInfo fieldMetaInfo, ByteBuffer data, ClassMetaInfo classMetaInfo) throws UnsupportedEncodingException, InstantiationException {
         byte[] bytes = null;
-        long count = 0;
+        int count = 0;
 
         // 判断缓冲区异常, 部分数据解析, 数据不够则直接停止解析 java.nio.BufferUnderflowException
         if(fieldMetaInfo.getTotalBytes() > data.capacity() - data.position()) return;
@@ -88,12 +88,13 @@ public class PackUtil {
                 CalcUtil.setValue(object,s, fieldMetaInfo.getField());
                 break;
             case ARRAY:
-                Object array = Array.newInstance(fieldMetaInfo.getClazz(),fieldMetaInfo.getSize());
-
                 count = fieldMetaInfo.getSize();
                 if(-1 != fieldMetaInfo.getMagicField().dynamicSizeFromOrder() && -1 == count) {
-                    count = (long) CalcUtil.readValue(object,  classMetaInfo.getFields().get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getField());
+                    int order = fieldMetaInfo.getMagicField().dynamicSizeFromOrder() - 1;
+                    count = convertToInt(object,  classMetaInfo.getFields().get(order));
                 }
+
+                Object array = Array.newInstance(fieldMetaInfo.getClazz(), count);
                 for(int i=0, unitBytes = fieldMetaInfo.getTotalBytes() / fieldMetaInfo.getSize(); i<count; i++) {
                     TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
                     if(TypeEnum.OBJECT == typeEnum) {
@@ -111,13 +112,13 @@ public class PackUtil {
                 CalcUtil.setValue(object, array, fieldMetaInfo.getField());
                 break;
             case LIST:
-                List<Object> list = new ArrayList<>(fieldMetaInfo.getSize());
-
                 count = fieldMetaInfo.getSize();
                 if(-1 != fieldMetaInfo.getMagicField().dynamicSizeFromOrder() && -1 == count) {
-                    count = (long) CalcUtil.readValue(object,  classMetaInfo.getFields().get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getField());
+                    int order = fieldMetaInfo.getMagicField().dynamicSizeFromOrder() - 1;
+                    count = convertToInt(object,  classMetaInfo.getFields().get(order));
                 }
 
+                List<Object> list = new ArrayList<>(count);
                 for(int i=0, unitBytes = fieldMetaInfo.getTotalBytes() / fieldMetaInfo.getSize(); i<count; i++) {
                     TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
                     if(TypeEnum.OBJECT == typeEnum) {
@@ -142,5 +143,22 @@ public class PackUtil {
 
     }
 
+
+    public static Integer convertToInt(Object object, FieldMetaInfo field) {
+        Object o =  CalcUtil.readValue(object, field.getField());
+
+        switch (field.getType()) {
+            case BYTE:
+                Byte b = (Byte) o;
+                return (int) b.byteValue();
+            case SHORT:
+                Short s = (Short) o;
+                return (int) s.shortValue();
+            case INT:
+                Integer integer = (Integer) o;
+                return (int) integer.intValue();
+        }
+        return 0;
+    }
 
 }
