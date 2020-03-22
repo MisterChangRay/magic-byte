@@ -11,6 +11,10 @@ import java.util.*;
 
 public class MagicByteTest {
 
+    @Test
+    public void test() {
+        System.out.println((byte)0xa8);
+    }
 
     /**
      * 检测部分数据是否 能正常加载

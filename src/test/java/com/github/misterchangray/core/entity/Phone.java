@@ -3,7 +3,7 @@ package com.github.misterchangray.core.entity;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
-@MagicClass(enableAutoTrim = true)
+@MagicClass(autoTrim = true)
 public class Phone {
     @MagicField(order = 1, size = 8)
     private String brand;

@@ -4,7 +4,7 @@ import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
 
-@MagicClass(enableAutoTrim = true)
+@MagicClass(autoTrim = true)
 public class Student {
     @MagicField(order = 1, size = 10)
     private String name;

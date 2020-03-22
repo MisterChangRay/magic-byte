@@ -39,7 +39,7 @@ public class ClassMetaInfoUtil {
         if(null != annotation) {
             MagicClass magicClass = (MagicClass) annotation;
             classMetaInfo.setByteOrder(magicClass.byteOrder() == ByteOrder.LITTLE_ENDIAN ? java.nio.ByteOrder.LITTLE_ENDIAN : java.nio.ByteOrder.BIG_ENDIAN);;
-            classMetaInfo.setAutoTrim(magicClass.enableAutoTrim());
+            classMetaInfo.setAutoTrim(magicClass.autoTrim());
         }
 
 
