@@ -3,9 +3,6 @@ package com.github.misterchangray.core.util;
 import com.github.misterchangray.core.exception.MagicByteException;
 
 import java.lang.reflect.Field;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class ClassUtil {
 
@@ -18,11 +15,7 @@ public class ClassUtil {
      * @return
      */
     public static boolean isSubClass(Class child, Class parent) {
-        try {
-            child.asSubclass(parent);
-            return true;
-        } catch (ClassCastException ae) { }
-        return false;
+        return parent.isAssignableFrom(child);
     }
 
 
