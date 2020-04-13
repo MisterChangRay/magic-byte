@@ -1,4 +1,4 @@
-### 魔术字节(magic-byte)
+### 魔法字节(magic-byte)
 [toc]
 
 #### 1. 简介
