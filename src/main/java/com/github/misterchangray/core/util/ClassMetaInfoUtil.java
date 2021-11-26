@@ -56,11 +56,13 @@ public class ClassMetaInfoUtil {
         Field[] fields = classMetaInfo.getClazz().getDeclaredFields();
         for (Field field : fields) {
             MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
+            FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
+            fieldMetaInfo.setOwnerClazz(classMetaInfo);
+            fieldMetaInfo.setField(field);
+            fieldMetaInfo.setMagicField(magicField);
+
+            AssertUtil.assertHasMagicField(fieldMetaInfo);
             if (Objects.nonNull(magicField)) {
-                FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
-                fieldMetaInfo.setOwnerClazz(classMetaInfo);
-                fieldMetaInfo.setField(field);
-                fieldMetaInfo.setMagicField(magicField);
                 boolean initRes = initFieldMetaInfo(fieldMetaInfo);
                 AssertUtil.assertFieldMetaInfoInitSuccess(initRes, fieldMetaInfo);
                 if(initRes) {
@@ -112,12 +114,13 @@ public class ClassMetaInfoUtil {
                 fieldMetaInfo.setClazz(fieldMetaInfo.getField().getType());
                 break;
             case STRING:
-                AssertUtil.assertSizeNotNull(fieldMetaInfo);
+                AssertUtil.assertHasLength(fieldMetaInfo);
                 size = fieldMetaInfo.getMagicField().size();
                 fieldMetaInfo.setClazz(String.class);
                 fieldMetaInfo.setSize(size);
                 break;
             case ARRAY:
+                AssertUtil.assertHasLength(fieldMetaInfo);
                 genericClazz = fieldMetaInfo.getField().getType().getComponentType();
                 size = fieldMetaInfo.getSize() * calcCollectionSize(genericClazz);
                 if(0 == size) genericClazz = null;
@@ -125,6 +128,7 @@ public class ClassMetaInfoUtil {
                 fieldMetaInfo.setClazz(genericClazz);
                 break;
             case LIST:
+                AssertUtil.assertHasLength(fieldMetaInfo);
                 genericType = fieldMetaInfo.getField().getGenericType();
                 if (genericType instanceof ParameterizedType) {
                     ParameterizedType pt = (ParameterizedType) genericType;

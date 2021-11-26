@@ -12,10 +12,10 @@ import java.util.*;
 
 public class AssertUtil {
 
-    public static void assertSizeNotNull(FieldMetaInfo fieldMetaInfo) {
+    public static void assertHasLength(FieldMetaInfo fieldMetaInfo) {
         MagicField magicField1 = fieldMetaInfo.getMagicField();
         if(magicField1.size() < 0)
-            throw new MagicByteException(String.format("field must set size member; %s", fieldMetaInfo.getField().getName()));
+            throw new MagicByteException(String.format("field must set size of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
     }
 
 
@@ -73,6 +73,12 @@ public class AssertUtil {
     public static void assertFieldMetaInfoInitSuccess(boolean initRes, FieldMetaInfo fieldMetaInfo) {
         if(!initRes && fieldMetaInfo.getOwnerClazz().isStrict()) {
             throw new MagicByteException(String.format("can't parser field of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+        }
+    }
+
+    public static void assertHasMagicField(FieldMetaInfo fieldMetaInfo) {
+        if(Objects.isNull(fieldMetaInfo.getMagicField()) && fieldMetaInfo.getOwnerClazz().isStrict()) {
+            throw new MagicByteException(String.format("not found @MagicField annotation of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
         }
     }
 }
