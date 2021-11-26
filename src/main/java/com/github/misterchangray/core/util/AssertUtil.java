@@ -3,9 +3,11 @@ package com.github.misterchangray.core.util;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class AssertUtil {
@@ -14,11 +16,6 @@ public class AssertUtil {
         MagicField magicField1 = fieldMetaInfo.getMagicField();
         if(magicField1.size() < 0)
             throw new MagicByteException(String.format("field must set size member; %s", fieldMetaInfo.getField().getName()));
-    }
-
-    public static void assertNotString(Class<?> clazz, String msg) {
-        if(null == clazz || String.class.equals(clazz))
-            throw new MagicByteException(msg);
     }
 
 
@@ -60,4 +57,21 @@ public class AssertUtil {
 
     }
 
+    public static void assertTotalLengthNotZero(int total, ClassMetaInfo classMetaInfo) {
+        if(classMetaInfo.isStrict() && total <= 0) {
+            throw new MagicByteException(String.format("class total bytes is zero; %s", classMetaInfo.getClazz().getName()));
+        }
+    }
+
+    public static void assertFieldMetaInfoNotNull(FieldMetaInfo fieldMetaInfo, Field field, ClassMetaInfo c) {
+        if(Objects.isNull(fieldMetaInfo) && c.isStrict()) {
+            throw new MagicByteException(String.format("can't parser field of class; %s.%s", c.getClazz().getName(), field.getName()));
+        }
+    }
+
+    public static void assertDataError(boolean interrupt, ClassMetaInfo classMetaInfo) {
+        if(interrupt && classMetaInfo.isStrict()) {
+            throw new MagicByteException(String.format("invalid byte array; do not converter to the java object : %s", classMetaInfo.getClazz().getName()));
+        }
+    }
 }

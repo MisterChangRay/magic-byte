@@ -27,24 +27,19 @@ public class ClassMetaInfoUtil {
     public static ClassMetaInfo buildClassMetaInfo(Class<?> clazz) {
         if(null != cache.get(clazz)) return cache.get(clazz);
 
-        List<FieldMetaInfo> magicFields = buildAllMagicField(clazz);
+        ClassMetaInfo classMetaInfo = new ClassMetaInfo();
+        classMetaInfo.setClazz(clazz);
+        classMetaInfo.initConfig(clazz);
+
+        List<FieldMetaInfo> magicFields = buildAllMagicField(classMetaInfo);
         int total = magicFields.stream().mapToInt(FieldMetaInfo::getTotalBytes).sum();
-        if(total == 0 ) {
-           return null;
+        AssertUtil.assertTotalLengthNotZero(total, classMetaInfo);
+        if(total == 0) {
+            return null;
         }
 
-        ClassMetaInfo classMetaInfo = new ClassMetaInfo();
         classMetaInfo.setTotalBytes(total);
         classMetaInfo.setFields(magicFields);
-        classMetaInfo.setClazz(clazz);
-
-        Annotation annotation = clazz.<MagicClass>getAnnotation(MagicClass.class);
-        if(null != annotation) {
-            MagicClass magicClass = (MagicClass) annotation;
-            classMetaInfo.setByteOrder(magicClass.byteOrder() == ByteOrder.LITTLE_ENDIAN ? java.nio.ByteOrder.LITTLE_ENDIAN : java.nio.ByteOrder.BIG_ENDIAN);;
-            classMetaInfo.setAutoTrim(magicClass.autoTrim());
-        }
-
 
         cache.put(classMetaInfo.getClazz(), classMetaInfo);
         return classMetaInfo;
@@ -56,14 +51,17 @@ public class ClassMetaInfoUtil {
      * @param c
      * @return
      */
-    private static  List<FieldMetaInfo>  buildAllMagicField(Class<?> c) {
+    private static  List<FieldMetaInfo>  buildAllMagicField(ClassMetaInfo classMetaInfo) {
         List<FieldMetaInfo> res = new ArrayList<>(50);
-        Field[] fields = c.getDeclaredFields();
+        Field[] fields = classMetaInfo.getClazz().getDeclaredFields();
         for (Field field : fields) {
             MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
             if (Objects.nonNull(magicField)) {
                 FieldMetaInfo fieldMetaInfo = buildFieldMetaInfo(field, magicField);
-                if(Objects.nonNull(fieldMetaInfo)) res.add(fieldMetaInfo);
+                AssertUtil.assertFieldMetaInfoNotNull(fieldMetaInfo, field, classMetaInfo);
+                if(Objects.nonNull(fieldMetaInfo)) {
+                    res.add(fieldMetaInfo);
+                }
             }
         }
         res.sort((o1,o2) ->  o1.getMagicField().order() - o2.getMagicField().order());

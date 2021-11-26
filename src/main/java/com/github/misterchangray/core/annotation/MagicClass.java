@@ -9,9 +9,25 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MagicClass {
+
+    /**
+     * 大小端
+     * @return
+     */
     ByteOrder byteOrder() default ByteOrder.BIG_ENDIAN;
 
+
+    /**
+     * 自动裁剪
+     * @return
+     */
     boolean autoTrim() default false;
+
+    /**
+     * 严格模式
+     * @return
+     */
+    boolean strict() default  false;
 
 
 }

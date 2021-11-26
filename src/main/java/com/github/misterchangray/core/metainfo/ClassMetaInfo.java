@@ -1,6 +1,9 @@
 package com.github.misterchangray.core.metainfo;
 
 
+import com.github.misterchangray.core.annotation.MagicClass;
+
+import java.lang.annotation.Annotation;
 import java.nio.ByteOrder;
 import java.util.List;
 
@@ -10,6 +13,25 @@ public class ClassMetaInfo {
     private int totalBytes;
     private ByteOrder byteOrder;
     private boolean autoTrim;
+    /**
+     * 是否使用严格模式
++     */
+    private boolean strict;
+
+
+    public void initConfig(Class<?> clazz) {
+        Annotation annotation = clazz.<MagicClass>getAnnotation(MagicClass.class);
+        if(null != annotation) {
+            MagicClass magicClass = (MagicClass) annotation;
+            ByteOrder byteOrder =
+                    magicClass.byteOrder() == com.github.misterchangray.core.enums.ByteOrder.LITTLE_ENDIAN ?
+                            ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
+            this.setByteOrder(byteOrder);;
+            this.setAutoTrim(magicClass.autoTrim());
+            this.setStrict(magicClass.strict());
+        }
+    }
+
 
     public boolean isAutoTrim() {
         return autoTrim;
@@ -50,5 +72,14 @@ public class ClassMetaInfo {
     public void setTotalBytes(int totalBytes) {
         this.totalBytes = totalBytes;
     }
+
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
+
 
 }

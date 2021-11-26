@@ -4,7 +4,7 @@ import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
 
-@MagicClass(autoTrim = true)
+@MagicClass(autoTrim = true, strict = true)
 public class Student {
     @MagicField(order = 1, size = 10)
     private String name;
@@ -14,16 +14,11 @@ public class Student {
     private Integer age;
     @MagicField(order = 4, size = 3)
     private long[] phones;
-    @MagicField(order = 5, size = 11)
-    private String[] strings;
 
     public void setAge(Integer age) {
         this.age = age;
     }
 
-    public void setStrings(String[] strings) {
-        this.strings = strings;
-    }
 
     public long[] getPhones() {
         return phones;

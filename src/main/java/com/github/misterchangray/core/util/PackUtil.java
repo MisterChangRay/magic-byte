@@ -66,7 +66,11 @@ public class PackUtil {
         int count = 0;
 
         // 判断缓冲区异常, 部分数据解析, 数据不够则直接停止解析 java.nio.BufferUnderflowException
-        if(fieldMetaInfo.getTotalBytes() > data.capacity() - data.position()) return;
+        boolean interrupt = fieldMetaInfo.getTotalBytes() > data.capacity() - data.position();
+        if(interrupt) {
+            AssertUtil.assertDataError(interrupt, classMetaInfo);
+            return;
+        }
 
         switch (fieldMetaInfo.getType()) {
             case BYTE:
