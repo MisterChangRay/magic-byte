@@ -28,31 +28,49 @@ wait
 // declare class must use public
 @MagicClass(autoTrim = true)
 public class School {
+    // 普通数据类型, 字符串长度为 10 byte 
     @MagicField(order = 1, size = 10)
-	private String name;
-    @MagicField(order = 2, size = 2)
+    private String name;
+    // 支持组合模式, 这里嵌入了 Student 对象
+    @MagicField(order = 3, size = 2)
     private Student[] students;
-    @MagicField(order = 3)
+    // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
+    @MagicField(order = 5)
+    private byte List<Object>
+    // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
+    @MagicField(order = 6)
+    private Object age;
+    // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
+    @MagicField(order = 7)
+    private Date[] birthdays;
+    // 普通数据类型, 通过order配置序列话顺序, 序列号顺序和定义顺序无关
+    @MagicField(order = 2)
     private byte age;
+   
     // getter and setter ...
 }
 
 @MagicClass(autoTrim = true)
 public class Student {
+    // 普通数据, 字符串长度为 10
     @MagicField(order = 1, size = 10)
-	private String name;
-    @MagicField(order = 2, size = 2)
+    private String name;
+    // 普通数据, 整数, 此字段决定后续 phones 字段长度
+    @MagicField(order = 2)
+    private int length;
+    // 此List并未直接指定大小, 大小由 length 字段决定
+    @MagicField(order = 3, dynamicSizeFromOrder = 2)
     private List<Long> phones;
-    @MagicField(order = 3)
+    @MagicField(order = 4)
     private byte age;
     // getter and setter ...
 }
 
 void main() {
-	School school = new School();
+    School school = new School();
     school.setAge((byte) 23);
     // you can set other propertis
-	byte[] bytes = Magic.unpack(school); // object to bytes
+    byte[] bytes = Magic.unpack(school); // object to bytes
     School school2 = Magic.pack(bytes, School.class); // bytes to object
     System.out.println(school.getAge() == school2.getAge()); // out put true
 
@@ -63,14 +81,14 @@ void main() {
 
 #### 4. 注解和属性说明
 工具存在两个注解:
-1. `@MagicClass()` 类注解; 主要用于报文全局配置
+1. `@MagicClass()` 类注解; 主要用于数据全局配置
 	- byteOrder 配置序列化大小端
-	- autoTrim 自动裁剪, 对于字符串和`List`将会出现将`0x00`或`0xff`裁剪现象
+	- autoTrim 自动裁剪, 对于字符串和`List`, 如果数据全为`0x00`或`0xff`将会被裁剪现象
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
 	- order 定义序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始依次递增)</b>
 	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
 	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
-	- dynamicSizeFromOrder 从数据中获取`List或Array`的大小, 仅`List和Array`有效
+	- dynamicSizeFromOrder 从指定的 order 中获取`List或Array`的长度, 仅`List和Array`有效
 
 
 
@@ -81,7 +99,7 @@ void main() {
 |short|char|2|
 |int|float|4|
 |long|double|8|
-||String|custom|
+|String| |custom|
 
 
 #### 6. 注意事项
