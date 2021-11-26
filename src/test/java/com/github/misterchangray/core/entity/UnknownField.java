@@ -5,12 +5,12 @@ import com.github.misterchangray.core.annotation.MagicField;
 
 import java.util.*;
 
-@MagicClass
+@MagicClass(autoTrim = false)
 public class UnknownField {
     private Date time;
     private StringBuffer stringBuffer;
     private StringBuilder stringBuilder;
-    @MagicField(order = 4, size = 10)
+    @MagicField(order = 4, size = 10, autoTrim = true)
     private String name;
     @MagicField(order = 5)
     private float aFloat;
@@ -20,7 +20,33 @@ public class UnknownField {
     private List<String> a;
     @MagicField(order = 7)
     private TreeMap<String, String > b;
+    @MagicField(order = 8)
+    private long createTime;
 
+
+    public List<String> getA() {
+        return a;
+    }
+
+    public void setA(List<String> a) {
+        this.a = a;
+    }
+
+    public TreeMap<String, String> getB() {
+        return b;
+    }
+
+    public void setB(TreeMap<String, String> b) {
+        this.b = b;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
 
     public static void main(String[] args) {
         System.out.println(Map.class.equals(HashMap.class));

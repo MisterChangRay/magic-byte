@@ -93,7 +93,7 @@ public class PackUtil {
                 } catch (UnsupportedEncodingException e) {
                     throw new MagicByteException(String.format("UnsupportedEncoding: %s", fieldMetaInfo.getCharset() ));
                 }
-                if(classMetaInfo.isAutoTrim()) s = s.trim();
+                if(fieldMetaInfo.isAutoTrim()) s = s.trim();
                 ClassUtil.setValue(object,s, fieldMetaInfo.getField());
                 break;
             case ARRAY:
@@ -109,7 +109,7 @@ public class PackUtil {
                     if(TypeEnum.OBJECT == typeEnum) {
                         bytes = new byte[unitBytes];
                         data.get(bytes);
-                        if(classMetaInfo.isAutoTrim() && ClassUtil.isEmptyData(bytes)) continue;
+                        if(fieldMetaInfo.isAutoTrim() && ClassUtil.isEmptyData(bytes)) continue;
 
                         Array.set(array, i, packObject(bytes, fieldMetaInfo.getClazz()));
                     } else {

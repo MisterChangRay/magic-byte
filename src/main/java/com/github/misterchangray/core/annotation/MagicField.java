@@ -15,6 +15,13 @@ public @interface MagicField {
 
 
     /**
+     * 自动裁剪
+     * @return
+     */
+    boolean autoTrim() default false;
+
+
+    /**
      * 仅 string 和 list 需要显式指定字节大小
      *
      * 基本类型使用以下列表中的占用字节大小;

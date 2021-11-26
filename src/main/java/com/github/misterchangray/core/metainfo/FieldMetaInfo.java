@@ -6,6 +6,7 @@ import com.github.misterchangray.core.enums.TypeEnum;
 import java.lang.reflect.Field;
 
 public class FieldMetaInfo {
+    private ClassMetaInfo ownerClazz;
     private MagicField magicField;
     private Field field;
     private int size;
@@ -13,6 +14,23 @@ public class FieldMetaInfo {
     private TypeEnum type;
     private Class<?> clazz;
     private String charset;
+    private boolean autoTrim;
+
+    public ClassMetaInfo getOwnerClazz() {
+        return ownerClazz;
+    }
+
+    public void setOwnerClazz(ClassMetaInfo ownerClazz) {
+        this.ownerClazz = ownerClazz;
+    }
+
+    public boolean isAutoTrim() {
+        return autoTrim;
+    }
+
+    public void setAutoTrim(boolean autoTrim) {
+        this.autoTrim = autoTrim;
+    }
 
     public String getCharset() {
         return charset;

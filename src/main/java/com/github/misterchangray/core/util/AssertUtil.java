@@ -59,19 +59,20 @@ public class AssertUtil {
 
     public static void assertTotalLengthNotZero(int total, ClassMetaInfo classMetaInfo) {
         if(classMetaInfo.isStrict() && total <= 0) {
-            throw new MagicByteException(String.format("class total bytes is zero; %s", classMetaInfo.getClazz().getName()));
+            throw new MagicByteException(String.format("class total bytes is zero: %s", classMetaInfo.getClazz().getName()));
         }
     }
 
-    public static void assertFieldMetaInfoNotNull(FieldMetaInfo fieldMetaInfo, Field field, ClassMetaInfo c) {
-        if(Objects.isNull(fieldMetaInfo) && c.isStrict()) {
-            throw new MagicByteException(String.format("can't parser field of class; %s.%s", c.getClazz().getName(), field.getName()));
-        }
-    }
 
     public static void assertDataError(boolean interrupt, ClassMetaInfo classMetaInfo) {
         if(interrupt && classMetaInfo.isStrict()) {
             throw new MagicByteException(String.format("invalid byte array; do not converter to the java object : %s", classMetaInfo.getClazz().getName()));
+        }
+    }
+
+    public static void assertFieldMetaInfoInitSuccess(boolean initRes, FieldMetaInfo fieldMetaInfo) {
+        if(!initRes && fieldMetaInfo.getOwnerClazz().isStrict()) {
+            throw new MagicByteException(String.format("can't parser field of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
         }
     }
 }

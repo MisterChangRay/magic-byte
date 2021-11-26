@@ -57,9 +57,13 @@ public class ClassMetaInfoUtil {
         for (Field field : fields) {
             MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
             if (Objects.nonNull(magicField)) {
-                FieldMetaInfo fieldMetaInfo = buildFieldMetaInfo(field, magicField);
-                AssertUtil.assertFieldMetaInfoNotNull(fieldMetaInfo, field, classMetaInfo);
-                if(Objects.nonNull(fieldMetaInfo)) {
+                FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
+                fieldMetaInfo.setOwnerClazz(classMetaInfo);
+                fieldMetaInfo.setField(field);
+                fieldMetaInfo.setMagicField(magicField);
+                boolean initRes = initFieldMetaInfo(fieldMetaInfo);
+                AssertUtil.assertFieldMetaInfoInitSuccess(initRes, fieldMetaInfo);
+                if(initRes) {
                     res.add(fieldMetaInfo);
                 }
             }
@@ -75,14 +79,15 @@ public class ClassMetaInfoUtil {
      * 将单独的 Field 包装为 FieldMetaInfo
      * @param field
      * @param magicField
+     * @param classMetaInfo
      * @return
      */
-    private static FieldMetaInfo buildFieldMetaInfo(Field field, MagicField magicField) {
-        FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
-        fieldMetaInfo.setField(field);
-        fieldMetaInfo.setMagicField(magicField);
+    private static boolean initFieldMetaInfo(FieldMetaInfo fieldMetaInfo) {
+        Field field = fieldMetaInfo.getField();
+        MagicField magicField = fieldMetaInfo.getMagicField();
         fieldMetaInfo.setSize(magicField.size());
         fieldMetaInfo.setCharset(magicField.charset());
+        fieldMetaInfo.setAutoTrim(magicField.autoTrim() || fieldMetaInfo.getOwnerClazz().isAutoTrim());
 
         field.setAccessible(true);
         Class<?> type = field.getType();
@@ -146,10 +151,10 @@ public class ClassMetaInfoUtil {
         fieldMetaInfo.setTotalBytes(size);
 
         if(Objects.isNull(fieldMetaInfo.getClazz()) || 0 == fieldMetaInfo.getTotalBytes()) {
-           fieldMetaInfo = null;
+           return false;
         }
 
-        return fieldMetaInfo;
+        return true;
     }
 
     /**

@@ -27,6 +27,29 @@ public class MagicByteTest {
      * 检测部分数据是否 能正常加载
      */
     @Test
+    public void testAllData() throws UnsupportedEncodingException, InstantiationException {
+        Student student = new Student();
+        student.setAge(39);
+        student.setPhones(new long[]{1838, 238, 234});
+        student.setName("ray");
+        student.setBookIds(new byte[]{1,2,3,4,5});
+
+        byte[] tmp = MagicByte.unpackToByte(student);
+
+        tmp = Arrays.copyOf(tmp, 250);
+        Student student1 = MagicByte.pack(tmp, Student.class);
+
+
+        Assert.assertEquals(student.getName(), student1.getName());
+        Assert.assertEquals(student.getAge(), student1.getAge());
+        Assert.assertEquals(student.getPhones()[2], student1.getPhones()[2]);
+    }
+
+
+    /**
+     * 检测部分数据是否 能正常加载
+     */
+    @Test
     public void testPartOfAllData() throws UnsupportedEncodingException, InstantiationException {
         Student student = new Student();
         student.setAge(39);
@@ -37,10 +60,15 @@ public class MagicByteTest {
         byte[] tmp = MagicByte.unpackToByte(student);
 
         tmp = Arrays.copyOf(tmp, 25);
-        Student student1 = MagicByte.pack(tmp, Student.class);
+        boolean hasException = false;
+        try {
+            Student student1 = MagicByte.pack(tmp, Student.class);
 
+        } catch (Exception ae) {
+            hasException = true;
+        }
 
-        Assert.assertEquals(student.getName(), student1.getName());
+        Assert.assertTrue("part of all data in strict model should be throw exception", hasException);
     }
 
     /**
@@ -62,6 +90,7 @@ public class MagicByteTest {
         unknownField.setStringBuilder(new StringBuilder("build"));
         unknownField.setTime(new Date());
         unknownField.setTmo(new HashMap<>());
+        unknownField.setCreateTime(System.currentTimeMillis());
 
 
         boolean hasException = false;
@@ -69,12 +98,16 @@ public class MagicByteTest {
             byte[] b = MagicByte.unpackToByte(unknownField);
             UnknownField unknownField1 = MagicByte.pack(b, UnknownField.class);
 
+            Assert.assertEquals(unknownField.getName(), unknownField1.getName());
+            Assert.assertEquals("double should be equals", unknownField.getaDouble(), unknownField1.getaDouble(), 0.0);
+            Assert.assertEquals("float should be equals", unknownField.getaFloat(), unknownField1.getaFloat(), 0.0);
+            Assert.assertEquals(unknownField.getCreateTime(), unknownField1.getCreateTime());
         } catch (MagicByteException ae) {
+            ae.printStackTrace();
             hasException= true;
         }
 
         Assert.assertFalse(hasException);
-
     }
 
     /**
