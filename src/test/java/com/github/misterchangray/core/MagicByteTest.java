@@ -33,10 +33,11 @@ public class MagicByteTest {
         student.setPhones(new long[]{1838, 238, 234});
         student.setName("ray");
         student.setBookIds(new byte[]{1,2,3,4,5});
+        student.setStrings(new String[] {"1", "@", "3"});
 
         byte[] tmp = MagicByte.unpackToByte(student);
 
-        tmp = Arrays.copyOf(tmp, 25);
+        tmp = Arrays.copyOf(tmp, 250);
         Student student1 = MagicByte.pack(tmp, Student.class);
 
 
@@ -73,7 +74,7 @@ public class MagicByteTest {
             hasException= true;
         }
 
-        Assert.assertTrue(hasException);
+        Assert.assertFalse(hasException);
 
     }
 

@@ -14,6 +14,16 @@ public class Student {
     private Integer age;
     @MagicField(order = 4, size = 3)
     private long[] phones;
+    @MagicField(order = 5, size = 11)
+    private String[] strings;
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public void setStrings(String[] strings) {
+        this.strings = strings;
+    }
 
     public long[] getPhones() {
         return phones;

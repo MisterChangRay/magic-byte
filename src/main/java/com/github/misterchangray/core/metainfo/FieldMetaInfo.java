@@ -11,7 +11,7 @@ public class FieldMetaInfo {
     private int size;
     private int totalBytes;
     private TypeEnum type;
-    private Class clazz;
+    private Class<?> clazz;
     private String charset;
 
     public String getCharset() {
@@ -30,11 +30,11 @@ public class FieldMetaInfo {
         this.totalBytes = totalBytes;
     }
 
-    public Class getClazz() {
+    public Class<?> getClazz() {
         return clazz;
     }
 
-    public void setClazz(Class clazz) {
+    public void setClazz(Class<?> clazz) {
         this.clazz = clazz;
     }
 

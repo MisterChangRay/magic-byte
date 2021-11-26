@@ -1,9 +1,9 @@
 package com.github.misterchangray.core;
 
+import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.util.PackUtil;
 import com.github.misterchangray.core.util.UnpackUtil;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 
@@ -19,7 +19,7 @@ public class MagicByte {
      * @param <T>
      * @return
      */
-    public static <T> T pack(byte[] data, Class clazz) {
+    public static <T> T pack(byte[] data, Class<?> clazz) throws MagicByteException {
         return PackUtil.packObject(data, clazz);
     }
 
@@ -31,7 +31,7 @@ public class MagicByte {
      * @param <T>
      * @return
      */
-    public static <T> ByteBuffer unpack(T t)  {
+    public static <T> ByteBuffer unpack(T t)  throws MagicByteException {
         if (null == t) return null;
 
         return UnpackUtil.unpackObject(t);
@@ -44,7 +44,7 @@ public class MagicByte {
      * @param <T>
      * @return
      */
-    public static <T> byte[] unpackToByte(T t) {
+    public static <T> byte[] unpackToByte(T t) throws MagicByteException {
         if (null == t) return null;
 
         return UnpackUtil.unpackObject(t).array();

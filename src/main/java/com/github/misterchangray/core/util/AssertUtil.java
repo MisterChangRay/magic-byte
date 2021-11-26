@@ -10,29 +10,20 @@ import java.util.*;
 
 public class AssertUtil {
 
-    public static void assertTypeNotNormalType(Class clazz) {
-        if(Object.class.equals(clazz) || Date.class.equals(clazz) || StringBuilder.class.equals(clazz) ||
-        StringBuffer.class.equals(clazz) || java.sql.Date.class.equals(clazz) || File.class.equals(clazz) ||
-        ClassUtil.isSubClass(clazz, Map.class)) {
-            throw new MagicByteException(String.format("Unsupported data type; %s", clazz.getTypeName()));
-        }
-    }
-
-
     public static void assertSizeNotNull(FieldMetaInfo fieldMetaInfo) {
         MagicField magicField1 = fieldMetaInfo.getMagicField();
-        if(null == fieldMetaInfo || magicField1.size() < 0)
+        if(magicField1.size() < 0)
             throw new MagicByteException(String.format("field must set size member; %s", fieldMetaInfo.getField().getName()));
     }
 
-    public static void assertNotString(Class clazz, String msg) {
+    public static void assertNotString(Class<?> clazz, String msg) {
         if(null == clazz || String.class.equals(clazz))
             throw new MagicByteException(msg);
     }
 
 
-    public static void assertFieldsSortAllRight(List<FieldMetaInfo> res) {
-        Map<Integer, FieldMetaInfo> tmp = new HashMap(30);
+    public static void assertFieldsSortIsRight(List<FieldMetaInfo> res) {
+        Map<Integer, FieldMetaInfo> tmp = new HashMap<Integer, FieldMetaInfo>(30);
 
         for(FieldMetaInfo fieldMetaInfo : res) {
             int order = fieldMetaInfo.getMagicField().order();
@@ -45,7 +36,7 @@ public class AssertUtil {
 
             if(TypeEnum.ARRAY == fieldMetaInfo.getType()  || TypeEnum.LIST == fieldMetaInfo.getType()) {
                 // 是否设置成员数量
-                if(-1 == fieldMetaInfo.getMagicField().size() && -1 == fieldMetaInfo.getMagicField().dynamicSizeFromOrder()) {
+                if(0 > fieldMetaInfo.getMagicField().size() && 0 > fieldMetaInfo.getMagicField().dynamicSizeFromOrder()) {
                     throw new MagicByteException(String.format("list and array member size must be set ; %s", fieldMetaInfo.getField().getName()));
                 }
 
@@ -56,20 +47,17 @@ public class AssertUtil {
 
                 // 检查目标字段是否为整数
                 if(0 < fieldMetaInfo.getMagicField().dynamicSizeFromOrder() && (
-                        TypeEnum.ARRAY == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.BOOLEAN== tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.LIST == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.OBJECT == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.CHAR == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.FLOAT == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.DOUBLE == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() ||
-                        TypeEnum.LONG == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType()
+                        TypeEnum.BYTE != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() &&
+                        TypeEnum.SHORT != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() &&
+                        TypeEnum.INT != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType() &&
+                        TypeEnum.LONG != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeFromOrder()).getType()
                 )) {
-                    throw new MagicByteException(String.format("dynamicSizeFromOrder target field should be number (int,short,byte); %s", fieldMetaInfo.getField().getName()));
+                    throw new MagicByteException(String.format("dynamicSizeFromOrder target field should be number (int,short,byte,long); %s", fieldMetaInfo.getField().getName()));
                 }
             }
             tmp.put(order, fieldMetaInfo);
         }
 
     }
+
 }

@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.util.List;
 
 public class ClassMetaInfo {
-    private Class clazz;
+    private Class<?> clazz;
     private List<FieldMetaInfo> fields;
     private int totalBytes;
     private ByteOrder byteOrder;
@@ -27,11 +27,11 @@ public class ClassMetaInfo {
         this.byteOrder = byteOrder;
     }
 
-    public Class getClazz() {
+    public Class<?> getClazz() {
         return clazz;
     }
 
-    public void setClazz(Class clazz) {
+    public void setClazz(Class<?> clazz) {
         this.clazz = clazz;
     }
 

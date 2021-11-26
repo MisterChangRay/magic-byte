@@ -7,6 +7,7 @@ import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
+import javax.swing.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -14,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public class ClassMetaInfoUtil {
-    private static Map<Class, ClassMetaInfo> cache = new HashMap<Class, ClassMetaInfo>(1000);
+    private static Map<Class<?>, ClassMetaInfo> cache = new HashMap<Class<?>, ClassMetaInfo>(1000);
 
 
     /**
@@ -23,12 +24,14 @@ public class ClassMetaInfoUtil {
      * @param clazz
      * @return
      */
-    public static ClassMetaInfo buildClassMetaInfo(Class clazz) {
+    public static ClassMetaInfo buildClassMetaInfo(Class<?> clazz) {
         if(null != cache.get(clazz)) return cache.get(clazz);
 
         List<FieldMetaInfo> magicFields = buildAllMagicField(clazz);
-        int total = 0;
-        total = magicFields.stream().mapToInt(item -> item.getTotalBytes()).sum();
+        int total = magicFields.stream().mapToInt(FieldMetaInfo::getTotalBytes).sum();
+        if(total == 0 ) {
+           return null;
+        }
 
         ClassMetaInfo classMetaInfo = new ClassMetaInfo();
         classMetaInfo.setTotalBytes(total);
@@ -43,7 +46,6 @@ public class ClassMetaInfoUtil {
         }
 
 
-
         cache.put(classMetaInfo.getClazz(), classMetaInfo);
         return classMetaInfo;
     }
@@ -54,19 +56,19 @@ public class ClassMetaInfoUtil {
      * @param c
      * @return
      */
-    private static  List<FieldMetaInfo>  buildAllMagicField(Class c) {
+    private static  List<FieldMetaInfo>  buildAllMagicField(Class<?> c) {
         List<FieldMetaInfo> res = new ArrayList<>(50);
         Field[] fields = c.getDeclaredFields();
-        for (int i=0; i<fields.length; i++) {
-            MagicField magicField = fields[i].<MagicField>getAnnotation(MagicField.class);
-            if(null != magicField) {
-                FieldMetaInfo fieldMetaInfo = buildFieldMetaInfo(fields[i], magicField);
-                res.add(fieldMetaInfo);
+        for (Field field : fields) {
+            MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
+            if (Objects.nonNull(magicField)) {
+                FieldMetaInfo fieldMetaInfo = buildFieldMetaInfo(field, magicField);
+                if(Objects.nonNull(fieldMetaInfo)) res.add(fieldMetaInfo);
             }
         }
         res.sort((o1,o2) ->  o1.getMagicField().order() - o2.getMagicField().order());
 
-        AssertUtil.assertFieldsSortAllRight(res);
+        AssertUtil.assertFieldsSortIsRight(res);
         return res;
     }
 
@@ -85,12 +87,12 @@ public class ClassMetaInfoUtil {
         fieldMetaInfo.setCharset(magicField.charset());
 
         field.setAccessible(true);
-        Class type = field.getType();
+        Class<?> type = field.getType();
         TypeEnum typeEnum = TypeEnum.getType(type);
 
         fieldMetaInfo.setType(typeEnum);
 
-        Class genericClazz = null;
+        Class<?> genericClazz = null;
         Type genericType = null;
         int size = 0;
         switch (typeEnum) {
@@ -114,9 +116,8 @@ public class ClassMetaInfoUtil {
                 break;
             case ARRAY:
                 genericClazz = fieldMetaInfo.getField().getType().getComponentType();
-                AssertUtil.assertNotString(genericClazz, String.format("not support String[]， please use String; %s", fieldMetaInfo.getField().getName()));
-
                 size = fieldMetaInfo.getSize() * calcCollectionSize(genericClazz);
+                if(0 == size) genericClazz = null;
 
                 fieldMetaInfo.setClazz(genericClazz);
                 break;
@@ -124,23 +125,32 @@ public class ClassMetaInfoUtil {
                 genericType = fieldMetaInfo.getField().getGenericType();
                 if (genericType instanceof ParameterizedType) {
                     ParameterizedType pt = (ParameterizedType) genericType;
-                    Class<?> actualTypeArgument = (Class<?>)pt.getActualTypeArguments()[0];
-                    genericClazz = actualTypeArgument;
-                    fieldMetaInfo.setClazz(genericClazz);
+                    genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
                 }
-                AssertUtil.assertNotString(genericClazz, String.format("not support List<String>， please use String; %s", fieldMetaInfo.getField().getName()));
 
                 size = fieldMetaInfo.getSize() * calcCollectionSize(genericClazz);
+                if(size == 0) genericClazz = null;
+
+                fieldMetaInfo.setClazz(genericClazz);
                 fieldMetaInfo.setSize(fieldMetaInfo.getSize());
                 break;
             case OBJECT:
-                size = buildClassMetaInfo(type).getTotalBytes();
+                ClassMetaInfo classMetaInfo = buildClassMetaInfo(type);
+                if(Objects.isNull(classMetaInfo)) {
+                    break;
+                }
+                size = classMetaInfo.getTotalBytes();
                 fieldMetaInfo.setSize(size);
                 fieldMetaInfo.setClazz(type);
                 break;
         }
 
         fieldMetaInfo.setTotalBytes(size);
+
+        if(Objects.isNull(fieldMetaInfo.getClazz()) || 0 == fieldMetaInfo.getTotalBytes()) {
+           fieldMetaInfo = null;
+        }
+
         return fieldMetaInfo;
     }
 
@@ -149,7 +159,7 @@ public class ClassMetaInfoUtil {
      * @param genericClazz
      * @return
      */
-    private static int calcCollectionSize(Class genericClazz) {
+    private static int calcCollectionSize(Class<?> genericClazz) {
         TypeEnum typeEnum = TypeEnum.getType(genericClazz);
         int res = 0;
         switch (typeEnum) {
@@ -164,7 +174,10 @@ public class ClassMetaInfoUtil {
                 res = typeEnum.getBytes();
                 break;
             case OBJECT:
-               res = buildClassMetaInfo(genericClazz).getTotalBytes();
+                ClassMetaInfo classMetaInfo = buildClassMetaInfo(genericClazz);
+                if(Objects.nonNull(classMetaInfo)) {
+                   res = classMetaInfo.getTotalBytes();
+                }
                 break;
         }
         return res;

@@ -7,18 +7,6 @@ import java.lang.reflect.Field;
 public class ClassUtil {
 
 
-
-    /**
-     * 判断类是否有继承关系
-     * @param child
-     * @param parent
-     * @return
-     */
-    public static boolean isSubClass(Class child, Class parent) {
-        return parent.isAssignableFrom(child);
-    }
-
-
     /**
      * 如果数据区全是由 0x00 和 0xFF 组成则认为是空数据,不具备解析价值
      * @param bytes

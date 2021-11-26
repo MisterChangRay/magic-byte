@@ -18,7 +18,7 @@ public class UnknownField {
     private double aDouble;
     private Object tmo;
     private List<String> a;
-    @MagicField(order = 6)
+    @MagicField(order = 7)
     private TreeMap<String, String > b;
 
 

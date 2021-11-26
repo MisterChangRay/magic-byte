@@ -7,6 +7,7 @@ import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,30 +15,28 @@ import java.util.List;
 public class PackUtil {
 
 
-    public static <T> T packObject(byte[] bytes, Class clazz) {
+    public static <T> T packObject(byte[] bytes, Class<?> clazz) {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(clazz);
         ByteBuffer res = ByteBuffer.allocate(bytes.length).order(classMetaInfo.getByteOrder());
         res.put(bytes);
         res.position(0);
 
 
-        Object object = null;
+        T object = null;
         try {
-            object = clazz.newInstance();
+            object = (T) clazz.getDeclaredConstructor().newInstance();
         } catch (IllegalAccessException e) {
             throw new MagicByteException(String.format("class must be declared public; inner class is not supported; \r\n%s", e));
-        } catch (InstantiationException e) {
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw new MagicByteException(String.format("no public and no arguments constructor; \r\n%s", e));
         }
 
-        int end = 0;
-        end = classMetaInfo.getTotalBytes() > bytes.length ? bytes.length : classMetaInfo.getTotalBytes();
 
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
             decodeField(object, fieldMetaInfo, res, classMetaInfo);
         }
 
-        return (T) object;
+        return object;
     }
 
     private static Object getBaseFieldValue(TypeEnum typeEnum,ByteBuffer data){
@@ -47,8 +46,7 @@ public class PackUtil {
             case CHAR:
                return (char)data.getChar();
             case BOOLEAN:
-                boolean res = data.get() == 0 ? false : true;
-                return res;
+                return data.get() != 0;
             case SHORT:
                return data.getShort();
             case INT:
@@ -89,7 +87,7 @@ public class PackUtil {
                 try {
                     s = new String(bytes, fieldMetaInfo.getCharset());
                 } catch (UnsupportedEncodingException e) {
-                    throw new MagicByteException(String.format("UnsupportedEncoding; ", fieldMetaInfo.getCharset() ));
+                    throw new MagicByteException(String.format("UnsupportedEncoding: %s", fieldMetaInfo.getCharset() ));
                 }
                 if(classMetaInfo.isAutoTrim()) s = s.trim();
                 ClassUtil.setValue(object,s, fieldMetaInfo.getField());
