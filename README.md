@@ -12,8 +12,13 @@
 5. 无符号运算操作
 
 maven项目可直接导入:
+点击查询最新版本
 ```
-wait
+<dependency>
+  <groupId>io.github.misterchangray</groupId>
+  <artifactId>magic-byte</artifactId>
+  <version>1.0.0</version>
+</dependency>
 ```
 
 #### 2. 快速入门:
