@@ -12,7 +12,7 @@
 5. 无符号运算操作
 
 maven项目可直接导入:
-点击查询最新版本
+[点击查询最新版本](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
 ```
 <dependency>
   <groupId>io.github.misterchangray</groupId>
