@@ -9,10 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class UnpackUtil {
 
@@ -26,6 +23,7 @@ public class UnpackUtil {
      */
     public static <T> ByteBuffer unpackObject(T object)  {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(object.getClass());
+        if(Objects.isNull(classMetaInfo)) return null;
 
         ByteBuffer res = ByteBuffer.allocate(classMetaInfo.getTotalBytes()).order(classMetaInfo.getByteOrder());
         for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {

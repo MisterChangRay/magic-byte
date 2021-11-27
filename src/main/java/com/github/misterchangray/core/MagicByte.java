@@ -20,6 +20,9 @@ public class MagicByte {
      * @return
      */
     public static <T> T pack(byte[] data, Class<?> clazz) throws MagicByteException {
+        if(null == data || null == clazz) return null;
+        if(0 == data.length) return null;
+
         return PackUtil.packObject(data, clazz);
     }
 
@@ -47,6 +50,8 @@ public class MagicByte {
     public static <T> byte[] unpackToByte(T t) throws MagicByteException {
         if (null == t) return null;
 
-        return UnpackUtil.unpackObject(t).array();
+        ByteBuffer res = unpack(t);
+        if(null == res) return null;
+        return res.array();
     }
 }

@@ -11,12 +11,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PackUtil {
 
 
     public static <T> T packObject(byte[] bytes, Class<?> clazz) {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(clazz);
+        if(Objects.isNull(classMetaInfo)) {
+            return null;
+        }
         ByteBuffer res = ByteBuffer.allocate(bytes.length).order(classMetaInfo.getByteOrder());
         res.put(bytes);
         res.position(0);

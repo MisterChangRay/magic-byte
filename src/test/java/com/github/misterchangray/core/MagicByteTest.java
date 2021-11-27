@@ -4,7 +4,6 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.entity.*;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.util.CalcUtil;
-import com.github.misterchangray.core.util.ClassUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,6 +12,17 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class MagicByteTest {
+
+
+
+    @Test
+    public void testSimpleObject() {
+        Object pack = MagicByte.pack(new byte[]{1, 2, 3}, EmptyObject.class);
+        Assert.assertNull(pack);
+
+        byte[] tmp = MagicByte.unpackToByte(new EmptyObject());
+    }
+
 
     @Test
     public void testUtil() {
