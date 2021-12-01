@@ -10,11 +10,59 @@ public class FieldMetaInfo {
     private MagicField magicField;
     private Field field;
     private int size;
+
     private int totalBytes;
+
+    // the size of one element on collections
+    private int elementBytes;
+
     private TypeEnum type;
     private Class<?> clazz;
     private String charset;
     private boolean autoTrim;
+    /**
+     * current field the size is dynamic
+     */
+    private boolean isDynamic;
+    /**
+     * dynamic ref
+     */
+    private FieldMetaInfo dynamicRef;
+
+    private int orderId;
+
+
+    public int getElementBytes() {
+        return elementBytes;
+    }
+
+    public void setElementBytes(int elementBytes) {
+        this.elementBytes = elementBytes;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public FieldMetaInfo getDynamicRef() {
+        return dynamicRef;
+    }
+
+    public void setDynamicRef(FieldMetaInfo dynamicRef) {
+        this.dynamicRef = dynamicRef;
+    }
+
+    public boolean isDynamic() {
+        return isDynamic;
+    }
+
+    public void setDynamic(boolean dynamic) {
+        isDynamic = dynamic;
+    }
 
     public ClassMetaInfo getOwnerClazz() {
         return ownerClazz;
@@ -87,5 +135,6 @@ public class FieldMetaInfo {
     public void setField(Field field) {
         this.field = field;
     }
+
 
 }

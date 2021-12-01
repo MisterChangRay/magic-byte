@@ -6,6 +6,7 @@ import com.github.misterchangray.core.annotation.MagicClass;
 import java.lang.annotation.Annotation;
 import java.nio.ByteOrder;
 import java.util.List;
+import java.util.Optional;
 
 public class ClassMetaInfo {
     private Class<?> clazz;
@@ -14,9 +15,32 @@ public class ClassMetaInfo {
     private ByteOrder byteOrder;
     private boolean autoTrim;
     /**
-     * 是否使用严格模式
+     * use strict
 +     */
     private boolean strict;
+    private int[] dynamicSize;
+    private boolean isDynamic;
+
+    public boolean isDynamic() {
+        return isDynamic;
+    }
+
+    public void setDynamic(boolean dynamic) {
+        isDynamic = dynamic;
+    }
+
+    public int[] getDynamicSize() {
+        return dynamicSize;
+    }
+
+    public void setDynamicSize(int[] dynamicSize) {
+        this.dynamicSize = dynamicSize;
+    }
+
+    public FieldMetaInfo getByOrderId(int orderId) {
+        Optional<FieldMetaInfo> first = fields.stream().filter(item -> item.getOrderId() == orderId).findFirst();
+        return first.orElse(null);
+    }
 
 
     public void initConfig(Class<?> clazz) {
@@ -31,6 +55,9 @@ public class ClassMetaInfo {
             this.setStrict(magicClass.strict());
         }
     }
+
+
+
 
 
     public boolean isAutoTrim() {
@@ -80,6 +107,5 @@ public class ClassMetaInfo {
     public void setStrict(boolean strict) {
         this.strict = strict;
     }
-
 
 }

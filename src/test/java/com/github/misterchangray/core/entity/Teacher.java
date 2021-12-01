@@ -3,7 +3,7 @@ package com.github.misterchangray.core.entity;
 import com.github.misterchangray.core.annotation.MagicField;
 
 public class Teacher {
-    @MagicField(order = 1, size = 10)
+    @MagicField(order = 1, size = 10, autoTrim = true)
     private String name;
     @MagicField(order = 3)
     private int age;

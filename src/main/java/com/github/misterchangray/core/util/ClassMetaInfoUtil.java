@@ -1,18 +1,15 @@
 package com.github.misterchangray.core.util;
 
-import com.github.misterchangray.core.annotation.MagicClass;
-import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
-import javax.swing.*;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class ClassMetaInfoUtil {
     private static Map<Class<?>, ClassMetaInfo> cache = new HashMap<Class<?>, ClassMetaInfo>(1000);
@@ -30,17 +27,26 @@ public class ClassMetaInfoUtil {
         ClassMetaInfo classMetaInfo = new ClassMetaInfo();
         classMetaInfo.setClazz(clazz);
         classMetaInfo.initConfig(clazz);
+        classMetaInfo.setFields(new ArrayList<>());
 
-        List<FieldMetaInfo> magicFields = buildAllMagicField(classMetaInfo);
-        int total = magicFields.stream().mapToInt(FieldMetaInfo::getTotalBytes).sum();
+        initAllMagicField(classMetaInfo);
+        int total = classMetaInfo.getFields().stream().mapToInt(FieldMetaInfo::getTotalBytes).sum();
         AssertUtil.assertTotalLengthNotZero(total, classMetaInfo);
         if(total == 0) {
             return null;
         }
 
-        classMetaInfo.setTotalBytes(total);
-        classMetaInfo.setFields(magicFields);
+        int[] ints = new int[classMetaInfo.getFields().get(classMetaInfo.getFields().size() - 1).getOrderId() + 1];
+        for (FieldMetaInfo field : classMetaInfo.getFields()) {
+            if(field.isDynamic()) {
+                ints[field.getOrderId()] = field.getElementBytes();
+            } else {
+                ints[field.getOrderId()] = field.getTotalBytes();
+            }
+        }
+        classMetaInfo.setDynamicSize(ints);
 
+        classMetaInfo.setTotalBytes(total);
         cache.put(classMetaInfo.getClazz(), classMetaInfo);
         return classMetaInfo;
     }
@@ -51,9 +57,10 @@ public class ClassMetaInfoUtil {
      * @param c
      * @return
      */
-    private static  List<FieldMetaInfo>  buildAllMagicField(ClassMetaInfo classMetaInfo) {
-        List<FieldMetaInfo> res = new ArrayList<>(50);
+    private static  void  initAllMagicField(ClassMetaInfo classMetaInfo) {
+        List<FieldMetaInfo> res = classMetaInfo.getFields();
         Field[] fields = classMetaInfo.getClazz().getDeclaredFields();
+        int dynamicIdIndex = 0;
         for (Field field : fields) {
             MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
             FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
@@ -63,6 +70,8 @@ public class ClassMetaInfoUtil {
 
             AssertUtil.assertHasMagicField(fieldMetaInfo);
             if (Objects.nonNull(magicField)) {
+                fieldMetaInfo.setOrderId(magicField.order());
+
                 boolean initRes = initFieldMetaInfo(fieldMetaInfo);
                 AssertUtil.assertFieldMetaInfoInitSuccess(initRes, fieldMetaInfo);
                 if(initRes) {
@@ -71,9 +80,7 @@ public class ClassMetaInfoUtil {
             }
         }
         res.sort((o1,o2) ->  o1.getMagicField().order() - o2.getMagicField().order());
-
         AssertUtil.assertFieldsSortIsRight(res);
-        return res;
     }
 
 
@@ -111,19 +118,24 @@ public class ClassMetaInfoUtil {
             case LONG:
                 size = typeEnum.getBytes();
                 fieldMetaInfo.setSize(size);
+                fieldMetaInfo.setElementBytes(size);
                 fieldMetaInfo.setClazz(fieldMetaInfo.getField().getType());
                 break;
             case STRING:
                 AssertUtil.assertHasLength(fieldMetaInfo);
                 size = fieldMetaInfo.getMagicField().size();
                 fieldMetaInfo.setClazz(String.class);
+                settingIfFiledIsDynamic(magicField, fieldMetaInfo);
+
                 fieldMetaInfo.setSize(size);
+                fieldMetaInfo.setElementBytes(size);
                 break;
             case ARRAY:
                 AssertUtil.assertHasLength(fieldMetaInfo);
                 genericClazz = fieldMetaInfo.getField().getType().getComponentType();
-                size = fieldMetaInfo.getSize() * calcCollectionSize(genericClazz);
-                if(0 == size) genericClazz = null;
+                fieldMetaInfo.setElementBytes(calcCollectionSize(genericClazz));
+                settingIfFiledIsDynamic(magicField, fieldMetaInfo);
+                size = fieldMetaInfo.getSize() * fieldMetaInfo.getElementBytes();
 
                 fieldMetaInfo.setClazz(genericClazz);
                 break;
@@ -135,8 +147,9 @@ public class ClassMetaInfoUtil {
                     genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
                 }
 
-                size = fieldMetaInfo.getSize() * calcCollectionSize(genericClazz);
-                if(size == 0) genericClazz = null;
+                fieldMetaInfo.setElementBytes(calcCollectionSize(genericClazz));
+                settingIfFiledIsDynamic(magicField, fieldMetaInfo);
+                size = fieldMetaInfo.getSize() * fieldMetaInfo.getElementBytes();
 
                 fieldMetaInfo.setClazz(genericClazz);
                 fieldMetaInfo.setSize(fieldMetaInfo.getSize());
@@ -148,18 +161,30 @@ public class ClassMetaInfoUtil {
                 }
                 size = classMetaInfo.getTotalBytes();
                 fieldMetaInfo.setSize(size);
+                fieldMetaInfo.setElementBytes(size);
                 fieldMetaInfo.setClazz(type);
                 break;
         }
 
         fieldMetaInfo.setTotalBytes(size);
 
-        if(Objects.isNull(fieldMetaInfo.getClazz()) || 0 == fieldMetaInfo.getTotalBytes()) {
+        if(Objects.isNull(fieldMetaInfo.getClazz())) {
            return false;
         }
 
         return true;
     }
+
+    private static void settingIfFiledIsDynamic(MagicField magicField, FieldMetaInfo fieldMetaInfo) {
+        if(magicField.dynamicSizeOf() > 0 && magicField.size() == 0) {
+            // dynamic field
+            fieldMetaInfo.setDynamic(true);
+            fieldMetaInfo.setDynamicRef(fieldMetaInfo.getOwnerClazz().getByOrderId(magicField.dynamicSizeOf()));
+
+            fieldMetaInfo.getOwnerClazz().setDynamic(true);
+        }
+    }
+
 
     /**
      * 取集合泛型的数据大小

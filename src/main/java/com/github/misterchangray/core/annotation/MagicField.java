@@ -37,14 +37,19 @@ public @interface MagicField {
      *
      * @return
      */
-    int size() default -1;
+    int size() default 0;
 
     /**
-     * list size
+     * take size from another field
      * @return
      */
-    int dynamicSizeFromOrder() default -1;
+    int dynamicSizeOf() default -1;
 
+
+    /**
+     * charset of String field
+     * @return
+     */
     String charset() default "ASCII";
 
 }

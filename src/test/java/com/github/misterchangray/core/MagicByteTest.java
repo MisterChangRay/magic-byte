@@ -16,6 +16,51 @@ public class MagicByteTest {
 
 
     @Test
+    public void testHighSchool() {
+        HighSchool highSchool = new HighSchool();
+        highSchool.setName("1234a");
+        highSchool.setStudentCount(3);
+        highSchool.setStudentList(new ArrayList<>());
+        for (int i = 0; i < highSchool.getStudentCount(); i++) {
+            Student student = new Student();
+            student.setAge(21 + i);
+            student.setName("张" + i);
+            highSchool.getStudentList().add(student);
+        }
+
+
+        highSchool.setTeacherCount(5);
+        highSchool.setTeachers(new Teacher[highSchool.getTeacherCount()]);
+        for (int i = 0; i < highSchool.getTeacherCount(); i++) {
+            Teacher teacher = new Teacher();
+            teacher.setAge(41 + i);
+            teacher.setName("t" + i);
+            highSchool.getTeachers()[i] = teacher;
+        }
+
+        byte[] tmp = MagicByte.unpackToByte(highSchool);
+
+
+
+        HighSchool pack = MagicByte.pack(tmp, HighSchool.class);
+
+
+        Assert.assertNotNull(pack);
+        Assert.assertEquals(highSchool.getName(), pack.getName());
+        Assert.assertEquals(highSchool.getTeacherCount(), pack.getTeacherCount());
+        Assert.assertEquals(highSchool.getTeachers()[1].getAge(), pack.getTeachers()[1].getAge());
+        Assert.assertEquals(highSchool.getTeachers()[1].getName(), pack.getTeachers()[1].getName());
+
+        Assert.assertEquals(highSchool.getStudentCount(), pack.getStudentCount());
+        Assert.assertEquals(highSchool.getStudentList().get(1).getAge(), pack.getStudentList().get(1).getAge());
+        Assert.assertEquals(highSchool.getStudentList().get(1).getAge(), pack.getStudentList().get(1).getAge());
+
+
+    }
+
+
+
+    @Test
     public void testSimpleObject() {
         Object pack = MagicByte.pack(new byte[]{1, 2, 3}, EmptyObject.class);
         Assert.assertNull(pack);

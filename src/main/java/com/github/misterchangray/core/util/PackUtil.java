@@ -89,7 +89,12 @@ public class PackUtil {
                 ClassUtil.setValue(object, value, fieldMetaInfo.getField());
                 break;
             case STRING:
-                bytes = new byte[fieldMetaInfo.getTotalBytes()];
+                int len = fieldMetaInfo.getTotalBytes();
+                if(fieldMetaInfo.isDynamic()) {
+                    int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
+                    len = convertToInt(object,  classMetaInfo.getByOrderId(order));
+                }
+                bytes = new byte[len];
                 data.get(bytes);
                 String s = null;
                 try {
@@ -102,13 +107,13 @@ public class PackUtil {
                 break;
             case ARRAY:
                 count = fieldMetaInfo.getSize();
-                if(-1 != fieldMetaInfo.getMagicField().dynamicSizeFromOrder() && -1 == count) {
-                    int order = fieldMetaInfo.getMagicField().dynamicSizeFromOrder() - 1;
-                    count = convertToInt(object,  classMetaInfo.getFields().get(order));
+                if(fieldMetaInfo.isDynamic()) {
+                    int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
+                    count = convertToInt(object,  classMetaInfo.getByOrderId(order));
                 }
 
                 Object array = Array.newInstance(fieldMetaInfo.getClazz(), count);
-                for(int i=0, unitBytes = fieldMetaInfo.getTotalBytes() / fieldMetaInfo.getSize(); i<count; i++) {
+                for(int i=0, unitBytes = fieldMetaInfo.getElementBytes(); i<count; i++) {
                     TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
                     if(TypeEnum.OBJECT == typeEnum) {
                         bytes = new byte[unitBytes];
@@ -126,13 +131,13 @@ public class PackUtil {
                 break;
             case LIST:
                 count = fieldMetaInfo.getSize();
-                if(-1 != fieldMetaInfo.getMagicField().dynamicSizeFromOrder() && -1 == count) {
-                    int order = fieldMetaInfo.getMagicField().dynamicSizeFromOrder() - 1;
-                    count = convertToInt(object,  classMetaInfo.getFields().get(order));
+                if(fieldMetaInfo.isDynamic()) {
+                    int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
+                    count = convertToInt(object,  classMetaInfo.getByOrderId(order));
                 }
 
                 List<Object> list = new ArrayList<>(count);
-                for(int i=0, unitBytes = fieldMetaInfo.getTotalBytes() / fieldMetaInfo.getSize(); i<count; i++) {
+                for(int i=0, unitBytes = fieldMetaInfo.getElementBytes(); i<count; i++) {
                     TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
                     if(TypeEnum.OBJECT == typeEnum) {
                         bytes = new byte[unitBytes];
