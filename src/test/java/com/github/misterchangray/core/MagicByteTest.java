@@ -25,6 +25,7 @@ public class MagicByteTest {
             Student student = new Student();
             student.setAge(21 + i);
             student.setName("张" + i);
+            student.setBookIds(new byte[]{1,2,3,4, (byte) i});
             highSchool.getStudentList().add(student);
         }
 
@@ -35,6 +36,11 @@ public class MagicByteTest {
             Teacher teacher = new Teacher();
             teacher.setAge(41 + i);
             teacher.setName("t" + i);
+
+            Phone p = new Phone();
+            p.setBrand("XM");
+            p.setPhone(13000 + i);
+            teacher.setPhone(p);
             highSchool.getTeachers()[i] = teacher;
         }
 
@@ -55,6 +61,8 @@ public class MagicByteTest {
         Assert.assertEquals(highSchool.getStudentList().get(1).getAge(), pack.getStudentList().get(1).getAge());
         Assert.assertEquals(highSchool.getStudentList().get(1).getAge(), pack.getStudentList().get(1).getAge());
 
+        Assert.assertArrayEquals(highSchool.getStudentList().get(2).getBookIds(), pack.getStudentList().get(2).getBookIds());
+        Assert.assertEquals(highSchool.getTeachers()[2].getPhone().getPhone(), pack.getTeachers()[2].getPhone().getPhone());
 
     }
 
@@ -119,6 +127,10 @@ public class MagicByteTest {
         try {
             Student student1 = MagicByte.pack(tmp, Student.class);
 
+            Assert.assertEquals(student.getName(), student1.getName());
+            Assert.assertEquals(student.getAge(), student1.getAge());
+            Assert.assertArrayEquals(student.getPhones(), student1.getPhones());
+            Assert.assertArrayEquals(student.getBookIds(), student1.getBookIds());
         } catch (Exception ae) {
             hasException = true;
         }
@@ -153,6 +165,10 @@ public class MagicByteTest {
             byte[] b = MagicByte.unpackToByte(unknownField);
             UnknownField unknownField1 = MagicByte.pack(b, UnknownField.class);
 
+            Assert.assertNull(unknownField1.getStringBuffer());
+            Assert.assertNull(unknownField1.getStringBuilder());
+            Assert.assertNull(unknownField1.getTime());
+            Assert.assertNull(unknownField1.getTmo());
             Assert.assertEquals(unknownField.getName(), unknownField1.getName());
             Assert.assertEquals("double should be equals", unknownField.getaDouble(), unknownField1.getaDouble(), 0.0);
             Assert.assertEquals("float should be equals", unknownField.getaFloat(), unknownField1.getaFloat(), 0.0);
@@ -182,10 +198,11 @@ public class MagicByteTest {
 
         Student student1 = MagicByte.pack(tmp, Student.class);
 
-        Assert.assertArrayEquals(student.getBookIds(), student1.getBookIds());
+        Assert.assertEquals(student.getAge(), student1.getAge());
         Assert.assertArrayEquals(student.getPhones(), student1.getPhones());
         Assert.assertEquals(student.getName(), student1.getName());
-        Assert.assertEquals(student.getAge(), student1.getAge());
+        Assert.assertArrayEquals(student.getBookIds(), student1.getBookIds());
+
     }
 
 
@@ -223,8 +240,6 @@ public class MagicByteTest {
     public void testPackNesting() throws UnsupportedEncodingException, InstantiationException {
         School school = new School();
         school.setName("XiHuaDaXe");
-
-
 
         List<Student> studentList = new ArrayList<>();
         for(int i=0; i<3; i++) {
