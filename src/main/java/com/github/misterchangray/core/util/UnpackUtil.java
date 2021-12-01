@@ -26,7 +26,7 @@ public class UnpackUtil {
         if(Objects.isNull(classMetaInfo)) return null;
 
         int[] dynamicSize = Arrays.copyOf(classMetaInfo.getDynamicSize(), classMetaInfo.getDynamicSize().length);
-        int totalBytes = classMetaInfo.getTotalBytes();
+        int totalBytes = classMetaInfo.getElementBytes();
         if(classMetaInfo.isDynamic()) {
             totalBytes = calcTotalBytes(classMetaInfo, dynamicSize, object);
         }
@@ -56,7 +56,7 @@ public class UnpackUtil {
                 }
                 res += dynamicSize[field.getOrderId()];
             } else {
-                res += field.getTotalBytes();
+                res += field.getElementBytes();
             }
         }
         return res;
@@ -139,7 +139,7 @@ public class UnpackUtil {
                 break;
             case OBJECT:
                 if(Objects.isNull(val)) {
-                    res.put(new byte[fieldMetaInfo.getTotalBytes()]);
+                    res.put(new byte[fieldMetaInfo.getElementBytes()]);
                 } else {
                     res.put(unpackObject(val).array());
                 }

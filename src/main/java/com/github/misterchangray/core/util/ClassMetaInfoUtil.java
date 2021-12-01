@@ -30,23 +30,21 @@ public class ClassMetaInfoUtil {
         classMetaInfo.setFields(new ArrayList<>());
 
         initAllMagicField(classMetaInfo);
-        int total = classMetaInfo.getFields().stream().mapToInt(FieldMetaInfo::getTotalBytes).sum();
+        if(classMetaInfo.getFields().size() == 0) return  null;
+
+        int[] ints = new int[classMetaInfo.getFields().get(classMetaInfo.getFields().size() - 1).getOrderId() + 1];
+        for (FieldMetaInfo field : classMetaInfo.getFields()) {
+            ints[field.getOrderId()] = field.getSize() * field.getElementBytes();
+        }
+        classMetaInfo.setDynamicSize(ints);
+
+        int total = Arrays.stream(ints).sum();
         AssertUtil.assertTotalLengthNotZero(total, classMetaInfo);
         if(total == 0) {
             return null;
         }
 
-        int[] ints = new int[classMetaInfo.getFields().get(classMetaInfo.getFields().size() - 1).getOrderId() + 1];
-        for (FieldMetaInfo field : classMetaInfo.getFields()) {
-            if(field.isDynamic()) {
-                ints[field.getOrderId()] = field.getElementBytes();
-            } else {
-                ints[field.getOrderId()] = field.getTotalBytes();
-            }
-        }
-        classMetaInfo.setDynamicSize(ints);
-
-        classMetaInfo.setTotalBytes(total);
+        classMetaInfo.setElementBytes(total);
         cache.put(classMetaInfo.getClazz(), classMetaInfo);
         return classMetaInfo;
     }
@@ -60,7 +58,6 @@ public class ClassMetaInfoUtil {
     private static  void  initAllMagicField(ClassMetaInfo classMetaInfo) {
         List<FieldMetaInfo> res = classMetaInfo.getFields();
         Field[] fields = classMetaInfo.getClazz().getDeclaredFields();
-        int dynamicIdIndex = 0;
         for (Field field : fields) {
             MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
             FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
@@ -116,9 +113,8 @@ public class ClassMetaInfoUtil {
             case FLOAT:
             case DOUBLE:
             case LONG:
-                size = typeEnum.getBytes();
-                fieldMetaInfo.setSize(size);
-                fieldMetaInfo.setElementBytes(size);
+                fieldMetaInfo.setSize(1);
+                fieldMetaInfo.setElementBytes( typeEnum.getBytes());
                 fieldMetaInfo.setClazz(fieldMetaInfo.getField().getType());
                 break;
             case STRING:
@@ -127,7 +123,7 @@ public class ClassMetaInfoUtil {
                 fieldMetaInfo.setClazz(String.class);
                 settingIfFiledIsDynamic(magicField, fieldMetaInfo);
 
-                fieldMetaInfo.setSize(size);
+                fieldMetaInfo.setSize(1);
                 fieldMetaInfo.setElementBytes(size);
                 break;
             case ARRAY:
@@ -135,7 +131,8 @@ public class ClassMetaInfoUtil {
                 genericClazz = fieldMetaInfo.getField().getType().getComponentType();
                 fieldMetaInfo.setElementBytes(calcCollectionSize(genericClazz));
                 settingIfFiledIsDynamic(magicField, fieldMetaInfo);
-                size = fieldMetaInfo.getSize() * fieldMetaInfo.getElementBytes();
+                size = fieldMetaInfo.getSize();
+                fieldMetaInfo.setSize(size);
 
                 fieldMetaInfo.setClazz(genericClazz);
                 break;
@@ -149,24 +146,22 @@ public class ClassMetaInfoUtil {
 
                 fieldMetaInfo.setElementBytes(calcCollectionSize(genericClazz));
                 settingIfFiledIsDynamic(magicField, fieldMetaInfo);
-                size = fieldMetaInfo.getSize() * fieldMetaInfo.getElementBytes();
+                size = fieldMetaInfo.getSize();
 
                 fieldMetaInfo.setClazz(genericClazz);
-                fieldMetaInfo.setSize(fieldMetaInfo.getSize());
+                fieldMetaInfo.setSize(size);
                 break;
             case OBJECT:
                 ClassMetaInfo classMetaInfo = buildClassMetaInfo(type);
                 if(Objects.isNull(classMetaInfo)) {
                     break;
                 }
-                size = classMetaInfo.getTotalBytes();
-                fieldMetaInfo.setSize(size);
+                size = classMetaInfo.getElementBytes();
+                fieldMetaInfo.setSize(1);
                 fieldMetaInfo.setElementBytes(size);
                 fieldMetaInfo.setClazz(type);
                 break;
         }
-
-        fieldMetaInfo.setTotalBytes(size);
 
         if(Objects.isNull(fieldMetaInfo.getClazz())) {
            return false;
@@ -208,7 +203,7 @@ public class ClassMetaInfoUtil {
             case OBJECT:
                 ClassMetaInfo classMetaInfo = buildClassMetaInfo(genericClazz);
                 if(Objects.nonNull(classMetaInfo)) {
-                   res = classMetaInfo.getTotalBytes();
+                   res = classMetaInfo.getElementBytes();
                 }
                 break;
         }

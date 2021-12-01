@@ -11,9 +11,9 @@ public class FieldMetaInfo {
     private Field field;
     private int size;
 
-    private int totalBytes;
-
-    // the size of one element on collections
+    // the size of element
+    // if element on collections, size is bytes of unit
+    // otherwise object is total bytes
     private int elementBytes;
 
     private TypeEnum type;
@@ -86,14 +86,6 @@ public class FieldMetaInfo {
 
     public void setCharset(String charset) {
         this.charset = charset;
-    }
-
-    public int getTotalBytes() {
-        return totalBytes;
-    }
-
-    public void setTotalBytes(int totalBytes) {
-        this.totalBytes = totalBytes;
     }
 
     public Class<?> getClazz() {

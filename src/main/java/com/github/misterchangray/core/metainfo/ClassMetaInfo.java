@@ -11,7 +11,6 @@ import java.util.Optional;
 public class ClassMetaInfo {
     private Class<?> clazz;
     private List<FieldMetaInfo> fields;
-    private int totalBytes;
     private ByteOrder byteOrder;
     private boolean autoTrim;
     /**
@@ -20,6 +19,22 @@ public class ClassMetaInfo {
     private boolean strict;
     private int[] dynamicSize;
     private boolean isDynamic;
+
+
+
+    // the size of element
+    // if element on collections, size is bytes of unit
+    // otherwise object is total bytes
+    private int elementBytes;
+
+
+    public int getElementBytes() {
+        return elementBytes;
+    }
+
+    public void setElementBytes(int elementBytes) {
+        this.elementBytes = elementBytes;
+    }
 
     public boolean isDynamic() {
         return isDynamic;
@@ -90,14 +105,6 @@ public class ClassMetaInfo {
 
     public void setFields(List<FieldMetaInfo> fields) {
         this.fields = fields;
-    }
-
-    public int getTotalBytes() {
-        return totalBytes;
-    }
-
-    public void setTotalBytes(int totalBytes) {
-        this.totalBytes = totalBytes;
     }
 
     public boolean isStrict() {

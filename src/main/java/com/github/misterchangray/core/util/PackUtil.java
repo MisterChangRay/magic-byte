@@ -70,7 +70,7 @@ public class PackUtil {
         int count = 0;
 
         // 判断缓冲区异常, 部分数据解析, 数据不够则直接停止解析 java.nio.BufferUnderflowException
-        boolean interrupt = fieldMetaInfo.getTotalBytes() > data.capacity() - data.position();
+        boolean interrupt = fieldMetaInfo.getElementBytes() > data.capacity() - data.position();
         if(interrupt) {
             AssertUtil.assertDataError(interrupt, classMetaInfo);
             return;
@@ -89,7 +89,7 @@ public class PackUtil {
                 ClassUtil.setValue(object, value, fieldMetaInfo.getField());
                 break;
             case STRING:
-                int len = fieldMetaInfo.getTotalBytes();
+                int len = fieldMetaInfo.getElementBytes();
                 if(fieldMetaInfo.isDynamic()) {
                     int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
                     len = convertToInt(object,  classMetaInfo.getByOrderId(order));
@@ -153,7 +153,7 @@ public class PackUtil {
                 ClassUtil.setValue(object, list, fieldMetaInfo.getField());
                 break;
             case OBJECT:
-                bytes = new byte[fieldMetaInfo.getTotalBytes()];
+                bytes = new byte[fieldMetaInfo.getElementBytes()];
                 data.get(bytes);
                 ClassUtil.setValue(object, packObject(bytes, fieldMetaInfo.getClazz()), fieldMetaInfo.getField());
                 break;
