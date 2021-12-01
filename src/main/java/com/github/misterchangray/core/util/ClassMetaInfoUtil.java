@@ -94,6 +94,7 @@ public class ClassMetaInfoUtil {
         fieldMetaInfo.setSize(magicField.size());
         fieldMetaInfo.setCharset(magicField.charset());
         fieldMetaInfo.setAutoTrim(magicField.autoTrim() || fieldMetaInfo.getOwnerClazz().isAutoTrim());
+        AssertUtil.assertSizeOrDynamicOf(fieldMetaInfo);
 
         field.setAccessible(true);
         Class<?> type = field.getType();
@@ -118,6 +119,7 @@ public class ClassMetaInfoUtil {
                 fieldMetaInfo.setClazz(fieldMetaInfo.getField().getType());
                 break;
             case STRING:
+                AssertUtil.assertEncoding(magicField.charset());
                 AssertUtil.assertHasLength(fieldMetaInfo);
                 size = fieldMetaInfo.getMagicField().size();
                 fieldMetaInfo.setClazz(String.class);
@@ -171,7 +173,7 @@ public class ClassMetaInfoUtil {
     }
 
     private static void settingIfFiledIsDynamic(MagicField magicField, FieldMetaInfo fieldMetaInfo) {
-        if(magicField.dynamicSizeOf() > 0 && magicField.size() == 0) {
+        if(magicField.dynamicSizeOf() > 0) {
             // dynamic field
             fieldMetaInfo.setDynamic(true);
             fieldMetaInfo.setDynamicRef(fieldMetaInfo.getOwnerClazz().getByOrderId(magicField.dynamicSizeOf()));

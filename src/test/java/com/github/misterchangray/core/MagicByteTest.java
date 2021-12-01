@@ -9,11 +9,29 @@ import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 public class MagicByteTest {
 
 
+    @Test
+    public void testDynamicString() {
+        DynamicString dynamicString = new DynamicString();
+        dynamicString.setDate(System.currentTimeMillis());
+        dynamicString.setEmail("misterchangray@gmail.com");
+        dynamicString.setName("ray");
+
+        byte[] unpack = MagicByte.unpackToByte(dynamicString);
+
+        DynamicString pack = MagicByte.<DynamicString>pack(unpack, DynamicString.class);
+        Assert.assertEquals(dynamicString.getLen(), pack.getLen());
+        Assert.assertEquals(dynamicString.getEmail(), pack.getEmail());
+        Assert.assertEquals(dynamicString.getName(), pack.getName());
+        Assert.assertEquals(dynamicString.getDate(), pack.getDate());
+
+
+    }
 
     @Test
     public void testHighSchool() {

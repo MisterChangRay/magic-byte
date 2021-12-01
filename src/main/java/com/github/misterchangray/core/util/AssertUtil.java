@@ -6,9 +6,19 @@ import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class AssertUtil {
+
+    public static void assertEncoding(String encoding) {
+        try {
+            "".getBytes(encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new MagicByteException(String.format("UnsupportedEncoding; %s", encoding));
+        }
+    }
+
 
     public static void assertHasLength(FieldMetaInfo fieldMetaInfo) {
         MagicField magicField1 = fieldMetaInfo.getMagicField();
@@ -29,7 +39,7 @@ public class AssertUtil {
                 throw new MagicByteException(String.format("Sorting cannot be repeated; %s", fieldMetaInfo.getField().getName()));
             }
 
-            if(TypeEnum.ARRAY == fieldMetaInfo.getType()  || TypeEnum.LIST == fieldMetaInfo.getType()) {
+            if(TypeEnum.ARRAY == fieldMetaInfo.getType()  || TypeEnum.LIST == fieldMetaInfo.getType() || TypeEnum.STRING == fieldMetaInfo.getType()) {
                 // 是否设置成员数量
                 if(0 > fieldMetaInfo.getMagicField().size() && 0 > fieldMetaInfo.getMagicField().dynamicSizeOf()) {
                     throw new MagicByteException(String.format("list and array member size must be set ; %s", fieldMetaInfo.getField().getName()));
@@ -37,19 +47,26 @@ public class AssertUtil {
 
                 // 检查目标字段是否先初始化
                 if(0 < fieldMetaInfo.getMagicField().dynamicSizeOf() && null == tmp.get(fieldMetaInfo.getMagicField().dynamicSizeOf())) {
-                    throw new MagicByteException(String.format("dynamicSizeFromOrder number should be less than target field order number; %s", fieldMetaInfo.getField().getName()));
+                    throw new MagicByteException(String.format("dynamicSizeOf number should be less than target field order number; %s",
+                            fieldMetaInfo.getField().getName()));
                 }
 
                 // 检查目标字段是否为整数
                 if(0 < fieldMetaInfo.getMagicField().dynamicSizeOf() && (
-                        TypeEnum.BYTE != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeOf()).getType() &&
-                        TypeEnum.SHORT != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeOf()).getType() &&
-                        TypeEnum.INT != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeOf()).getType() &&
-                        TypeEnum.LONG != tmp.get(fieldMetaInfo.getMagicField().dynamicSizeOf()).getType()
+                        TypeEnum.BYTE != fieldMetaInfo.getDynamicRef().getType() &&
+                        TypeEnum.SHORT != fieldMetaInfo.getDynamicRef().getType() &&
+                        TypeEnum.INT != fieldMetaInfo.getDynamicRef().getType()
                 )) {
-                    throw new MagicByteException(String.format("dynamicSizeFromOrder target field should be number (int,short,byte,long); %s", fieldMetaInfo.getField().getName()));
+                    throw new MagicByteException(String.format("dynamicSizeOf target field should be number (int,short,byte); %s",
+                            fieldMetaInfo.getField().getName()));
+                }
+            } else {
+                if(fieldMetaInfo.getMagicField().dynamicSizeOf() > 0) {
+                    throw new MagicByteException(String.format("dynamicSizeOf properties only use String, Array, List : %s.%s",
+                            fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
                 }
             }
+
             tmp.put(order, fieldMetaInfo);
         }
 
@@ -64,21 +81,30 @@ public class AssertUtil {
 
     public static void assertDataError(boolean interrupt, ClassMetaInfo classMetaInfo) {
         if(interrupt && classMetaInfo.isStrict()) {
-            throw new MagicByteException(String.format("invalid byte array; do not converter to the java object : %s", classMetaInfo.getClazz().getName()));
+            throw new MagicByteException(String.format("invalid byte array; do not converter to the java object : %s",
+                    classMetaInfo.getClazz().getName()));
         }
     }
 
     public static void assertFieldMetaInfoInitSuccess(boolean initRes, FieldMetaInfo fieldMetaInfo) {
         if(!initRes && fieldMetaInfo.getOwnerClazz().isStrict()) {
-            throw new MagicByteException(String.format("can't parser field of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+            throw new MagicByteException(String.format("can't parser field of class: %s.%s",
+                    fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
         }
     }
 
     public static void assertHasMagicField(FieldMetaInfo fieldMetaInfo) {
         if(Objects.isNull(fieldMetaInfo.getMagicField()) && fieldMetaInfo.getOwnerClazz().isStrict()) {
-            throw new MagicByteException(String.format("not found @MagicField annotation of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+            throw new MagicByteException(String.format("not found @MagicField annotation of class: %s.%s",
+                    fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
         }
     }
 
 
+    public static void assertSizeOrDynamicOf(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.getMagicField().size() > 0 && fieldMetaInfo.getMagicField().dynamicSizeOf() > 0) {
+            throw new MagicByteException(String.format("@MagicField(size, dynamicSizeOf) only can be use only one, annotation of class: %s.%s",
+                    fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+        }
+    }
 }

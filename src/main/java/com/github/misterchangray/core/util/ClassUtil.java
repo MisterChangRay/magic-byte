@@ -1,8 +1,10 @@
 package com.github.misterchangray.core.util;
 
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class ClassUtil {
 
@@ -44,4 +46,35 @@ public class ClassUtil {
         }
     }
 
+
+    public static void autoSetInt(Object object, Integer value, FieldMetaInfo field) {
+        switch (field.getType()) {
+            case BYTE:
+                setValue(object, value.byteValue(), field.getField());
+                break;
+            case SHORT:
+                setValue(object, value.shortValue(), field.getField());
+                break;
+            case INT:
+                setValue(object, value, field.getField());
+                break;
+        }
+    }
+
+
+    public static <T> int readAsInt(FieldMetaInfo field, T o) {
+        Object i =  readValue(o, field.getField());
+        if(Objects.isNull(i)) {
+            return 0;
+        }
+        switch (field.getType()) {
+            case BYTE:
+                return ((Byte) i).intValue();
+            case SHORT:
+                return ((Short) i).intValue();
+            case INT:
+                return (Integer) i;
+        }
+        return 0;
+    }
 }

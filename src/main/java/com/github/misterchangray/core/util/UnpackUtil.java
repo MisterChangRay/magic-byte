@@ -1,7 +1,6 @@
 package com.github.misterchangray.core.util;
 
 import com.github.misterchangray.core.enums.TypeEnum;
-import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
@@ -43,18 +42,38 @@ public class UnpackUtil {
         int res = 0;
         for (FieldMetaInfo field : classMetaInfo.getFields()) {
             if(field.isDynamic()){
+                Object val = ClassUtil.readValue(object, field.getField());
+
+                if(Objects.isNull(val)) {
+                    ClassUtil.autoSetInt(object, 0, field.getDynamicRef());
+                    dynamicSize[field.getOrderId()] = 0;
+                    continue;
+                }
+
+
+                int defaultSize = ClassUtil.readAsInt(field.getDynamicRef(), object);
+                int actualSize = defaultSize;
+
                 switch (field.getType()) {
                     case LIST:
                     case ARRAY:
-                        Object o = ClassUtil.readValue(object, field.getField());
-                        dynamicSize[field.getOrderId()] = CollectionUtil.sizeOfCollection(field, o) * field.getElementBytes();
+                        if(actualSize == 0) {
+                            actualSize = CollectionUtil.sizeOfCollection(field, val);
+                        }
+                        dynamicSize[field.getOrderId()] = actualSize * field.getElementBytes();
                         break;
                     case STRING:
-                        String s = (String) ClassUtil.readValue(object, field.getField());
-                        dynamicSize[field.getOrderId()] = s.length();
+                        String s = (String) val;
+                        if(actualSize == 0) {
+                            try {
+                                actualSize = s.getBytes(field.getCharset()).length;
+                            } catch (UnsupportedEncodingException e) {}
+                        }
+                        dynamicSize[field.getOrderId()] = actualSize;
                         break;
                 }
                 res += dynamicSize[field.getOrderId()];
+                ClassUtil.autoSetInt(object, actualSize, field.getDynamicRef());
             } else {
                 res += field.getElementBytes();
             }
@@ -73,12 +92,9 @@ public class UnpackUtil {
      */
     private static ByteBuffer encodeField(FieldMetaInfo fieldMetaInfo, Object object, ByteOrder byteOrder, int[] dynamicSize) {
         ByteBuffer res = ByteBuffer.allocate(dynamicSize[fieldMetaInfo.getOrderId()]).order(byteOrder);
+        if(Objects.isNull(object)) return res;
+
         Object val = ClassUtil.readValue(object, fieldMetaInfo.getField());
-
-        if(fieldMetaInfo.isDynamic() && Objects.isNull(val)) {
-            throw new MagicByteException(String.format("dynamic field not be null: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
-        }
-
         List objectList = new ArrayList(20);
         switch (fieldMetaInfo.getType()) {
             case BOOLEAN:
@@ -97,9 +113,7 @@ public class UnpackUtil {
                 byte[] bytes = new byte[0];
                 try {
                     bytes = ((String) val).getBytes(fieldMetaInfo.getCharset());
-                } catch (UnsupportedEncodingException e) {
-                    throw new MagicByteException(String.format("UnsupportedEncoding; %s", fieldMetaInfo.getCharset()));
-                }
+                } catch (UnsupportedEncodingException e) {}
                 if(bytes.length > dynamicSize[fieldMetaInfo.getOrderId()]){
                     bytes = Arrays.copyOf(bytes, dynamicSize[fieldMetaInfo.getOrderId()]);
                 }
