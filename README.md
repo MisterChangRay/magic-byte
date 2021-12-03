@@ -28,7 +28,7 @@ maven项目可直接导入:
 3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 
 #### 3. 代码示例
-下面的对象中, Student 总共分配 27 个字节; School 总共分配 67 个字节
+下面的对象中, Student 总共分配 42 个字节; School 总共分配 95 个字节
 ```java
 // declare class must use public
 @MagicClass(autoTrim = true)
