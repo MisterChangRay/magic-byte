@@ -1,8 +1,10 @@
 package com.github.misterchangray.core;
 
 
+import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.entity.*;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.util.AssertUtil;
 import com.github.misterchangray.core.util.CalcUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +15,66 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 public class MagicByteTest {
+
+    @Test
+    public void testAllData() {
+        AllDataTypes allDataTypes = new AllDataTypes();
+        allDataTypes.setB1((byte) 1);
+        allDataTypes.setB2((byte) 2);
+
+        allDataTypes.setBo1(true);
+        allDataTypes.setBo2(false);
+
+        allDataTypes.setC1('a');
+        allDataTypes.setC2('A');
+
+        allDataTypes.setS1((short) 3);
+        allDataTypes.setS2((short) 4);
+
+        allDataTypes.setI1(11);
+        allDataTypes.setI2(12);
+
+        allDataTypes.setL1(123L);
+        allDataTypes.setL2(345L);
+
+        allDataTypes.setF1(3.14F);
+        allDataTypes.setF2(3.1415F);
+
+        allDataTypes.setD1(3.141592D);
+        allDataTypes.setD2(3.1415926D);
+
+        allDataTypes.setSt2("string");
+
+        byte[] tmp = MagicByte.unpackToByte(allDataTypes);
+        AllDataTypes pack = MagicByte.pack(tmp, AllDataTypes.class);
+
+        Assert.assertEquals(allDataTypes.getB1(), pack.getB1());
+        Assert.assertEquals(allDataTypes.getB2(), pack.getB2());
+        Assert.assertEquals(allDataTypes.isBo1(), pack.isBo1());
+        Assert.assertEquals(allDataTypes.getBo2(), pack.getBo2());
+
+        Assert.assertEquals(allDataTypes.getC1(), pack.getC1());
+        Assert.assertEquals(allDataTypes.getC2(), pack.getC2());
+
+        Assert.assertEquals(allDataTypes.getS1(), pack.getS1());
+        Assert.assertEquals(allDataTypes.getS2(), pack.getS2());
+
+        Assert.assertEquals(allDataTypes.getI1(), pack.getI1());
+        Assert.assertEquals(allDataTypes.getI2(), pack.getI2());
+
+        Assert.assertEquals(allDataTypes.getL1(), pack.getL1());
+        Assert.assertEquals(allDataTypes.getL2(), pack.getL2());
+
+        Assert.assertEquals(allDataTypes.getF1(), pack.getF1(), 0.00000);
+        Assert.assertEquals(allDataTypes.getF2(), pack.getF2(), 0.00000);
+
+        Assert.assertEquals(allDataTypes.getD1(), pack.getD1(), 0.00000);
+        Assert.assertEquals(allDataTypes.getD2(), pack.getD2(), 0.00000);
+
+        Assert.assertEquals(allDataTypes.getSt2(), pack.getSt2());
+
+    }
+
 
 
     @Test
@@ -109,7 +171,7 @@ public class MagicByteTest {
      * 检测部分数据是否 能正常加载
      */
     @Test
-    public void testAllData() throws UnsupportedEncodingException, InstantiationException {
+    public void testObjectData() throws UnsupportedEncodingException, InstantiationException {
         Student student = new Student();
         student.setAge(39);
         student.setPhones(new long[]{1838, 238, 234});
