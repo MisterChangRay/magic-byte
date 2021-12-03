@@ -6,7 +6,7 @@ import com.github.misterchangray.core.annotation.MagicField;
 @MagicClass
 public class DynamicString {
     @MagicField(order = 1)
-    private int len;
+    private Integer len;
     @MagicField(order = 2, dynamicSizeOf = 1)
     private String email;
     @MagicField(order = 3, size = 10, autoTrim = true)
@@ -14,11 +14,11 @@ public class DynamicString {
     @MagicField(order = 4)
     private long date;
 
-    public int getLen() {
+    public Integer getLen() {
         return len;
     }
 
-    public void setLen(int len) {
+    public void setLen(Integer len) {
         this.len = len;
     }
 

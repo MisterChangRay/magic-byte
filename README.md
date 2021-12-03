@@ -64,7 +64,7 @@ public class Student {
     @MagicField(order = 2)
     private int length;
     // 此List并未直接指定大小, 大小由 length 字段决定
-    @MagicField(order = 3, dynamicSizeFromOrder = 2)
+    @MagicField(order = 3, dynamicSizeOf = 2)
     private List<Long> phones;
     @MagicField(order = 4)
     private byte age;

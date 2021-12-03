@@ -37,9 +37,10 @@ public class MagicByteTest {
     public void testHighSchool() {
         HighSchool highSchool = new HighSchool();
         highSchool.setName("1234a");
-        highSchool.setStudentCount(3);
+        // 这里测试设置大小超过配置数量
+        highSchool.setStudentCount(5);
         highSchool.setStudentList(new ArrayList<>());
-        for (int i = 0; i < highSchool.getStudentCount(); i++) {
+        for (int i = 0; i < highSchool.getStudentCount() -2; i++) {
             Student student = new Student();
             student.setAge(21 + i);
             student.setName("张" + i);

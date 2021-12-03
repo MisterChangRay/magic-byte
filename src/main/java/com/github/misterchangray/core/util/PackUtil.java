@@ -92,7 +92,7 @@ public class PackUtil {
                 int len = fieldMetaInfo.getElementBytes();
                 if(fieldMetaInfo.isDynamic()) {
                     int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
-                    len = convertToInt(object,  classMetaInfo.getByOrderId(order));
+                    len = ClassUtil.readAsInt(classMetaInfo.getByOrderId(order), object);
                 }
                 bytes = new byte[len];
                 data.get(bytes);
@@ -109,7 +109,7 @@ public class PackUtil {
                 count = fieldMetaInfo.getSize();
                 if(fieldMetaInfo.isDynamic()) {
                     int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
-                    count = convertToInt(object,  classMetaInfo.getByOrderId(order));
+                    count = ClassUtil.readAsInt(classMetaInfo.getByOrderId(order), object);
                 }
 
                 Object array = Array.newInstance(fieldMetaInfo.getClazz(), count);
@@ -133,7 +133,7 @@ public class PackUtil {
                 count = fieldMetaInfo.getSize();
                 if(fieldMetaInfo.isDynamic()) {
                     int order = fieldMetaInfo.getMagicField().dynamicSizeOf();
-                    count = convertToInt(object,  classMetaInfo.getByOrderId(order));
+                    count = ClassUtil.readAsInt(classMetaInfo.getByOrderId(order), object);
                 }
 
                 List<Object> list = new ArrayList<>(count);
@@ -162,21 +162,5 @@ public class PackUtil {
     }
 
 
-    public static Integer convertToInt(Object object, FieldMetaInfo field) {
-        Object o =  ClassUtil.readValue(object, field.getField());
-
-        switch (field.getType()) {
-            case BYTE:
-                Byte b = (Byte) o;
-                return (int) b.byteValue();
-            case SHORT:
-                Short s = (Short) o;
-                return (int) s.shortValue();
-            case INT:
-                Integer integer = (Integer) o;
-                return (int) integer.intValue();
-        }
-        return 0;
-    }
 
 }
