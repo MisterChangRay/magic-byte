@@ -100,12 +100,18 @@ public class UnpackUtil {
             case BOOLEAN:
                 if(Objects.isNull(val)) val = false;
             case BYTE:
+                if(Objects.isNull(val)) val = (byte)0;
             case CHAR:
+                if(Objects.isNull(val)) val = (char)0;
             case SHORT:
-            case INT:
+                if(Objects.isNull(val)) val = (short)0;
             case FLOAT:
+                if(Objects.isNull(val)) val = (float)0;
             case DOUBLE:
+                if(Objects.isNull(val)) val = (double)0;
             case LONG:
+                if(Objects.isNull(val)) val = (long)0;
+            case INT:
                 if(Objects.isNull(val)) val = 0;
                 putBaseFieldValue(fieldMetaInfo.getType(), object, val ,  res);
                 break;

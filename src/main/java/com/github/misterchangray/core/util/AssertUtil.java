@@ -22,8 +22,8 @@ public class AssertUtil {
 
     public static void assertHasLength(FieldMetaInfo fieldMetaInfo) {
         MagicField magicField1 = fieldMetaInfo.getMagicField();
-        if(magicField1.size() < 0 && magicField1.dynamicSizeOf() < 0)
-            throw new MagicByteException(String.format("field must set size of class: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+        if(magicField1.size() <= 0 && magicField1.dynamicSizeOf() <= 0)
+            throw new MagicByteException(String.format("field must set size of field: %s.%s", fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
     }
 
 
