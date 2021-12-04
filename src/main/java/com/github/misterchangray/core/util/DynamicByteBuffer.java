@@ -1,8 +1,10 @@
 package com.github.misterchangray.core.util;
 
+import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.exception.MagicParseException;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
 
 public class DynamicByteBuffer {
     private ByteBuffer byteBuffer;
@@ -42,6 +44,9 @@ public class DynamicByteBuffer {
 
     
     public byte get() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.BYTE.getBytes()) {
+            throw new MagicParseException();
+        }
         return byteBuffer.get();
     }
 
@@ -55,10 +60,16 @@ public class DynamicByteBuffer {
 
     
     public byte get(int i) {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.BYTE.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.get(i);
     }
 
     public char getChar() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.CHAR.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.getChar();
     }
 
@@ -70,6 +81,9 @@ public class DynamicByteBuffer {
 
 
     public short getShort() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.SHORT.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.getShort();
     }
 
@@ -83,6 +97,9 @@ public class DynamicByteBuffer {
 
 
     public int getInt() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.INT.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.getInt();
     }
 
@@ -96,6 +113,9 @@ public class DynamicByteBuffer {
 
 
     public long getLong() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.LONG.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.getLong();
     }
 
@@ -107,6 +127,9 @@ public class DynamicByteBuffer {
 
 
     public float getFloat() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.FLOAT.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.getFloat();
     }
 
@@ -119,6 +142,9 @@ public class DynamicByteBuffer {
 
 
     public double getDouble() {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.DOUBLE.getBytes()) {
+            throw new MagicParseException();
+        }
         return this.byteBuffer.getDouble();
     }
 
@@ -139,5 +165,16 @@ public class DynamicByteBuffer {
     public void put(byte[] bytes) {
         autoGrow(bytes.length);
         this.byteBuffer.put(bytes);
+    }
+
+    public void position(int i) {
+        this.byteBuffer.position(i);
+    }
+
+    public void get(byte[] bytes) {
+        if(this.byteBuffer.capacity() - this.byteBuffer.position() < bytes.length) {
+            throw new MagicParseException();
+        }
+        this.byteBuffer.get(bytes);
     }
 }

@@ -2,6 +2,7 @@ package com.github.misterchangray.core.util;
 
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.exception.MagicParseException;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 public class PackUtil {
 
 
-    public static <T> T packObject(ByteBuffer data, Class<?> clazz) {
+    public static <T> T packObject(DynamicByteBuffer data, Class<?> clazz) {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(clazz);
         if(Objects.isNull(classMetaInfo)) {
             return null;
@@ -33,13 +34,17 @@ public class PackUtil {
 
 
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-            decodeField(object, fieldMetaInfo, data, classMetaInfo);
+            try {
+                decodeField(object, fieldMetaInfo, data, classMetaInfo);
+            } catch (MagicParseException ae) {
+                break;
+            }
         }
 
         return object;
     }
 
-    private static Object getBaseFieldValue(TypeEnum typeEnum,ByteBuffer data){
+    private static Object getBaseFieldValue(TypeEnum typeEnum,DynamicByteBuffer data){
         switch (typeEnum) {
             case BYTE:
                 return data.get();
@@ -61,16 +66,9 @@ public class PackUtil {
         return null;
     }
 
-    private static void decodeField(Object object, FieldMetaInfo fieldMetaInfo, ByteBuffer data, ClassMetaInfo classMetaInfo) {
+    private static void decodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, ClassMetaInfo classMetaInfo) {
         byte[] bytes = null;
         int count = 0;
-
-        // 判断缓冲区异常, 部分数据解析, 数据不够则直接停止解析 java.nio.BufferUnderflowException
-        boolean interrupt = fieldMetaInfo.getElementBytes() > data.capacity() - data.position();
-        if(interrupt) {
-            AssertUtil.assertDataError(interrupt, classMetaInfo);
-            return;
-        }
 
         switch (fieldMetaInfo.getType()) {
             case BYTE:

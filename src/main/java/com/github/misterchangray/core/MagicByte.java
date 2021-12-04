@@ -1,6 +1,7 @@
 package com.github.misterchangray.core;
 
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.util.DynamicByteBuffer;
 import com.github.misterchangray.core.util.PackUtil;
 import com.github.misterchangray.core.util.UnpackUtil;
 
@@ -23,7 +24,7 @@ public class MagicByte {
         if(null == data || null == clazz) return null;
         if(0 == data.length) return null;
 
-        ByteBuffer res = ByteBuffer.allocate(data.length);
+        DynamicByteBuffer res = DynamicByteBuffer.allocate(data.length);
         res.put(data);
         res.position(0);
 
