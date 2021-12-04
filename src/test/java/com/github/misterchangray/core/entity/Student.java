@@ -44,7 +44,7 @@ public class Student {
         this.bookIds = bookIds;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 

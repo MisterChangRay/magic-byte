@@ -258,9 +258,20 @@ public class MagicByteTest {
         Student student1 = MagicByte.pack(tmp, Student.class);
 
 
+        // all data
         Assert.assertEquals(student.getName(), student1.getName());
         Assert.assertEquals(student.getAge(), student1.getAge());
         Assert.assertEquals(student.getPhones()[2], student1.getPhones()[2]);
+
+
+        // half data
+        tmp = Arrays.copyOf(tmp, 30);
+        student1 = MagicByte.pack(tmp, Student.class);
+
+
+        Assert.assertEquals(student.getName(), student1.getName());
+        Assert.assertEquals(student.getAge(), student1.getAge());
+        Assert.assertNull(student1.getPhones());
     }
 
 
@@ -277,20 +288,21 @@ public class MagicByteTest {
 
         byte[] tmp = MagicByte.unpackToByte(student);
 
-        tmp = Arrays.copyOf(tmp, 25);
-        boolean hasException = false;
-        try {
-            Student student1 = MagicByte.pack(tmp, Student.class);
 
-            Assert.assertEquals(student.getName(), student1.getName());
-            Assert.assertEquals(student.getAge(), student1.getAge());
-            Assert.assertArrayEquals(student.getPhones(), student1.getPhones());
-            Assert.assertArrayEquals(student.getBookIds(), student1.getBookIds());
-        } catch (Exception ae) {
-            hasException = true;
-        }
+        Student student1 = MagicByte.pack(tmp, Student.class);
 
-        Assert.assertTrue("part of all data in strict model should be throw exception", hasException);
+        Assert.assertEquals(student.getName(), student1.getName());
+        Assert.assertEquals(student.getAge(), student1.getAge());
+        Assert.assertArrayEquals(student.getPhones(), student1.getPhones());
+        Assert.assertArrayEquals(student.getBookIds(), student1.getBookIds());
+
+
+        tmp = Arrays.copyOf(tmp, 13);
+        student1 = MagicByte.pack(tmp, Student.class);
+        Assert.assertEquals(student.getName(), student1.getName());
+        Assert.assertNull( student1.getAge());
+        Assert.assertNull( student1.getBookIds());
+        Assert.assertNull( student1.getPhones());
     }
 
     /**
