@@ -107,4 +107,11 @@ public class AssertUtil {
                     fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
         }
     }
+
+    public static void assertLengthEqualsDeclare(FieldMetaInfo fieldMetaInfo, List objectList, int size) {
+        if(objectList.size() < size) {
+            throw new MagicByteException(String.format("collection actually length less than declare size , annotation of class: %s.%s",
+                    fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+        }
+    }
 }

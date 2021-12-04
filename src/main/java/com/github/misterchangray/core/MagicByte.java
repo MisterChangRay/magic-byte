@@ -23,7 +23,11 @@ public class MagicByte {
         if(null == data || null == clazz) return null;
         if(0 == data.length) return null;
 
-        return PackUtil.packObject(data, clazz);
+        ByteBuffer res = ByteBuffer.allocate(data.length);
+        res.put(data);
+        res.position(0);
+
+        return PackUtil.packObject(res, clazz);
     }
 
     /**
@@ -36,8 +40,8 @@ public class MagicByte {
      */
     public static <T> ByteBuffer unpack(T t)  throws MagicByteException {
         if (null == t) return null;
-
-        return UnpackUtil.unpackObject(t);
+        byte[] bytes = unpackToByte(t);
+        return ByteBuffer.allocate(bytes.length).put(bytes);
     }
 
 
@@ -50,8 +54,6 @@ public class MagicByte {
     public static <T> byte[] unpackToByte(T t) throws MagicByteException {
         if (null == t) return null;
 
-        ByteBuffer res = unpack(t);
-        if(null == res) return null;
-        return res.array();
+        return  UnpackUtil.unpackObject(t);
     }
 }

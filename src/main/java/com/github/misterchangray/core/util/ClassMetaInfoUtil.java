@@ -32,13 +32,9 @@ public class ClassMetaInfoUtil {
         initAllMagicField(classMetaInfo);
         if(classMetaInfo.getFields().size() == 0) return  null;
 
-        int[] ints = new int[classMetaInfo.getFields().get(classMetaInfo.getFields().size() - 1).getOrderId() + 1];
-        for (FieldMetaInfo field : classMetaInfo.getFields()) {
-            ints[field.getOrderId()] = field.getSize() * field.getElementBytes();
-        }
-        classMetaInfo.setDynamicSize(ints);
-
-        int total = Arrays.stream(ints).sum();
+        int total = classMetaInfo.getFields().stream().mapToInt(item -> {
+            return item.getElementBytes() * item.getSize();
+        }).sum();
         AssertUtil.assertTotalLengthNotZero(total, classMetaInfo);
         if(total == 0) {
             return null;
@@ -103,7 +99,6 @@ public class ClassMetaInfoUtil {
         fieldMetaInfo.setType(typeEnum);
 
         Class<?> genericClazz = null;
-        Type genericType = null;
         int size = 0;
         switch (typeEnum) {
             case BYTE:
@@ -130,7 +125,7 @@ public class ClassMetaInfoUtil {
                 break;
             case ARRAY:
                 AssertUtil.assertHasLength(fieldMetaInfo);
-                genericClazz = fieldMetaInfo.getField().getType().getComponentType();
+                genericClazz = fieldMetaInfo.getGenericClazz();
                 fieldMetaInfo.setElementBytes(calcCollectionSize(genericClazz));
                 settingIfFiledIsDynamic(magicField, fieldMetaInfo);
                 size = fieldMetaInfo.getSize();
@@ -140,12 +135,7 @@ public class ClassMetaInfoUtil {
                 break;
             case LIST:
                 AssertUtil.assertHasLength(fieldMetaInfo);
-                genericType = fieldMetaInfo.getField().getGenericType();
-                if (genericType instanceof ParameterizedType) {
-                    ParameterizedType pt = (ParameterizedType) genericType;
-                    genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
-                }
-
+                genericClazz = fieldMetaInfo.getGenericClazz();
                 fieldMetaInfo.setElementBytes(calcCollectionSize(genericClazz));
                 settingIfFiledIsDynamic(magicField, fieldMetaInfo);
                 size = fieldMetaInfo.getSize();
@@ -177,6 +167,10 @@ public class ClassMetaInfoUtil {
             // dynamic field
             fieldMetaInfo.setDynamic(true);
             fieldMetaInfo.setDynamicRef(fieldMetaInfo.getOwnerClazz().getByOrderId(magicField.dynamicSizeOf()));
+
+
+            fieldMetaInfo.getDynamicRef().setDynamic(true);
+            fieldMetaInfo.getDynamicRef().setDynamicRef(fieldMetaInfo);
 
             fieldMetaInfo.getOwnerClazz().setDynamic(true);
         }

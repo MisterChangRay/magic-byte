@@ -20,65 +20,37 @@ public class UnpackUtil {
      * @param <T>
      * @return
      */
-    public static <T> ByteBuffer unpackObject(T object)  {
+    public static <T> byte[] unpackObject(T object)  {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(object.getClass());
         if(Objects.isNull(classMetaInfo)) return null;
 
-        int[] dynamicSize = Arrays.copyOf(classMetaInfo.getDynamicSize(), classMetaInfo.getDynamicSize().length);
-        int totalBytes = classMetaInfo.getElementBytes();
+        DynamicByteBuffer res = null;
         if(classMetaInfo.isDynamic()) {
-            totalBytes = calcTotalBytes(classMetaInfo, dynamicSize, object);
+            preInitObject(classMetaInfo, object);
+            res = DynamicByteBuffer.allocate().order(classMetaInfo.getByteOrder());
+        } else {
+            res = DynamicByteBuffer.allocate(classMetaInfo.getElementBytes()).order(classMetaInfo.getByteOrder());
         }
 
-        ByteBuffer res = ByteBuffer.allocate(totalBytes).order(classMetaInfo.getByteOrder());
         for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-            res = res.put(encodeField(fieldMetaInfo, object, classMetaInfo.getByteOrder(), dynamicSize).array());
+            encodeField(fieldMetaInfo, object, classMetaInfo.getByteOrder(), res);
         }
 
-        return res;
+        return res.array();
     }
 
-    private static <T> int calcTotalBytes(ClassMetaInfo classMetaInfo, int[] dynamicSize, T object) {
-        int res = 0;
+    private static <T> void preInitObject(ClassMetaInfo classMetaInfo, T object) {
         for (FieldMetaInfo field : classMetaInfo.getFields()) {
-            if(field.isDynamic()){
-                Object val = ClassUtil.readValue(object, field.getField());
-
-                if(Objects.isNull(val)) {
-                    ClassUtil.autoSetInt(object, 0, field.getDynamicRef());
-                    dynamicSize[field.getOrderId()] = 0;
-                    continue;
-                }
-
-
-                int defaultSize = ClassUtil.readAsInt(field.getDynamicRef(), object);
-                int actualSize = defaultSize;
-
-                switch (field.getType()) {
-                    case LIST:
-                    case ARRAY:
-                        if(actualSize == 0) {
-                            actualSize = CollectionUtil.sizeOfCollection(field, val);
-                        }
-                        dynamicSize[field.getOrderId()] = actualSize * field.getElementBytes();
-                        break;
-                    case STRING:
-                        String s = (String) val;
-                        if(actualSize == 0) {
-                            try {
-                                actualSize = s.getBytes(field.getCharset()).length;
-                            } catch (UnsupportedEncodingException e) {}
-                        }
-                        dynamicSize[field.getOrderId()] = actualSize;
-                        break;
-                }
-                res += dynamicSize[field.getOrderId()];
-                ClassUtil.autoSetInt(object, actualSize, field.getDynamicRef());
-            } else {
-                res += field.getElementBytes();
+            if(!field.isDynamic()) continue;
+            if(field.getType() != TypeEnum.LIST &&
+                    field.getType() != TypeEnum.ARRAY &&
+                    field.getType() != TypeEnum.STRING) {
+                continue;
             }
+
+            field.calcDynamicSize(object, ClassUtil.readValue(object, field.getField()));
         }
-        return res;
+
     }
 
 
@@ -90,9 +62,8 @@ public class UnpackUtil {
      * @param dynamicSize
      * @return
      */
-    private static ByteBuffer encodeField(FieldMetaInfo fieldMetaInfo, Object object, ByteOrder byteOrder, int[] dynamicSize) {
-        ByteBuffer res = ByteBuffer.allocate(dynamicSize[fieldMetaInfo.getOrderId()]).order(byteOrder);
-        if(Objects.isNull(object)) return res;
+    private static void encodeField(FieldMetaInfo fieldMetaInfo, Object object, ByteOrder byteOrder, DynamicByteBuffer res) {
+        if(Objects.isNull(object)) return;
 
         Object val = ClassUtil.readValue(object, fieldMetaInfo.getField());
         List objectList = new ArrayList(20);
@@ -113,59 +84,74 @@ public class UnpackUtil {
                 if(Objects.isNull(val)) val = (long)0;
             case INT:
                 if(Objects.isNull(val)) val = 0;
-                putBaseFieldValue(fieldMetaInfo.getType(), object, val ,  res);
+                putBaseFieldValue(fieldMetaInfo.getType(), val ,  res);
                 break;
             case STRING:
                 byte[] bytes = new byte[0];
                 try {
                     bytes = ((String) val).getBytes(fieldMetaInfo.getCharset());
                 } catch (UnsupportedEncodingException e) {}
-                if(bytes.length > dynamicSize[fieldMetaInfo.getOrderId()]){
-                    bytes = Arrays.copyOf(bytes, dynamicSize[fieldMetaInfo.getOrderId()]);
-                }
+                Integer size = fieldMetaInfo.calcDynamicSize(object, val);
+                bytes = Arrays.copyOf(bytes, size);
                 res.put(bytes);
                 break;
-            case ARRAY:
-                if(Objects.isNull(val)) {
-                    fill(res);
+            case ARRAY: {
+                Integer len = fieldMetaInfo.calcDynamicSize(object, val);
+                int totalBytes = len * fieldMetaInfo.getElementBytes();
+                bytes = new byte[totalBytes];
+
+                if (Objects.isNull(val)) {
+                    res.put(bytes);
                     break;
                 }
-                for(int i = 0, length = Array.getLength(val); i<length; i++) {
-                    if(i < length) objectList.add(Array.get(val, i));
+                for (int i = 0, length = Array.getLength(val); i < length; i++) {
+                    objectList.add(Array.get(val, i));
                 }
-            case LIST:
-                if(fieldMetaInfo.getType() == TypeEnum.LIST) objectList = (List) val;
+                doEncodingContainer(fieldMetaInfo, objectList, res, len);
+            }
+                break;
+            case LIST: {
+                objectList = (List) val;
+                Integer len = fieldMetaInfo.calcDynamicSize(object, val);
+                int totalBytes = len * fieldMetaInfo.getElementBytes();
+                bytes = new byte[totalBytes];
 
-                int index = 0;
-                int size = fieldMetaInfo.getSize();
-                if(fieldMetaInfo.isDynamic()) {
-                    size = dynamicSize[fieldMetaInfo.getOrderId()] / fieldMetaInfo.getElementBytes();
+                if (Objects.isNull(val)) {
+                    res.put(bytes);
+                    break;
                 }
-                for (Iterator item = objectList.iterator(); item.hasNext() && index < size;) {
-                    index ++;
-                    Object temp = item.next();
-                    if(null == temp) {
-                        res.put(new byte[fieldMetaInfo.getElementBytes()]);
-                        continue;
-                    }
-
-                    TypeEnum typeEnum = TypeEnum.getType(fieldMetaInfo.getClazz());
-                    if(TypeEnum.OBJECT == typeEnum) {
-                        res.put(unpackObject(temp).array());
-                    } else {
-                        putBaseFieldValue(typeEnum, object, temp, res);
-                    }
-                }
+                doEncodingContainer(fieldMetaInfo, objectList, res, len);
+            }
                 break;
             case OBJECT:
                 if(Objects.isNull(val)) {
                     res.put(new byte[fieldMetaInfo.getElementBytes()]);
                 } else {
-                    res.put(unpackObject(val).array());
+                    res.put(unpackObject(val));
                 }
                 break;
         }
-        return res;
+    }
+
+    private static void doEncodingContainer(FieldMetaInfo fieldMetaInfo, List objectList, DynamicByteBuffer res, int size) {
+        AssertUtil.assertLengthEqualsDeclare(fieldMetaInfo, objectList, size);
+
+        int index = 0;
+        for (Iterator item = objectList.iterator(); item.hasNext() && index < size;) {
+            index ++;
+            Object temp = item.next();
+            if(null == temp) {
+                res.put(new byte[fieldMetaInfo.getElementBytes()]);
+                continue;
+            }
+
+            TypeEnum typeEnum = TypeEnum.getType(fieldMetaInfo.getClazz());
+            if(TypeEnum.OBJECT == typeEnum) {
+                res.put(unpackObject(temp));
+            } else {
+                putBaseFieldValue(typeEnum,  temp, res);
+            }
+        }
     }
 
     private static void fill(ByteBuffer res) {
@@ -174,7 +160,7 @@ public class UnpackUtil {
         }
     }
 
-    private static void putBaseFieldValue(TypeEnum typeEnum,  Object object, Object value, ByteBuffer res) {
+    private static void putBaseFieldValue(TypeEnum typeEnum,   Object value, DynamicByteBuffer res) {
         switch (typeEnum) {
             case BOOLEAN:
                 value = (boolean)value ? 1 : 0;

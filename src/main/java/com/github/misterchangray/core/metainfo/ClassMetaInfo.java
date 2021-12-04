@@ -17,7 +17,6 @@ public class ClassMetaInfo {
      * use strict
 +     */
     private boolean strict;
-    private int[] dynamicSize;
     private boolean isDynamic;
 
 
@@ -44,14 +43,6 @@ public class ClassMetaInfo {
         isDynamic = dynamic;
     }
 
-    public int[] getDynamicSize() {
-        return dynamicSize;
-    }
-
-    public void setDynamicSize(int[] dynamicSize) {
-        this.dynamicSize = dynamicSize;
-    }
-
     public FieldMetaInfo getByOrderId(int orderId) {
         Optional<FieldMetaInfo> first = fields.stream().filter(item -> item.getOrderId() == orderId).findFirst();
         return first.orElse(null);
@@ -60,15 +51,17 @@ public class ClassMetaInfo {
 
     public void initConfig(Class<?> clazz) {
         Annotation annotation = clazz.<MagicClass>getAnnotation(MagicClass.class);
+        ByteOrder byteOrder = ByteOrder.BIG_ENDIAN;
+
         if(null != annotation) {
             MagicClass magicClass = (MagicClass) annotation;
-            ByteOrder byteOrder =
-                    magicClass.byteOrder() == com.github.misterchangray.core.enums.ByteOrder.LITTLE_ENDIAN ?
+            byteOrder = magicClass.byteOrder() == com.github.misterchangray.core.enums.ByteOrder.LITTLE_ENDIAN ?
                             ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
-            this.setByteOrder(byteOrder);;
             this.setAutoTrim(magicClass.autoTrim());
             this.setStrict(magicClass.strict());
         }
+        this.setByteOrder(byteOrder);;
+
     }
 
 

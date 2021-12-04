@@ -16,16 +16,12 @@ import java.util.Objects;
 public class PackUtil {
 
 
-    public static <T> T packObject(byte[] bytes, Class<?> clazz) {
+    public static <T> T packObject(ByteBuffer data, Class<?> clazz) {
         ClassMetaInfo classMetaInfo = ClassMetaInfoUtil.buildClassMetaInfo(clazz);
         if(Objects.isNull(classMetaInfo)) {
             return null;
         }
-        ByteBuffer res = ByteBuffer.allocate(bytes.length).order(classMetaInfo.getByteOrder());
-        res.put(bytes);
-        res.position(0);
-
-
+        data.order(classMetaInfo.getByteOrder());
         T object = null;
         try {
             object = (T) clazz.getDeclaredConstructor().newInstance();
@@ -37,7 +33,7 @@ public class PackUtil {
 
 
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-            decodeField(object, fieldMetaInfo, res, classMetaInfo);
+            decodeField(object, fieldMetaInfo, data, classMetaInfo);
         }
 
         return object;
@@ -116,11 +112,7 @@ public class PackUtil {
                 for(int i=0, unitBytes = fieldMetaInfo.getElementBytes(); i<count; i++) {
                     TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
                     if(TypeEnum.OBJECT == typeEnum) {
-                        bytes = new byte[unitBytes];
-                        data.get(bytes);
-                        if(fieldMetaInfo.isAutoTrim() && ClassUtil.isEmptyData(bytes)) continue;
-
-                        Array.set(array, i, packObject(bytes, fieldMetaInfo.getClazz()));
+                        Array.set(array, i, packObject(data, fieldMetaInfo.getClazz()));
                     } else {
 
                         Array.set(array, i, getBaseFieldValue(typeEnum, data));
@@ -140,11 +132,7 @@ public class PackUtil {
                 for(int i=0, unitBytes = fieldMetaInfo.getElementBytes(); i<count; i++) {
                     TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
                     if(TypeEnum.OBJECT == typeEnum) {
-                        bytes = new byte[unitBytes];
-                        data.get(bytes);
-                        if(classMetaInfo.isAutoTrim() && ClassUtil.isEmptyData(bytes)) continue;
-
-                        list.add( packObject(bytes, fieldMetaInfo.getClazz()));
+                        list.add( packObject(data, fieldMetaInfo.getClazz()));
                     } else {
                         list.add(getBaseFieldValue(typeEnum, data));
                     }
@@ -153,9 +141,7 @@ public class PackUtil {
                 ClassUtil.setValue(object, list, fieldMetaInfo.getField());
                 break;
             case OBJECT:
-                bytes = new byte[fieldMetaInfo.getElementBytes()];
-                data.get(bytes);
-                ClassUtil.setValue(object, packObject(bytes, fieldMetaInfo.getClazz()), fieldMetaInfo.getField());
+                ClassUtil.setValue(object, packObject(data, fieldMetaInfo.getClazz()), fieldMetaInfo.getField());
                 break;
         }
 

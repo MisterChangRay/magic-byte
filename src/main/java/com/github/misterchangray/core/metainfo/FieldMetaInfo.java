@@ -2,8 +2,14 @@ package com.github.misterchangray.core.metainfo;
 
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.util.ClassUtil;
+import com.github.misterchangray.core.util.CollectionUtil;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Objects;
 
 public class FieldMetaInfo {
     private ClassMetaInfo ownerClazz;
@@ -31,6 +37,52 @@ public class FieldMetaInfo {
 
     private int orderId;
 
+
+    public Class<?> getGenericClazz() {
+        if(this.getType() == TypeEnum.ARRAY) {
+            return this.getField().getType().getComponentType();
+
+        } else
+        if( this.getType() == TypeEnum.LIST) {
+            Type genericType = this.getField().getGenericType();
+            if (genericType instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType) genericType;
+                return  (Class<?>)pt.getActualTypeArguments()[0];
+            }        }
+        return null;
+    }
+
+
+
+    public int calcDynamicSize(Object obj, Object val) {
+
+        int size = 0;
+        switch (this.getType()) {
+            case ARRAY:
+            case LIST:
+                if(this.getSize() > 0) {
+                    return this.getSize();
+                }
+                size = CollectionUtil.sizeOfCollection(this, val);
+                break;
+            case STRING:
+                if(this.getElementBytes() > 0) {
+                    return this.getElementBytes();
+                }
+                try {
+                    size = ((String) val).getBytes(this.getCharset()).length;
+                } catch (UnsupportedEncodingException e) {}
+                break;
+        }
+
+        int c1 = ClassUtil.readAsInt(this.getDynamicRef(), obj);
+        if(c1 > 0){
+            size = c1;
+        }
+
+        ClassUtil.autoSetInt(obj, size, this.getDynamicRef());
+        return size;
+    }
 
     public int getElementBytes() {
         return elementBytes;
