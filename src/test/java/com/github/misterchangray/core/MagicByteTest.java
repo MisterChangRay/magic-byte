@@ -17,6 +17,80 @@ import java.util.*;
 public class MagicByteTest {
 
     @Test
+    public void testPackNestingMulti() {
+        HighSchool highSchool = new HighSchool();
+
+
+        City city = new City();
+        city.setName("成都");
+        city.setHighSchoolList(new ArrayList<>());
+        city.getHighSchoolList().add(highSchool);
+
+
+        highSchool.setName("one");
+        highSchool.setTeachers(new Teacher[]{new Teacher(), new Teacher(), new Teacher()});
+        highSchool.setStudentList(new ArrayList<Student>() {{
+            this.add(new Student());
+            this.add(new Student());
+            this.add(new Student());
+            this.add(new Student());
+        }});
+
+        for (int i = 0; i < highSchool.getTeachers().length; i++) {
+            highSchool.getTeachers()[i].setName("Teacher" + i);
+            Phone p = new Phone();
+            p.setBrand("XM" + i);
+            p.setPhone(3000 + i);
+            highSchool.getTeachers()[i].setPhone(p);
+
+            highSchool.getTeachers()[i].setAge(30 + i);
+        }
+        for (int i = 0; i < highSchool.getStudentList().size(); i++) {
+            highSchool.getStudentList().get(i).setName("Student" + i);
+            highSchool.getStudentList().get(i).setAge(20 + i);
+            highSchool.getStudentList().get(i).setBookIds(new byte[]{1, 2, 3, 5, (byte)i});
+            highSchool.getStudentList().get(i).setPhones(new long[] {183800, 183800, 183800 + i});
+        }
+
+        byte[] tmp = MagicByte.unpackToByte(city);
+
+        City pack = MagicByte.pack(tmp, City.class);
+        Assert.assertEquals(city.getName(), pack.getName());
+        Assert.assertEquals(city.getHighSchoolList().size(), pack.getHighSchoolList().size());
+        Assert.assertEquals(city.getHighSchoolSize(), pack.getHighSchoolSize());
+
+
+        for (int i = 0; i < city.getHighSchoolList().size(); i++) {
+            HighSchool highSchool1 = city.getHighSchoolList().get(i);
+            HighSchool highSchool2 = pack.getHighSchoolList().get(i);
+            Assert.assertEquals(highSchool1.getTeachers().length, highSchool2.getTeachers().length);
+            Assert.assertEquals(highSchool1.getTeachers()[1].getName(), highSchool2.getTeachers()[1].getName());
+            Assert.assertEquals(highSchool1.getTeachers()[1].getAge(), highSchool2.getTeachers()[1].getAge());
+            Assert.assertEquals(highSchool1.getTeachers()[1].getPhone().getPhone(), highSchool2.getTeachers()[1].getPhone().getPhone());
+            Assert.assertEquals(highSchool1.getTeachers()[1].getSexByte(), highSchool2.getTeachers()[1].getSexByte());
+
+            Assert.assertEquals(highSchool1.getTeachers()[2].getName(), highSchool2.getTeachers()[2].getName());
+            Assert.assertEquals(highSchool1.getTeachers()[2].getAge(), highSchool2.getTeachers()[2].getAge());
+            Assert.assertEquals(highSchool1.getTeachers()[2].getPhone().getPhone(), highSchool2.getTeachers()[2].getPhone().getPhone());
+            Assert.assertEquals(highSchool1.getTeachers()[2].getSexByte(), highSchool2.getTeachers()[2].getSexByte());
+
+            Assert.assertEquals(highSchool1.getStudentList().size(), highSchool2.getStudentList().size());
+            Assert.assertEquals(highSchool1.getStudentList().get(1).getAge(), highSchool2.getStudentList().get(1).getAge());
+            Assert.assertArrayEquals(highSchool1.getStudentList().get(1).getBookIds(), highSchool2.getStudentList().get(1).getBookIds());
+            Assert.assertArrayEquals(highSchool1.getStudentList().get(1).getPhones(), highSchool2.getStudentList().get(1).getPhones());
+            Assert.assertEquals(highSchool1.getStudentList().get(1).getName(), highSchool2.getStudentList().get(1).getName());
+
+
+            Assert.assertEquals(highSchool1.getStudentList().size(), highSchool2.getStudentList().size());
+            Assert.assertEquals(highSchool1.getStudentList().get(3).getAge(), highSchool2.getStudentList().get(3).getAge());
+            Assert.assertArrayEquals(highSchool1.getStudentList().get(3).getBookIds(), highSchool2.getStudentList().get(3).getBookIds());
+            Assert.assertArrayEquals(highSchool1.getStudentList().get(3).getPhones(), highSchool2.getStudentList().get(3).getPhones());
+            Assert.assertEquals(highSchool1.getStudentList().get(3).getName(), highSchool2.getStudentList().get(3).getName());
+        }
+
+    }
+
+    @Test
     public void testAllData() {
         AllDataTypes allDataTypes = new AllDataTypes();
         allDataTypes.setB1((byte) 1);
@@ -102,7 +176,7 @@ public class MagicByteTest {
         // 这里测试设置大小超过配置数量
         highSchool.setStudentCount(5);
         highSchool.setStudentList(new ArrayList<>());
-        for (int i = 0; i < highSchool.getStudentCount() -2; i++) {
+        for (int i = 0; i < highSchool.getStudentCount(); i++) {
             Student student = new Student();
             student.setAge(21 + i);
             student.setName("张" + i);
@@ -323,7 +397,7 @@ public class MagicByteTest {
         school.setName("XiHuaDaXe");
 
         List<Student> studentList = new ArrayList<>();
-        for(int i=0; i<3; i++) {
+        for(int i=0; i<4; i++) {
             Student student = new Student();
             student.setAge(23 + i);
             student.setPhones(new long[]{1838 + i, 238, 234});

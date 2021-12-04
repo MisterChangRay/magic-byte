@@ -9,14 +9,16 @@ import java.util.List;
 public class HighSchool {
     @MagicField(order = 1, size = 10)
     private String name;
-    @MagicField(order = 2)
-    private int studentCount;
-    @MagicField(order = 3, dynamicSizeOf = 2)
-    private List<Student> studentList;
-    @MagicField(order = 4)
+
+    @MagicField(order = 3)
     private int teacherCount;
-    @MagicField(order = 5, dynamicSizeOf = 4)
+    @MagicField(order = 4, dynamicSizeOf = 3)
     private Teacher[] teachers;
+
+    @MagicField(order = 5)
+    private int studentCount;
+    @MagicField(order = 6, dynamicSizeOf = 5)
+    private List<Student> studentList;
 
 
     public String getName() {
