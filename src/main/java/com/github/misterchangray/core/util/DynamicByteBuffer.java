@@ -33,8 +33,11 @@ public class DynamicByteBuffer {
         if( this.byteBuffer.capacity() - this.byteBuffer.position() >= bytes) {
             return;
         }
+        int newSize = (byteBuffer.capacity() * 2) + bytes;
+        ByteBuffer tmp = ByteBuffer.allocate(newSize).order(this.byteBuffer.order());
+        tmp.put(this.array());
+        this.byteBuffer = tmp;
 
-        byteBuffer = ByteBuffer.allocate(byteBuffer.capacity() * 2).order(this.byteBuffer.order());
     }
 
     public DynamicByteBuffer order(ByteOrder order) {
