@@ -6,7 +6,7 @@
 
     <groupId>io.github.misterchangray</groupId>
     <artifactId>magic-byte</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>magic-byte</name>
     <description>A java tool class to byte stream</description>
