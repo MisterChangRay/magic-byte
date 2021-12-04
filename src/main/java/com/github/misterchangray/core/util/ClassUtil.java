@@ -28,7 +28,6 @@ public class ClassUtil {
 
     public static Object readValue(Object o, Field field) {
         try {
-            field.setAccessible(true);
             return  field.get(o);
         } catch (IllegalAccessException e) {
             throw new MagicByteException("can't read object value, please check setter and getter method ");
@@ -39,7 +38,6 @@ public class ClassUtil {
 
     public static void setValue(Object object, Object value, Field field) {
         try {
-            field.setAccessible(true);
             field.set(object, value);
         } catch (IllegalAccessException e) {
             throw new MagicByteException("can't set object value, please check setter and getter method ");

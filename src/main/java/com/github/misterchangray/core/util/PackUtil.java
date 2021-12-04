@@ -9,7 +9,6 @@ import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,15 +31,11 @@ public class PackUtil {
             throw new MagicByteException(String.format("no public and no arguments constructor; \r\n%s", e));
         }
 
-
-        for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-            try {
+        try {
+            for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 decodeField(object, fieldMetaInfo, data, classMetaInfo);
-            } catch (MagicParseException ae) {
-                break;
             }
-        }
-
+        } catch (MagicParseException ae) { }
         return object;
     }
 
@@ -69,6 +64,7 @@ public class PackUtil {
     private static void decodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, ClassMetaInfo classMetaInfo) {
         byte[] bytes = null;
         int count = 0;
+        TypeEnum typeEnum = null;
 
         switch (fieldMetaInfo.getType()) {
             case BYTE:
@@ -107,12 +103,12 @@ public class PackUtil {
                 }
 
                 Object array = Array.newInstance(fieldMetaInfo.getClazz(), count);
-                for(int i=0, unitBytes = fieldMetaInfo.getElementBytes(); i<count; i++) {
-                    TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
+                typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
+
+                for(int i=0; i<count; i++) {
                     if(TypeEnum.OBJECT == typeEnum) {
                         Array.set(array, i, packObject(data, fieldMetaInfo.getClazz()));
                     } else {
-
                         Array.set(array, i, getBaseFieldValue(typeEnum, data));
                     }
                 }
@@ -127,8 +123,9 @@ public class PackUtil {
                 }
 
                 List<Object> list = new ArrayList<>(count);
-                for(int i=0, unitBytes = fieldMetaInfo.getElementBytes(); i<count; i++) {
-                    TypeEnum typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
+                typeEnum  = TypeEnum.getType(fieldMetaInfo.getClazz());
+
+                for(int i=0; i<count; i++) {
                     if(TypeEnum.OBJECT == typeEnum) {
                         list.add( packObject(data, fieldMetaInfo.getClazz()));
                     } else {

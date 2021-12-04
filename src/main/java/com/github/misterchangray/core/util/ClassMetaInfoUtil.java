@@ -55,6 +55,8 @@ public class ClassMetaInfoUtil {
         List<FieldMetaInfo> res = classMetaInfo.getFields();
         Field[] fields = classMetaInfo.getClazz().getDeclaredFields();
         for (Field field : fields) {
+            field.setAccessible(true);
+
             MagicField magicField = field.<MagicField>getAnnotation(MagicField.class);
             FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
             fieldMetaInfo.setOwnerClazz(classMetaInfo);
