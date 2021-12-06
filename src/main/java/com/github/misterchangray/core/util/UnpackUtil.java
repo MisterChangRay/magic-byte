@@ -87,11 +87,14 @@ public class UnpackUtil {
                 putBaseFieldValue(fieldMetaInfo.getType(), val ,  res);
                 break;
             case STRING:
-                byte[] bytes = new byte[0];
-                try {
-                    bytes = ((String) val).getBytes(fieldMetaInfo.getCharset());
-                } catch (UnsupportedEncodingException e) {}
                 Integer size = fieldMetaInfo.calcDynamicSize(object, val);
+
+                byte[] bytes = new byte[size];
+                if(Objects.nonNull(val)) {
+                    try {
+                        bytes = ((String) val).getBytes(fieldMetaInfo.getCharset());
+                    } catch (UnsupportedEncodingException e) {}
+                }
                 bytes = Arrays.copyOf(bytes, size);
                 res.put(bytes);
                 break;

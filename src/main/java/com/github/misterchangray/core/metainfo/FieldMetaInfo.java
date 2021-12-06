@@ -71,7 +71,9 @@ public class FieldMetaInfo {
                 }
                 try {
                     size = ((String) val).getBytes(this.getCharset()).length;
-                } catch (UnsupportedEncodingException e) {}
+                } catch (UnsupportedEncodingException e) {
+                    size = 0;
+                }
                 break;
         }
 
