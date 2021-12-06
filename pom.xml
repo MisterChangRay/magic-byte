@@ -6,7 +6,7 @@
 
     <groupId>io.github.misterchangray</groupId>
     <artifactId>magic-byte</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <name>magic-byte</name>
     <description>A java tool class to byte stream</description>
@@ -66,7 +66,7 @@
             <id>release</id> <!-- 部署要用到 -->
             <build>
                 <plugins>
-                    <!--将组件部署到 OSSRH 并将其发布到 Central Repository-->
+                    <!--将组件部署到 OSSRH 并将其发布到 Central Repository
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -78,6 +78,7 @@
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
+                    -->
                     <!--源码附件︎-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

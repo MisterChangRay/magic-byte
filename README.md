@@ -17,7 +17,7 @@ maven项目可直接导入:
 <dependency>
   <groupId>io.github.misterchangray</groupId>
   <artifactId>magic-byte</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
