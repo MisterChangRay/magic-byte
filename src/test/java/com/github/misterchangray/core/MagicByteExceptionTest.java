@@ -20,6 +20,19 @@ public class MagicByteExceptionTest {
      *
      */
     @Test
+    public void testArrayOrList() {
+        ArrayEntity arrayEntity = new ArrayEntity();
+        byte[] bytes = MagicByte.unpackToByte(arrayEntity);
+        ArrayEntity pack = MagicByte.pack(bytes, ArrayEntity.class);
+        Assert.assertArrayEquals(arrayEntity.getBytes(), pack.getBytes());
+
+    }
+
+    /**
+     * 字符串超长后将会自动截取.
+     *
+     */
+    @Test
     public void testNullOfString() {
         Phone p = new Phone();
         p.setPhone(183803802222L);
