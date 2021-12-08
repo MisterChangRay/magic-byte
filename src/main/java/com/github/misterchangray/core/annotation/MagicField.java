@@ -52,4 +52,9 @@ public @interface MagicField {
      */
     String charset() default "ASCII";
 
+    /**
+     * use the fill bytes if the field is null
+     * @return
+     */
+    byte fillByte() default (byte) 0xAE;
 }
