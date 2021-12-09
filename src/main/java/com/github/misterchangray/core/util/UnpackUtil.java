@@ -66,24 +66,19 @@ public class UnpackUtil {
         if(Objects.isNull(object)) return;
 
         Object val = ClassUtil.readValue(object, fieldMetaInfo.getField());
+        if(Objects.isNull(val)) {
+            AssertUtil.assertFieldValNonNull(fieldMetaInfo, val);
+        }
         List objectList = new ArrayList(20);
         switch (fieldMetaInfo.getType()) {
             case BOOLEAN:
-                if(Objects.isNull(val)) val = false;
             case BYTE:
-                if(Objects.isNull(val)) val = (byte)0;
             case CHAR:
-                if(Objects.isNull(val)) val = (char)0;
             case SHORT:
-                if(Objects.isNull(val)) val = (short)0;
             case FLOAT:
-                if(Objects.isNull(val)) val = (float)0;
             case DOUBLE:
-                if(Objects.isNull(val)) val = (double)0;
             case LONG:
-                if(Objects.isNull(val)) val = (long)0;
             case INT:
-                if(Objects.isNull(val)) val = 0;
                 putBaseFieldValue(fieldMetaInfo.getType(), val ,  res);
                 break;
             case STRING:
@@ -100,13 +95,7 @@ public class UnpackUtil {
                 break;
             case ARRAY: {
                 Integer len = fieldMetaInfo.calcDynamicSize(object, val);
-                int totalBytes = len * fieldMetaInfo.getElementBytes();
-                bytes = new byte[totalBytes];
 
-                if (Objects.isNull(val)) {
-                    res.put(bytes);
-                    break;
-                }
                 for (int i = 0, length = Array.getLength(val); i < length; i++) {
                     objectList.add(Array.get(val, i));
                 }
@@ -116,22 +105,11 @@ public class UnpackUtil {
             case LIST: {
                 objectList = (List) val;
                 Integer len = fieldMetaInfo.calcDynamicSize(object, val);
-                int totalBytes = len * fieldMetaInfo.getElementBytes();
-                bytes = new byte[totalBytes];
-
-                if (Objects.isNull(val)) {
-                    res.put(bytes);
-                    break;
-                }
                 doEncodingContainer(fieldMetaInfo, objectList, res, len);
             }
                 break;
             case OBJECT:
-                if(Objects.isNull(val)) {
-                    res.put(new byte[fieldMetaInfo.getElementBytes()]);
-                } else {
-                    res.put(unpackObject(val));
-                }
+                res.put(unpackObject(val));
                 break;
         }
     }

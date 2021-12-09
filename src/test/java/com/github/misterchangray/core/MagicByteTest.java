@@ -44,6 +44,7 @@ public class MagicByteTest {
             highSchool.getTeachers()[i].setPhone(p);
 
             highSchool.getTeachers()[i].setAge(30 + i);
+            highSchool.getTeachers()[i].setSex(false);
         }
         for (int i = 0; i < highSchool.getStudentList().size(); i++) {
             highSchool.getStudentList().get(i).setName("Student" + i);
@@ -181,6 +182,7 @@ public class MagicByteTest {
             student.setAge(21 + i);
             student.setName("张" + i);
             student.setBookIds(new byte[]{1,2,3,4, (byte) i});
+            student.setPhones(new long[]{1,2,i});
             highSchool.getStudentList().add(student);
         }
 
@@ -191,6 +193,7 @@ public class MagicByteTest {
             Teacher teacher = new Teacher();
             teacher.setAge(41 + i);
             teacher.setName("t" + i);
+            teacher.setSex(true);
 
             Phone p = new Phone();
             p.setBrand("XM");

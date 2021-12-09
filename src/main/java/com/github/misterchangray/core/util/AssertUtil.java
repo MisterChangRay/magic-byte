@@ -3,6 +3,8 @@ package com.github.misterchangray.core.util;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.exception.MagicCollectionSizeNotMatchException;
+import com.github.misterchangray.core.exception.MagicUnpackValueNotBeNullException;
 import com.github.misterchangray.core.metainfo.ClassMetaInfo;
 import com.github.misterchangray.core.metainfo.FieldMetaInfo;
 
@@ -101,6 +103,7 @@ public class AssertUtil {
     }
 
 
+
     public static void assertSizeOrDynamicOf(FieldMetaInfo fieldMetaInfo) {
         if(fieldMetaInfo.getMagicField().size() > 0 && fieldMetaInfo.getMagicField().dynamicSizeOf() > 0) {
             throw new MagicByteException(String.format("@MagicField(size, dynamicSizeOf) only can be use only one, annotation of class: %s.%s",
@@ -110,7 +113,14 @@ public class AssertUtil {
 
     public static void assertLengthEqualsDeclare(FieldMetaInfo fieldMetaInfo, List objectList, int size) {
         if(objectList.size() < size) {
-            throw new MagicByteException(String.format("collection actually length less than declare size , annotation of class: %s.%s",
+            throw new MagicCollectionSizeNotMatchException(String.format("collection actually length less than declare size , annotation of class: %s.%s",
+                    fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
+        }
+    }
+
+    public static void assertFieldValNonNull(FieldMetaInfo fieldMetaInfo, Object val) {
+        if(Objects.isNull(val)) {
+            throw new MagicUnpackValueNotBeNullException(String.format("properties can't be null, annotation of class: %s.%s",
                     fieldMetaInfo.getOwnerClazz().getClazz().getName(), fieldMetaInfo.getField().getName()));
         }
     }
