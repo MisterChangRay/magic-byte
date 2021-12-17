@@ -1,6 +1,12 @@
 ### 魔法字节(magic-byte)
 [toc]
 
+[![GitHub (pre-)release](https://img.shields.io/github/release/misterchangray/magic-byte/all.svg)](https://github.com/misterchangray/magic-byte) 
+[![GitHub issues](https://img.shields.io/github/issues/misterchangray/magic-byte.svg)](https://github.com/misterchangray/magic-byte/issues) 
+[![GitHub closed issues](https://img.shields.io/github/issues-closed/misterchangray/magic-byte.svg)](https://github.com/misterchangray/magic-byte/issues?q=is%3Aissue+is%3Aclosed) 
+[![GitHub](https://img.shields.io/github/license/misterchangray/magic-byte.svg)](./LICENSE)
+
+
 #### 1. 简介
 本工具解决在自定义二进制协议中二进制和javaBean相互转换的问题;
 在当代物联网行业中, 更多的公司选择使用自定义的二进制协议; JAVA同学在对这些协议进行解析时，会陷入序列化/反序列化的痛苦循环中；所以诞生了此项目。
