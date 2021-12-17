@@ -145,5 +145,7 @@ void main() {
 - [JavaStract](http://code.google.com/p/javastruct/wiki/HowToUseJavaStruct)
 - [Javolution](http://javolution.org/)
 
+欢迎大佬入驻讨论: 
+QQ群  562371124
 
 
