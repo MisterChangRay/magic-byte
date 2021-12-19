@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.annotation;
 
+
 import com.github.misterchangray.core.enums.ByteOrder;
 
 import java.lang.annotation.*;
@@ -23,11 +24,11 @@ public @interface MagicClass {
      */
     boolean autoTrim() default false;
 
+
     /**
-     * 严格模式
+     * fill Value
      * @return
      */
-    boolean strict() default  false;
-
+    byte fillByte() default -1;
 
 }

@@ -1,9 +1,5 @@
 package com.github.misterchangray.core.enums;
 
-
-import com.github.misterchangray.core.util.AssertUtil;
-import com.github.misterchangray.core.util.ClassUtil;
-
 import java.lang.reflect.Array;
 import java.util.*;
 

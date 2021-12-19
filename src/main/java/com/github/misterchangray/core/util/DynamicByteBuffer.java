@@ -6,6 +6,11 @@ import com.github.misterchangray.core.exception.MagicParseException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * @description: 动态的bytebuffer 可以自动扩容
+ * @author: Ray.chang
+ * @create: 2021-12-17 15:05
+ **/
 public class DynamicByteBuffer {
     private ByteBuffer byteBuffer;
     private boolean isDynamic;

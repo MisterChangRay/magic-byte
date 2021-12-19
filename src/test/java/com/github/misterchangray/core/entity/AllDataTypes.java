@@ -3,7 +3,7 @@ package com.github.misterchangray.core.entity;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
-@MagicClass(autoTrim = true, strict = true)
+@MagicClass(autoTrim = true)
 public class AllDataTypes {
     @MagicField(order = 1)
     private byte b1;

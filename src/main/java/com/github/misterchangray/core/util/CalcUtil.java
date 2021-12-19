@@ -13,7 +13,6 @@ public class CalcUtil {
     public static BigInteger QWORD = new BigInteger("FFFFFFFF", 16);
 
 
-
     /**
      * 16进制转换为字节;这里16进制是无符号的
      * @param aint
