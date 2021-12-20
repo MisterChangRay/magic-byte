@@ -19,10 +19,10 @@ public class TestException {
     @Test
     public void TestListMatrix() {
         ClassParser classParser = new ClassParser();
-        ClassMetaInfo parse = classParser.parse(TestListMatrix.class);
-//        Assert.assertThrows(MagicParseException.class, () -> {
-//            ClassMetaInfo parse = classParser.parse(TestListMatrix.class);
-//        });
+
+        Assert.assertThrows(MagicParseException.class, () -> {
+            ClassMetaInfo parse = classParser.parse(TestListMatrix.class);
+        });
     }
 
     @Test
