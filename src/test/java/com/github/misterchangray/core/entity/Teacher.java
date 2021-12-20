@@ -2,6 +2,9 @@ package com.github.misterchangray.core.entity;
 
 import com.github.misterchangray.core.annotation.MagicField;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @description:
  * @author: Ray.chang
@@ -16,6 +19,25 @@ public class Teacher {
     private int phoneSize;
     @MagicField(order = 4, dynamicSizeOf = 3)
     private long[] phones;
+
+
+
+    public static List<Teacher> build(int count) {
+        List<Teacher> teachers = new ArrayList<>();
+        for (int i = 0; i <count; i++) {
+
+            Teacher teacher = new Teacher();
+            teacher.setName("teacher1");
+            teacher.setId(10 + i);
+            teacher.setPhoneSize(3);
+            teacher.setPhones(new long[teacher.getPhoneSize()]);
+            for (int j = 0; j < teacher.getPhoneSize(); j++) {
+                teacher.getPhones()[j] = 18300000 + j;
+            }
+            teachers.add(teacher);
+        }
+        return teachers;
+    }
 
 
     public int getPhoneSize() {

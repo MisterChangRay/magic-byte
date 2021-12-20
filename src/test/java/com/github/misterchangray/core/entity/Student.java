@@ -1,14 +1,19 @@
 package com.github.misterchangray.core.entity;
 
+import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description:
  * @author: Ray.chang
  * @create: 2021-12-20 16:33
  **/
+@MagicClass(autoTrim = true)
 public class Student {
-    @MagicField(order = 1, size = 10, autoTrim = true)
+    @MagicField(order = 1, size = 10)
     private String name;
     @MagicField(order = 2)
     private long phone;
@@ -38,4 +43,18 @@ public class Student {
     public void setBookids(int[] bookids) {
         this.bookids = bookids;
     }
+
+
+    public static List<Student> build(int count) {
+        List<Student> students = new ArrayList<>();
+        for (int i = 0; i <count; i++) {
+            Student student = new Student();
+            student.setName("stu-" + i);
+            student.setBookids(new int[]{10 + i, 100 +i ,1000 + i});
+            student.setPhone(1000 + i);
+            students.add(student);
+        }
+        return students;
+    }
+
 }
