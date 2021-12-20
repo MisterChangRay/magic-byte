@@ -174,7 +174,7 @@ public class ClassParser {
 
         fieldMetaInfo.setMagicField(magicField);
         fieldMetaInfo.setOrderId(magicField.order());
-        fieldMetaInfo.setAutoTrim(magicField.autoTrim());
+        fieldMetaInfo.setAutoTrim(magicField.autoTrim() || classMetaInfo.isAutoTrim());
         fieldMetaInfo.setCharset(magicField.charset());
         fieldMetaInfo.setFillByte(magicField.fillByte());
         if(magicField.size() > 0) {

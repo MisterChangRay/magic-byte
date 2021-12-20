@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.simple;
 
+import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
 /**
@@ -7,6 +8,7 @@ import com.github.misterchangray.core.annotation.MagicField;
  * @author: Ray.chang
  * @create: 2021-12-19 13:29
  **/
+@MagicClass(autoTrim = true)
 public class StringObj {
     @MagicField(order = 1, size = 5)
     private String a;

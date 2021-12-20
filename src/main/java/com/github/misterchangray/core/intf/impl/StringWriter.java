@@ -25,9 +25,6 @@ public class StringWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val) throws IllegalAccessException {
-        if(Objects.isNull(val)) {
-            val = "";
-        }
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             int position = buffer.position();
@@ -35,12 +32,14 @@ public class StringWriter extends MWriter {
             byteLen = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(val);
             buffer.position(position);
         }
+        // direct write fill byte if the value is null
+        byte[] data = new byte[byteLen];
+        Arrays.fill(data, this.fieldMetaInfo.getFillByte());
+        if(Objects.isNull(val)) val = "";
 
         byte[] tmp = val.toString().getBytes(Charset.forName(fieldMetaInfo.getCharset()));
-        if(tmp.length > byteLen) {
-            tmp = Arrays.copyOf(tmp, byteLen);
-        }
-        buffer.put(tmp);
+        System.arraycopy(tmp, 0, data, 0, Math.min(tmp.length, byteLen));
+        buffer.put(data);
     }
 
 

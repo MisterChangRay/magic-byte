@@ -34,7 +34,12 @@ public class StringReader extends MReader {
         byte[] tmp = new byte[byteLen];
         buffer.get(tmp);
 
-        return new String(tmp, this.fieldMetaInfo.getCharset());
+
+        String res = new String(tmp, this.fieldMetaInfo.getCharset());
+        if(this.fieldMetaInfo.isAutoTrim()) {
+            res = res.trim();
+        }
+        return res;
     }
 
 }

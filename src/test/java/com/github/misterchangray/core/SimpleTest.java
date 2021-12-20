@@ -25,19 +25,35 @@ public class SimpleTest {
     @Test
     public void testString() {
         StringObj stringObj = new StringObj();
-        stringObj.setA("helloworld");
+        stringObj.setA("hello");
 
         byte[] bytes = UnPacker.getInstance().unpackObject(stringObj);
 
-        CharObj pack = MagicByte.pack(bytes, CharObj.class);
+        StringObj pack = MagicByte.pack(bytes, StringObj.class);
         Assert.assertEquals(stringObj.getA(), pack.getA());
 
-        // test null data
+        // test overflow
+        stringObj.setA("helloworld");
+        bytes = UnPacker.getInstance().unpackObject(stringObj);
+
+        pack = MagicByte.pack(bytes, StringObj.class);
+        Assert.assertEquals("hello", pack.getA());
+
+        // test empty
+        stringObj.setA("");
+        bytes = UnPacker.getInstance().unpackObject(stringObj);
+
+        pack = MagicByte.pack(bytes, StringObj.class);
+        Assert.assertEquals("",pack.getA());
+
+
+        // test null
         stringObj.setA(null);
         bytes = UnPacker.getInstance().unpackObject(stringObj);
 
-        pack = MagicByte.pack(bytes, CharObj.class);
-        Assert.assertEquals(stringObj.getA(), pack.getA());
+        pack = MagicByte.pack(bytes, StringObj.class);
+        Assert.assertEquals("", pack.getA());
+
 
     }
 

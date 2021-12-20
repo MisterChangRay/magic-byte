@@ -56,5 +56,5 @@ public @interface MagicField {
      * fill Value
      * @return
      */
-    byte fillByte() default -1;
+    byte fillByte() default 0;
 }
