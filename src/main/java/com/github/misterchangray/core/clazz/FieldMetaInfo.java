@@ -82,18 +82,11 @@ public class FieldMetaInfo implements MField {
     private String fullName;
 
 
-
     /**
      * 泛型字段
      *
      */
     private FieldMetaInfo genericsField;
-
-    /**
-     * 读取位置
-     */
-    private int startReadIndex;
-
 
 
     public FieldMetaInfo getGenericsField() {
@@ -103,15 +96,6 @@ public class FieldMetaInfo implements MField {
     public void setGenericsField(FieldMetaInfo genericsField) {
         this.genericsField = genericsField;
     }
-
-    public int getStartReadIndex() {
-        return startReadIndex;
-    }
-
-    public void setStartReadIndex(int startReadIndex) {
-        this.startReadIndex = startReadIndex;
-    }
-
 
     public String getFullName() {
         return fullName;

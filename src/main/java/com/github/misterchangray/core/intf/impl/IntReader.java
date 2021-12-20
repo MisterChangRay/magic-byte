@@ -20,7 +20,7 @@ public class IntReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer) {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
         return buffer.getInt();
     }
 }

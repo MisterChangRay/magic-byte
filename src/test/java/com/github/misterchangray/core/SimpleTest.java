@@ -1,12 +1,7 @@
 package com.github.misterchangray.core;
 
 
-import com.github.misterchangray.core.clazz.ClassMetaInfo;
-import com.github.misterchangray.core.clazz.ClassParser;
 import com.github.misterchangray.core.entity.AllDataTypes;
-import com.github.misterchangray.core.errorEntity.TestArrayMatrix;
-import com.github.misterchangray.core.errorEntity.TestListMatrix;
-import com.github.misterchangray.core.exception.MagicParseException;
 import com.github.misterchangray.core.simple.*;
 import org.junit.Assert;
 import org.junit.Test;

@@ -26,7 +26,7 @@ public class ObjectReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer) throws UnsupportedEncodingException {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException {
         return Packer.getInstance().packObject(buffer, this.fieldMetaInfo.getClazz());
     }
 

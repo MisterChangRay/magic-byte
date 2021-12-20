@@ -88,18 +88,28 @@ public class ClassParser {
      * @return
      */
     private boolean afterVerify(FieldMetaInfo field) {
-        if(field.getSize() > 0 && field.getDynamicSizeOf() > 0) {
+        // 序号重复
+        if(Objects.nonNull(field.getOwnerClazz().getFieldMetaInfoByOrderId(field.getOrderId()))) {
+            throw new MagicParseException("Sorting cannot be repeated; at:" + field.getFullName());
+        }
+
+        // dynamicSize 和 size 不能共存
+        if(field.getMagicField().size() > 0 && field.getMagicField().dynamicSizeOf() > 0) {
             throw new PropertiesInvalidException("size or dynamicSize only can be use one, at:" + field.getFullName());
         }
 
-        if(!field.isDynamic() && field.getSize() < 0) {
-            throw new NotYetConfigurationSizeException("please configuration size properties, at:" + field.getFullName());
+        // list string array 必须配置 size or dynamicSize
+        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
+            throw new NotYetConfigurationSizeException("size or dynamicSize must be use one, at:" + field.getFullName());
         }
 
         if(field.isDynamic()) {
+            // dynamicSize 必须引用申明在前面的变量
             if(Objects.isNull(field.getDynamicRef())) {
                 throw new DynamicOfInvalidException("dynamicSizeOf property value should be less than itself order, at:" + field.getFullName());
             }
+
+            // dynamicSize 引用数据类型只能为 byte, short, int
             FieldMetaInfo dynamicRef = field.getDynamicRef();
             if(dynamicRef.getType() != TypeEnum.BYTE &&
                     dynamicRef.getType() != TypeEnum.SHORT &&

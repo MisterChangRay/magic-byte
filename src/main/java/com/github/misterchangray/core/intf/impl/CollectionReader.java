@@ -30,20 +30,17 @@ public class CollectionReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer) throws UnsupportedEncodingException {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            int position = buffer.position();
-            buffer.position(this.fieldMetaInfo.getStartReadIndex());
-            count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormBuffer(buffer);
-            buffer.position(position);
+            count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
         }
 
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
             Object array = Array.newInstance(fieldMetaInfo.getGenericsField().getClazz(), count);
 
             for(int i=0; i<count; i++) {
-                Object o = fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer);
+                Object o = fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, entity);
                 Array.set(array, i, o);
             }
 
@@ -55,7 +52,7 @@ public class CollectionReader extends MReader {
             List<Object> list = new ArrayList<>(count);
 
             for(int i=0; i<count; i++) {
-                list.add( fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer));
+                list.add( fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, entity));
             }
 
             return list;

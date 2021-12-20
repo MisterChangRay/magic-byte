@@ -1,32 +1,19 @@
 package com.github.misterchangray.core.entity;
 
-import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
-
-@MagicClass(autoTrim = true)
+/**
+ * @description:
+ * @author: Ray.chang
+ * @create: 2021-12-20 16:33
+ **/
 public class Student {
-    @MagicField(order = 1, size = 10, charset = "UTF8")
+    @MagicField(order = 1, size = 10, autoTrim = true)
     private String name;
-    @MagicField(order = 2, size = 5)
-    private byte[] bookIds;
-    @MagicField(order = 3)
-    private Integer age;
-    @MagicField(order = 4, size = 3)
-    private long[] phones;
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-
-    public long[] getPhones() {
-        return phones;
-    }
-
-    public void setPhones(long[] phones) {
-        this.phones = phones;
-    }
+    @MagicField(order = 2)
+    private long phone;
+    @MagicField(order = 3, size = 3)
+    private int[] bookids;
 
     public String getName() {
         return name;
@@ -36,21 +23,19 @@ public class Student {
         this.name = name;
     }
 
-    public byte[] getBookIds() {
-        return bookIds;
+    public long getPhone() {
+        return phone;
     }
 
-    public void setBookIds(byte[] bookIds) {
-        this.bookIds = bookIds;
+    public void setPhone(long phone) {
+        this.phone = phone;
     }
 
-    public Integer getAge() {
-        return age;
+    public int[] getBookids() {
+        return bookids;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBookids(int[] bookids) {
+        this.bookids = bookids;
     }
 }
-
-

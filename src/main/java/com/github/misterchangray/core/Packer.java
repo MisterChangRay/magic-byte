@@ -49,7 +49,7 @@ public class Packer {
     private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data) throws IllegalAccessException{
         Object val = null;
         try {
-            val = fieldMetaInfo.getReader().readFormBuffer(data);
+            val = fieldMetaInfo.getReader().readFormBuffer(data, object);
         } catch (UnsupportedEncodingException e) {
             throw new MagicByteException("not support charset of " + fieldMetaInfo.getCharset() + "; at :" + fieldMetaInfo.getFullName());
         }

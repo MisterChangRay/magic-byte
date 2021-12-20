@@ -2,19 +2,37 @@ package com.github.misterchangray.core.entity;
 
 import com.github.misterchangray.core.annotation.MagicField;
 
+/**
+ * @description:
+ * @author: Ray.chang
+ * @create: 2021-12-20 16:32
+ **/
 public class Teacher {
-    @MagicField(order = 1, size = 10, autoTrim = true)
+    @MagicField(order = 1)
+    private int id;
+    @MagicField(order = 2, size = 10, autoTrim = true)
     private String name;
     @MagicField(order = 3)
-    private int age;
-    @MagicField(order = 2)
-    private Phone phone;
-    @MagicField(order = 4)
-    private Boolean sex;
-    @MagicField(order = 5)
-    private byte sexByte;
-    @MagicField(order = 6)
-    private char sexChar;
+    private int phoneSize;
+    @MagicField(order = 4, dynamicSizeOf = 3)
+    private long[] phones;
+
+
+    public int getPhoneSize() {
+        return phoneSize;
+    }
+
+    public void setPhoneSize(int phoneSize) {
+        this.phoneSize = phoneSize;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -24,43 +42,11 @@ public class Teacher {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
+    public long[] getPhones() {
+        return phones;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Phone getPhone() {
-        return phone;
-    }
-
-    public void setPhone(Phone phone) {
-        this.phone = phone;
-    }
-
-    public Boolean getSex() {
-        return sex;
-    }
-
-    public void setSex(Boolean sex) {
-        this.sex = sex;
-    }
-
-    public byte getSexByte() {
-        return sexByte;
-    }
-
-    public void setSexByte(byte sexByte) {
-        this.sexByte = sexByte;
-    }
-
-    public char getSexChar() {
-        return sexChar;
-    }
-
-    public void setSexChar(char sexChar) {
-        this.sexChar = sexChar;
+    public void setPhones(long[] phones) {
+        this.phones = phones;
     }
 }

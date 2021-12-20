@@ -148,4 +148,8 @@ public class TypeManager {
     public static boolean isCollection(TypeEnum type) {
         return TypeEnum.LIST == type || TypeEnum.ARRAY == type;
     }
+
+    public static boolean isVariable(TypeEnum type) {
+        return TypeEnum.STRING == type || TypeEnum.LIST == type || TypeEnum.ARRAY == type;
+    }
 }

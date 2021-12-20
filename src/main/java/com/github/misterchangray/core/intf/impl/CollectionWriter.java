@@ -30,10 +30,7 @@ public class CollectionWriter extends MWriter {
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            int position = buffer.position();
-            buffer.position(this.fieldMetaInfo.getStartReadIndex());
             count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
-            buffer.position(position);
         }
 
         DynamicByteBuffer dynamicByteBuffer = DynamicByteBuffer.allocate(count * this.fieldMetaInfo.getElementBytes());
