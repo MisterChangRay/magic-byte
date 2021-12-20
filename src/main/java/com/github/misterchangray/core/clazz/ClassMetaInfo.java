@@ -1,10 +1,12 @@
 package com.github.misterchangray.core.clazz;
 
 
+import com.github.misterchangray.core.intf.MClass;
+
 import java.nio.ByteOrder;
 import java.util.List;
 
-public class ClassMetaInfo {
+public class ClassMetaInfo implements MClass {
     private Class<?> clazz;
     private List<FieldMetaInfo> fields;
     private ByteOrder byteOrder;
@@ -64,6 +66,16 @@ public class ClassMetaInfo {
 
     public List<FieldMetaInfo> getFields() {
         return fields;
+    }
+
+    @Override
+    public FieldMetaInfo getFieldMetaInfoByOrderId(int orderId) {
+        for (FieldMetaInfo field : this.getFields()) {
+            if( field.getOrderId() == orderId) {
+                return field;
+            }
+        }
+        return null;
     }
 
     public void setFields(List<FieldMetaInfo> fields) {

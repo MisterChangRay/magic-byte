@@ -2,12 +2,19 @@ package com.github.misterchangray.core.clazz;
 
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.intf.MField;
+import com.github.misterchangray.core.intf.MReader;
+import com.github.misterchangray.core.intf.MWriter;
+
 import java.lang.reflect.Field;
 
-public class FieldMetaInfo {
+public class FieldMetaInfo implements MField {
     private ClassMetaInfo ownerClazz;
     private MagicField magicField;
     private Field field;
+
+    private MWriter writer;
+    private MReader reader;
 
     /**
      * 字段大小,
@@ -75,18 +82,47 @@ public class FieldMetaInfo {
     private String fullName;
 
 
+
     /**
-     * 数组或list时此对象为泛型数据
+     * 泛型字段
+     *
      */
-    private Class<?> genericsType;
+    private FieldMetaInfo genericsField;
+    /**
+     * 虚拟字段
+     */
+    private boolean virtualField;
 
-    public Class<?> getGenericsType() {
-        return genericsType;
+    /**
+     * 读取位置
+     */
+    private int startReadIndex;
+
+
+    public boolean isVirtualField() {
+        return virtualField;
     }
 
-    public void setGenericsType(Class<?> genericsType) {
-        this.genericsType = genericsType;
+    public void setVirtualField(boolean virtualField) {
+        this.virtualField = virtualField;
     }
+
+    public FieldMetaInfo getGenericsField() {
+        return genericsField;
+    }
+
+    public void setGenericsField(FieldMetaInfo genericsField) {
+        this.genericsField = genericsField;
+    }
+
+    public int getStartReadIndex() {
+        return startReadIndex;
+    }
+
+    public void setStartReadIndex(int startReadIndex) {
+        this.startReadIndex = startReadIndex;
+    }
+
 
     public String getFullName() {
         return fullName;
@@ -206,5 +242,23 @@ public class FieldMetaInfo {
 
     public void setFillByte(byte fillByte) {
         this.fillByte = fillByte;
+    }
+
+    @Override
+    public MReader getReader() {
+        return this.reader;
+    }
+
+    @Override
+    public MWriter getWriter() {
+        return this.writer;
+    }
+
+    public void setWriter(MWriter writer) {
+        this.writer = writer;
+    }
+
+    public void setReader(MReader reader) {
+        this.reader = reader;
     }
 }

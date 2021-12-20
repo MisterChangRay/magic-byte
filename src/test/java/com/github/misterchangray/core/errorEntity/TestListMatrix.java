@@ -9,44 +9,12 @@ import java.util.List;
  * @author: Ray.chang
  * @create: 2021-12-17 17:28
  **/
-public class TestMatrix {
+public class TestListMatrix {
     @MagicField(order = 1)
     private List<String> b;
 
     @MagicField(order = 2)
     private List<List<String>> a;
-
-
-    @MagicField(order = 3)
-    private int c;
-    @MagicField(order = 4)
-    private int[] d;
-
-    private int[][] e;
-
-    public int[] getD() {
-        return d;
-    }
-
-    public void setD(int[] d) {
-        this.d = d;
-    }
-
-    public int[][] getE() {
-        return e;
-    }
-
-    public void setE(int[][] e) {
-        this.e = e;
-    }
-
-    public int getC() {
-        return c;
-    }
-
-    public void setC(int c) {
-        this.c = c;
-    }
 
     public List<String> getB() {
         return b;

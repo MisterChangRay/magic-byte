@@ -27,14 +27,5 @@ public class ClassManager {
         return ClassParser.getInstance().parse(clazz);
     }
 
-    public static FieldMetaInfo getFieldMetaInfoByOrderId(Class<?> clazz, int orderId) {
-        ClassMetaInfo classMetaInfo = cache.get(clazz);
-        if(Objects.isNull(classMetaInfo)) return null;
-        for (FieldMetaInfo field : classMetaInfo.getFields()) {
-            if( field.getOrderId() == orderId) {
-                return field;
-            }
-        }
-        return null;
-    }
+
 }

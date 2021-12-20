@@ -179,6 +179,10 @@ public class DynamicByteBuffer {
         this.byteBuffer.position(i);
     }
 
+    public int position() {
+        return this.byteBuffer.position();
+    }
+
     public void get(byte[] bytes) {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < bytes.length) {
             throw new MagicParseException();

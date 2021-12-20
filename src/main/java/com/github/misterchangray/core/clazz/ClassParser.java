@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.ByteOrder;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -36,15 +35,27 @@ public class ClassParser {
         this.beforeLinkClazz(classMetaInfo, clazz);
 
         for (Field field : clazz.getDeclaredFields()) {
+            if(!this.beforeVerify(field)) {
+                continue;
+            }
+            field.setAccessible(true);
+
             FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
             this.linkField(field, fieldMetaInfo, classMetaInfo);
-            if(this.verify(fieldMetaInfo)) continue;
+            if(!this.afterVerify(fieldMetaInfo)) {
+                continue;
+            }
 
             classMetaInfo.getFields().add(fieldMetaInfo);
         }
 
         this.afterLinkClazz(classMetaInfo, clazz);
         return classMetaInfo;
+    }
+
+    private boolean beforeVerify(Field field) {
+        MagicField magicField = AnnotationUtil.getMagicFieldAnnotation(field);
+        return Objects.nonNull(magicField);
     }
 
     /**
@@ -76,7 +87,7 @@ public class ClassParser {
      * @param field
      * @return
      */
-    private boolean verify(FieldMetaInfo field) {
+    private boolean afterVerify(FieldMetaInfo field) {
         if(field.getSize() > 0 && field.getDynamicSizeOf() > 0) {
             throw new PropertiesInvalidException("size or dynamicSize only can be use one, at:" + field.getFullName());
         }
@@ -107,54 +118,54 @@ public class ClassParser {
         fieldMetaInfo.setOwnerClazz(classMetaInfo);
         fieldMetaInfo.setAutoTrim(fieldMetaInfo.getOwnerClazz().isAutoTrim());
         fieldMetaInfo.setFillByte(fieldMetaInfo.getOwnerClazz().getFillByte());
+        fieldMetaInfo.setSize(1);
         fieldMetaInfo.setClazz(field.getType());
-        fieldMetaInfo.setGenericsType(field.getType());
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
 
-        TypeEnum type = TypeEnum.getType(field.getType());
+        TypeEnum type = TypeManager.getType(field.getType());
         fieldMetaInfo.setType(type);
-        classMetaInfo.setElementBytes(type.getBytes());
-        fieldMetaInfo.setGenericsType(this.parseGenericsType(fieldMetaInfo));
-        switch (type) {
-            case ARRAY:
-            case LIST:
-            case OBJECT:
-                ClassMetaInfo parse = parse(fieldMetaInfo.getGenericsType());
-                classMetaInfo.setElementBytes(parse.getElementBytes());
-
+        fieldMetaInfo.setElementBytes(type.getBytes());
+        if(!fieldMetaInfo.isVirtualField()) {
+            fieldMetaInfo.setGenericsField(this.buildGenericsField(fieldMetaInfo));
         }
+        fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
+        fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
     }
 
+
     /**
-     * 获取
+     * 泛型的字段为虚拟字段
+     *
      * @param fieldMetaInfo
      * @return
      */
-    private Class<?> parseGenericsType(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.getType() != TypeEnum.ARRAY &&
-                fieldMetaInfo.getType() != TypeEnum.LIST) {
-            return fieldMetaInfo.getGenericsType();
+    private FieldMetaInfo buildGenericsField(FieldMetaInfo origin) {
+        if(origin.getType() != TypeEnum.ARRAY &&
+                origin.getType() != TypeEnum.LIST) {
+            return null;
         }
 
-        if(fieldMetaInfo.getType() == TypeEnum.ARRAY) {
-            if(fieldMetaInfo.getField().getType().getName().startsWith("[[+")) {
-                throw new MagicParseException("not support matrix, such as int[][], at: " + fieldMetaInfo.getFullName());
+        FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
+        fieldMetaInfo.setVirtualField(true);
+        if(origin.getType() == TypeEnum.ARRAY) {
+            if(origin.getField().getType().getName().startsWith("[[")) {
+                throw new MagicParseException("not support matrix, such as int[][], at: " + origin.getFullName());
             }
-            return fieldMetaInfo.getField().getType().getComponentType();
+            fieldMetaInfo.setClazz(origin.getField().getType().getComponentType());
         }
 
 
-        Type genericType = fieldMetaInfo.getField().getGenericType();
+        Type genericType = origin.getField().getGenericType();
         if (genericType instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) genericType;
             if(pt.getActualTypeArguments()[0] instanceof ParameterizedType) {
                 throw new MagicParseException("not support matrix, such as List<List<String>>, at: " + fieldMetaInfo.getFullName());
             }
-
-            return  (Class<?>)pt.getActualTypeArguments()[0];
+            fieldMetaInfo.setClazz((Class<?>)pt.getActualTypeArguments()[0]);
         }
-
-        return null;
+        this.linkField(origin.getField(), fieldMetaInfo, origin.getOwnerClazz());
+        origin.setElementBytes(fieldMetaInfo.getElementBytes());
+        return fieldMetaInfo;
     }
 
     private void copyConfiguration(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
@@ -166,14 +177,16 @@ public class ClassParser {
         fieldMetaInfo.setAutoTrim(magicField.autoTrim());
         fieldMetaInfo.setCharset(magicField.charset());
         fieldMetaInfo.setFillByte(magicField.fillByte());
-        fieldMetaInfo.setSize(magicField.size());
+        if(magicField.size() > 0) {
+            fieldMetaInfo.setSize(magicField.size());
+        }
         fieldMetaInfo.setDynamicSizeOf(magicField.dynamicSizeOf());
 
-        if(fieldMetaInfo.getDynamicSizeOf() > 0){
+        if( fieldMetaInfo.getDynamicSizeOf() > 0 ){
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
             FieldMetaInfo dynamicRef =
-                    ClassManager.getFieldMetaInfoByOrderId(classMetaInfo.getClazz(), fieldMetaInfo.getDynamicSizeOf());
+                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
             if(Objects.isNull(dynamicRef)) {
                 return;
             }
