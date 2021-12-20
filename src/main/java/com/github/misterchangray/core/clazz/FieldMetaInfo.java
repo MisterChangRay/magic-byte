@@ -88,10 +88,6 @@ public class FieldMetaInfo implements MField {
      *
      */
     private FieldMetaInfo genericsField;
-    /**
-     * 虚拟字段
-     */
-    private boolean virtualField;
 
     /**
      * 读取位置
@@ -99,13 +95,6 @@ public class FieldMetaInfo implements MField {
     private int startReadIndex;
 
 
-    public boolean isVirtualField() {
-        return virtualField;
-    }
-
-    public void setVirtualField(boolean virtualField) {
-        this.virtualField = virtualField;
-    }
 
     public FieldMetaInfo getGenericsField() {
         return genericsField;

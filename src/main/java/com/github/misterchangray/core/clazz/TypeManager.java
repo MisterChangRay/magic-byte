@@ -144,4 +144,8 @@ public class TypeManager {
         }
         return res;
     }
+
+    public static boolean isCollection(TypeEnum type) {
+        return TypeEnum.LIST == type || TypeEnum.ARRAY == type;
+    }
 }

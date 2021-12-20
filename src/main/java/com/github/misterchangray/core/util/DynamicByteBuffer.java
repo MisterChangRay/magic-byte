@@ -189,4 +189,11 @@ public class DynamicByteBuffer {
         }
         this.byteBuffer.get(bytes);
     }
+
+    public void fill(byte fillByte) {
+        while (this.byteBuffer.position() < this.byteBuffer.capacity()) {
+            this.byteBuffer.put(fillByte);
+        }
+        this.byteBuffer.position(0);
+    }
 }

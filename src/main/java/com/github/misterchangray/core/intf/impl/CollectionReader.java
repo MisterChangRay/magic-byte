@@ -43,7 +43,8 @@ public class CollectionReader extends MReader {
             Object array = Array.newInstance(fieldMetaInfo.getGenericsField().getClazz(), count);
 
             for(int i=0; i<count; i++) {
-                Array.set(array, i, fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer));
+                Object o = fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer);
+                Array.set(array, i, o);
             }
 
             return array;

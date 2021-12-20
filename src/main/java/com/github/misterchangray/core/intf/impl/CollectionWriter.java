@@ -36,37 +36,33 @@ public class CollectionWriter extends MWriter {
             buffer.position(position);
         }
 
-        if(Objects.isNull(val)) {
-            // direct write fill byte if the value is null
-            byte[] fillBytes = new byte[count * this.fieldMetaInfo.getElementBytes()];
-            buffer.put(fillBytes);
-            return;
-        }
-
+        DynamicByteBuffer dynamicByteBuffer = DynamicByteBuffer.allocate(count * this.fieldMetaInfo.getElementBytes());
+        dynamicByteBuffer.fill(this.fieldMetaInfo.getFillByte());
 
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
-            Object o = this.fieldMetaInfo.getReader().readFormObject(val);
-            int length = Array.getLength(val);
+            Object arr = this.fieldMetaInfo.getReader().readFormObject(val);
+            int length = Array.getLength(arr);
             length = Math.min(length, count);
 
             for (int i = 0; i < length; i++) {
-                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer, Array.get(val, i));
+                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(dynamicByteBuffer, Array.get(arr, i));
             }
         }
 
 
         if(TypeEnum.LIST == this.fieldMetaInfo.getType()) {
-            Object o = this.fieldMetaInfo.getReader().readFormObject(val);
-            List<?> list = (List<?>) o;
+            Object arr = this.fieldMetaInfo.getReader().readFormObject(val);
+            List<?> list = (List<?>) arr;
 
             int length = list.size();
             length = Math.min(length, count);
 
             for (int i = 0; i < length; i++) {
-                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer,list.get(i));
+                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(dynamicByteBuffer,list.get(i));
             }
         }
 
+        buffer.put(dynamicByteBuffer.array());
     }
 
 

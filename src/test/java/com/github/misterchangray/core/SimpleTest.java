@@ -10,6 +10,9 @@ import com.github.misterchangray.core.simple.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * test simple data type
@@ -17,6 +20,34 @@ import org.junit.Test;
  *
  */
 public class SimpleTest {
+
+    /**
+     * test collection.
+     *
+     */
+    @Test
+    public void testCollection() {
+        ColletionObj colletionObj = new ColletionObj();
+        colletionObj.setA(new byte[]{1,2,3,4,5});
+        colletionObj.setB(new Integer[]{11, 12, 13, 14, 15});;
+        List<Long> es = new ArrayList<>();
+        es.add(22L);
+        es.add(23L);
+        es.add(24L);
+        es.add(25L);
+        es.add(26L);
+        colletionObj.setC(es);;
+
+        byte[] tmp = MagicByte.unpackToByte(colletionObj);
+        ColletionObj pack = MagicByte.pack(tmp, ColletionObj.class);
+        Assert.assertArrayEquals(pack.getA(), colletionObj.getA());
+        Assert.assertArrayEquals(pack.getB(), colletionObj.getB());
+
+        for (int i = 0; i < es.size(); i++) {
+            Assert.assertEquals(es.get(i), pack.getC().get(i));
+        }
+
+    }
 
     /**
      * test double.

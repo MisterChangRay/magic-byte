@@ -113,21 +113,27 @@ public class ClassParser {
     }
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
+        this.initField(field, fieldMetaInfo, classMetaInfo, field.getType());
+        this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
+
+        if(TypeManager.isCollection(fieldMetaInfo.getType())) {
+            fieldMetaInfo.setGenericsField(this.newGenericsField(fieldMetaInfo));
+            fieldMetaInfo.setElementBytes(fieldMetaInfo.getGenericsField().getElementBytes());
+        }
+
+    }
+
+    private void initField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo, Class<?> clazz) {
         fieldMetaInfo.setField(field);
         fieldMetaInfo.setFullName(classMetaInfo.getFullName() + "." + field.getName());
         fieldMetaInfo.setOwnerClazz(classMetaInfo);
         fieldMetaInfo.setAutoTrim(fieldMetaInfo.getOwnerClazz().isAutoTrim());
         fieldMetaInfo.setFillByte(fieldMetaInfo.getOwnerClazz().getFillByte());
         fieldMetaInfo.setSize(1);
-        fieldMetaInfo.setClazz(field.getType());
-        this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
-
-        TypeEnum type = TypeManager.getType(field.getType());
+        fieldMetaInfo.setClazz(clazz);
+        TypeEnum type = TypeManager.getType(clazz);
         fieldMetaInfo.setType(type);
         fieldMetaInfo.setElementBytes(type.getBytes());
-        if(!fieldMetaInfo.isVirtualField()) {
-            fieldMetaInfo.setGenericsField(this.buildGenericsField(fieldMetaInfo));
-        }
         fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
         fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
     }
@@ -139,19 +145,14 @@ public class ClassParser {
      * @param fieldMetaInfo
      * @return
      */
-    private FieldMetaInfo buildGenericsField(FieldMetaInfo origin) {
-        if(origin.getType() != TypeEnum.ARRAY &&
-                origin.getType() != TypeEnum.LIST) {
-            return null;
-        }
-
+    private FieldMetaInfo newGenericsField(FieldMetaInfo origin) {
         FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
-        fieldMetaInfo.setVirtualField(true);
+        Class<?> clazz = null;
         if(origin.getType() == TypeEnum.ARRAY) {
             if(origin.getField().getType().getName().startsWith("[[")) {
                 throw new MagicParseException("not support matrix, such as int[][], at: " + origin.getFullName());
             }
-            fieldMetaInfo.setClazz(origin.getField().getType().getComponentType());
+            clazz = origin.getField().getType().getComponentType();
         }
 
 
@@ -161,10 +162,12 @@ public class ClassParser {
             if(pt.getActualTypeArguments()[0] instanceof ParameterizedType) {
                 throw new MagicParseException("not support matrix, such as List<List<String>>, at: " + fieldMetaInfo.getFullName());
             }
-            fieldMetaInfo.setClazz((Class<?>)pt.getActualTypeArguments()[0]);
+            clazz =(Class<?>)pt.getActualTypeArguments()[0];
+
         }
-        this.linkField(origin.getField(), fieldMetaInfo, origin.getOwnerClazz());
         origin.setElementBytes(fieldMetaInfo.getElementBytes());
+        fieldMetaInfo.setClazz(clazz);
+        this.initField(origin.getField(), fieldMetaInfo, origin.getOwnerClazz(), fieldMetaInfo.getClazz());
         return fieldMetaInfo;
     }
 
