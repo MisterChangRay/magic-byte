@@ -27,7 +27,7 @@ public class ObjectWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val) throws IllegalAccessException {
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         UnPacker.getInstance().unpackObject(buffer, val, ClassManager.getClassMetaInfo(this.fieldMetaInfo.getClazz()));
     }
 

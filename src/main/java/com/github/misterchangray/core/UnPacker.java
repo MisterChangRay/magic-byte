@@ -69,7 +69,8 @@ public class UnPacker {
      * @return
      */
     private  void decodeField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res) throws IllegalAccessException {
-        fieldMetaInfo.getWriter().writeToBuffer(res, object);
+        Object val = fieldMetaInfo.getReader().readFormObject(object);
+        fieldMetaInfo.getWriter().writeToBuffer(res, val, object);
     }
 //
 //    private  void doEncodingContainer(FieldMetaInfo fieldMetaInfo, List objectList, DynamicByteBuffer res, int size) {

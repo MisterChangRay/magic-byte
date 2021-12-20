@@ -27,12 +27,12 @@ public class CollectionWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val) throws IllegalAccessException {
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             int position = buffer.position();
             buffer.position(this.fieldMetaInfo.getStartReadIndex());
-            count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(val);
+            count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
             buffer.position(position);
         }
 
@@ -40,25 +40,23 @@ public class CollectionWriter extends MWriter {
         dynamicByteBuffer.fill(this.fieldMetaInfo.getFillByte());
 
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
-            Object arr = this.fieldMetaInfo.getReader().readFormObject(val);
-            int length = Array.getLength(arr);
+            int length = Array.getLength(val);
             length = Math.min(length, count);
 
             for (int i = 0; i < length; i++) {
-                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(dynamicByteBuffer, Array.get(arr, i));
+                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(dynamicByteBuffer, Array.get(val, i), val);
             }
         }
 
 
         if(TypeEnum.LIST == this.fieldMetaInfo.getType()) {
-            Object arr = this.fieldMetaInfo.getReader().readFormObject(val);
-            List<?> list = (List<?>) arr;
+            List<?> list = (List<?>) val;
 
             int length = list.size();
             length = Math.min(length, count);
 
             for (int i = 0; i < length; i++) {
-                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(dynamicByteBuffer,list.get(i));
+                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(dynamicByteBuffer,list.get(i), val);
             }
         }
 
