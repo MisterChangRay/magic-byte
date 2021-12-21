@@ -2,6 +2,7 @@ package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.intf.MReader;
+import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.io.UnsupportedEncodingException;
@@ -26,7 +27,8 @@ public class StringReader extends MReader {
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            byteLen = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
+            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
+            byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
 

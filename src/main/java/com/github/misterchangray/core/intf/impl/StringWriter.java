@@ -2,6 +2,7 @@ package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.intf.MWriter;
+import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.nio.charset.Charset;
@@ -27,7 +28,8 @@ public class StringWriter extends MWriter {
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            byteLen = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
+            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
+            byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
         // direct write fill byte if the value is null
         byte[] data = new byte[byteLen];

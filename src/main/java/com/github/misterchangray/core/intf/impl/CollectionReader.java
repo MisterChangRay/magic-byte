@@ -7,6 +7,7 @@ import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MReader;
+import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.io.UnsupportedEncodingException;
@@ -33,7 +34,8 @@ public class CollectionReader extends MReader {
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
+            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
+            count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {

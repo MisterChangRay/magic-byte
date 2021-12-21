@@ -3,6 +3,7 @@ package com.github.misterchangray.core.intf.impl;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MWriter;
+import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.lang.reflect.Array;
@@ -30,7 +31,8 @@ public class CollectionWriter extends MWriter {
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            count = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
+            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
+            count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
         int fillItems = 0;
