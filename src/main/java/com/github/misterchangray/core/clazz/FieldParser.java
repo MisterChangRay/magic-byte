@@ -63,13 +63,18 @@ public class FieldParser {
 
         // list string array 必须配置 size or dynamicSize
         if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
-            throw new NotYetConfigurationSizeException("size or dynamicSize must be use one,;at: " + field.getFullName());
+            throw new InvalidParameterException("size or dynamicSize must be use one,;at: " + field.getFullName());
+        }
+
+        // dynamicSize only use the list string and array
+        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSizeOf() > 0) {
+            throw new InvalidParameterException("dynamicSize only use the list string and array; at: " + field.getFullName());
         }
 
         if(field.isDynamic()) {
             // dynamicSize 必须引用申明在前面的变量
             if(Objects.isNull(field.getDynamicRef())) {
-                throw new DynamicOfInvalidException("dynamicSizeOf property value should be less than itself order; at: " + field.getFullName());
+                throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + field.getFullName());
             }
 
             // dynamicSize 引用数据类型只能为 byte, short, int
@@ -77,7 +82,7 @@ public class FieldParser {
             if(dynamicRef.getType() != TypeEnum.BYTE &&
                     dynamicRef.getType() != TypeEnum.SHORT &&
                     dynamicRef.getType() != TypeEnum.INT) {
-                throw new DynamicRefInvalidException("dynamic target type must be primitive and only be byte, short, int; at: " + field.getFullName());
+                throw new DynamicRefInvalidException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + field.getFullName());
             }
         }
 
