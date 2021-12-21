@@ -13,7 +13,7 @@ import java.util.List;
 public class Teacher {
     @MagicField(order = 1)
     private int id;
-    @MagicField(order = 2, size = 10, autoTrim = true)
+    @MagicField(order = 2, size = 10)
     private String name;
     @MagicField(order = 3)
     private int phoneSize;

@@ -10,7 +10,7 @@ import java.util.List;
  * @author: Ray.chang
  * @create: 2021-12-19 13:29
  **/
-@MagicClass(autoTrim = true)
+@MagicClass()
 public class ColletionObj {
     @MagicField(order = 1, size = 5)
     private byte[] a;

@@ -1,23 +1,32 @@
 package com.github.misterchangray.core;
 
 
-import com.github.misterchangray.core.clazz.ClassMetaInfo;
-import com.github.misterchangray.core.clazz.ClassParser;
-import com.github.misterchangray.core.entity.UnknownType;
-import com.github.misterchangray.core.errorEntity.TestArrayMatrix;
-import com.github.misterchangray.core.errorEntity.TestListMatrix;
-import com.github.misterchangray.core.errorEntity.TestSameOrder;
-import com.github.misterchangray.core.exception.MagicParseException;
+import com.github.misterchangray.core.entity.Student;
+import com.github.misterchangray.core.entity.custom.UnknownType;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.nio.ByteBuffer;
-import java.util.List;
 
 public class ComplexTest {
 
     /**
-     * 测试数组必须大于声明.
+     * test for array byte fill.
+     *
+     */
+    @Test
+    public void testArrayFill() throws InterruptedException {
+        Student student = Student.build(1).get(0);
+        student.setBookids(new int[]{22});
+
+        byte[] bytes = MagicByte.unpackToByte(student);
+        Student pack = MagicByte.pack(bytes, Student.class);
+
+        Assert.assertEquals(student.getPhone(), pack.getPhone());
+
+    }
+
+
+    /**
+     * 未知数据类型.
      *
      */
     @Test

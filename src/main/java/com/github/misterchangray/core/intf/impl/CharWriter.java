@@ -24,7 +24,7 @@ public class CharWriter extends MWriter {
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
         if(Objects.isNull(val)) {
-            val = (char) 0;
+            val = (char) this.fieldMetaInfo.getDefaultVal();
         }
 
         buffer.putChar((char) val);

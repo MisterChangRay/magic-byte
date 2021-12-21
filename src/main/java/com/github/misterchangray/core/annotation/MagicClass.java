@@ -18,17 +18,4 @@ public @interface MagicClass {
     ByteOrder byteOrder() default ByteOrder.BIG_ENDIAN;
 
 
-    /**
-     * 自动裁剪
-     * @return
-     */
-    boolean autoTrim() default false;
-
-
-    /**
-     * fill Value
-     * @return
-     */
-    byte fillByte() default 0;
-
 }

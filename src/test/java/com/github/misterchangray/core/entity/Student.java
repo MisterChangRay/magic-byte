@@ -11,7 +11,7 @@ import java.util.List;
  * @author: Ray.chang
  * @create: 2021-12-20 16:33
  **/
-@MagicClass(autoTrim = true)
+@MagicClass()
 public class Student {
     @MagicField(order = 1, size = 10)
     private String name;

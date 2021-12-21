@@ -5,6 +5,7 @@ import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 /**
  * @description: read collection data
@@ -28,14 +29,18 @@ public class StringReader extends MReader {
             byteLen = (int) this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
         }
 
-        byte[] tmp = new byte[byteLen];
-        buffer.get(tmp);
 
-        String res = new String(tmp, this.fieldMetaInfo.getCharset());
-        if(this.fieldMetaInfo.isAutoTrim()) {
-            res = res.trim();
+        byte[] tmp = new byte[byteLen];
+        int actualLen = tmp.length;
+
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = buffer.get();
+            if(tmp[i] == 0) {
+                actualLen --;
+            }
         }
-        return res;
+
+        return new String(Arrays.copyOfRange(tmp, 0, actualLen) , this.fieldMetaInfo.getCharset());
     }
 
 }

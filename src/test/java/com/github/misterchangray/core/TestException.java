@@ -3,9 +3,9 @@ package com.github.misterchangray.core;
 
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.ClassParser;
-import com.github.misterchangray.core.errorEntity.TestArrayMatrix;
-import com.github.misterchangray.core.errorEntity.TestListMatrix;
-import com.github.misterchangray.core.errorEntity.TestSameOrder;
+import com.github.misterchangray.core.entity.error.TestArrayMatrix;
+import com.github.misterchangray.core.entity.error.TestListMatrix;
+import com.github.misterchangray.core.entity.error.TestSameOrder;
 import com.github.misterchangray.core.exception.MagicParseException;
 import org.junit.Assert;
 import org.junit.Test;

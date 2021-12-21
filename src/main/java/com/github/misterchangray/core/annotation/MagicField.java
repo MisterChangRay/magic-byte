@@ -13,14 +13,6 @@ public @interface MagicField {
      */
     int order();
 
-
-    /**
-     * 自动裁剪
-     * @return
-     */
-    boolean autoTrim() default false;
-
-
     /**
      * 仅 string 和 list 需要显式指定字节大小
      *
@@ -52,9 +44,10 @@ public @interface MagicField {
      */
     String charset() default "ASCII";
 
+
     /**
-     * fill Value
+     * default value if the field is null
      * @return
      */
-    byte fillByte() default 0;
+    int defaultVal() default -1;
 }

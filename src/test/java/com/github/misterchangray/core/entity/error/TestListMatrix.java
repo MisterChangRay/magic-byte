@@ -1,4 +1,4 @@
-package com.github.misterchangray.core.errorEntity;
+package com.github.misterchangray.core.entity.error;
 
 import com.github.misterchangray.core.annotation.MagicField;
 

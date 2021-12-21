@@ -31,7 +31,7 @@ public class StringWriter extends MWriter {
         }
         // direct write fill byte if the value is null
         byte[] data = new byte[byteLen];
-        Arrays.fill(data, this.fieldMetaInfo.getFillByte());
+        Arrays.fill(data, (byte) 0);
         if(Objects.isNull(val)) val = "";
 
         byte[] tmp = val.toString().getBytes(Charset.forName(fieldMetaInfo.getCharset()));

@@ -79,9 +79,7 @@ public class ClassParser {
         MagicClass magicClass = AnnotationUtil.getMagicClassAnnotation(clazz);
         if(Objects.isNull(magicClass)) return;
 
-        classMetaInfo.setAutoTrim(magicClass.autoTrim());
         classMetaInfo.setByteOrder(magicClass.byteOrder().getBytes());
-        classMetaInfo.setFillByte(magicClass.fillByte());
     }
 
 }

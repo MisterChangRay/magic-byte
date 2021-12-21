@@ -24,7 +24,7 @@ public class LongWriter extends MWriter {
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
         if(Objects.isNull(val)) {
-            val = (long) 0;
+            val = (long) this.fieldMetaInfo.getDefaultVal();
         }
 
         buffer.putLong((long) val);

@@ -1,7 +1,8 @@
 package com.github.misterchangray.core;
 
 
-import com.github.misterchangray.core.entity.AllDataTypes;
+import com.github.misterchangray.core.entity.custom.*;
+import com.github.misterchangray.core.entity.custom.AllDataTypes;
 import com.github.misterchangray.core.simple.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,9 +19,53 @@ import java.util.List;
 public class SimpleTest {
 
 
+
+    @Test
+    public void testStringObj() {
+        AutoTrim defaultValue = new AutoTrim();
+        defaultValue.setEmail("misterchangray@hotmail.com");
+        defaultValue.setName("changray");
+
+        byte[] tmp = MagicByte.unpackToByte(defaultValue);
+        AutoTrim pack = MagicByte.pack(tmp, AutoTrim.class);
+        Assert.assertEquals(pack.getEmail(), defaultValue.getEmail());
+        Assert.assertEquals(pack.getName(), defaultValue.getName());
+
+    }
+
+    @Test
+    public void testCustomDefaultVal() {
+        CustomDefaultValue defaultValue = new CustomDefaultValue();
+        byte[] tmp = MagicByte.unpackToByte(defaultValue);
+        DefaultValue pack = MagicByte.pack(tmp, DefaultValue.class);
+        Assert.assertEquals(pack.getB2().intValue(), 3);
+        Assert.assertTrue(pack.getBo2());
+        Assert.assertEquals(pack.getS2().shortValue(), 8);
+        Assert.assertEquals(pack.getI2().intValue(), 10);
+        Assert.assertEquals(pack.getL2().longValue(), 11);
+        Assert.assertEquals(pack.getF2(), 13.0, 2);
+        Assert.assertEquals(pack.getD2(), 16.0, 2);
+
+    }
+
+    @Test
+    public void testDefaultVal() {
+        DefaultValue defaultValue = new DefaultValue();
+        byte[] tmp = MagicByte.unpackToByte(defaultValue);
+        DefaultValue pack = MagicByte.pack(tmp, DefaultValue.class);
+        Assert.assertEquals(pack.getB2().intValue(), 0);
+        Assert.assertFalse(pack.getBo2());
+        Assert.assertEquals(pack.getS2().shortValue(), 0);
+        Assert.assertEquals(pack.getI2().shortValue(), 0);
+        Assert.assertEquals(pack.getL2().shortValue(), 0);
+        Assert.assertEquals(pack.getD2(), 0.0, 2);
+        Assert.assertEquals(pack.getF2(), 0.0, 2);
+
+    }
+
     @Test
     public void testAllData() {
-        com.github.misterchangray.core.entity.AllDataTypes allDataTypes = new com.github.misterchangray.core.entity.AllDataTypes();
+       AllDataTypes allDataTypes = new AllDataTypes();
         allDataTypes.setB1((byte) 1);
         allDataTypes.setB2((byte) 2);
 
@@ -48,7 +93,7 @@ public class SimpleTest {
         allDataTypes.setSt2("string");
 
         byte[] tmp = MagicByte.unpackToByte(allDataTypes);
-        com.github.misterchangray.core.entity.AllDataTypes pack = MagicByte.pack(tmp, AllDataTypes.class);
+        AllDataTypes pack = MagicByte.pack(tmp, AllDataTypes.class);
 
         Assert.assertEquals(allDataTypes.getB1(), pack.getB1());
         Assert.assertEquals(allDataTypes.getB2(), pack.getB2());

@@ -10,7 +10,6 @@ public class ClassMetaInfo implements MClass {
     private Class<?> clazz;
     private List<FieldMetaInfo> fields;
     private ByteOrder byteOrder;
-    private boolean autoTrim;
 
     /**
      * 是否为动态大小
@@ -26,13 +25,6 @@ public class ClassMetaInfo implements MClass {
     private int elementBytes;
 
 
-
-    /**
-     * 填充字节
-     * -1 则不启用
-     */
-    private byte fillByte;
-
     /**
      * 全限定名
      */
@@ -46,14 +38,6 @@ public class ClassMetaInfo implements MClass {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public byte getFillByte() {
-        return fillByte;
-    }
-
-    public void setFillByte(byte fillByte) {
-        this.fillByte = fillByte;
     }
 
     public Class<?> getClazz() {
@@ -90,13 +74,6 @@ public class ClassMetaInfo implements MClass {
         this.byteOrder = byteOrder;
     }
 
-    public boolean isAutoTrim() {
-        return autoTrim;
-    }
-
-    public void setAutoTrim(boolean autoTrim) {
-        this.autoTrim = autoTrim;
-    }
 
     public boolean isDynamic() {
         return isDynamic;

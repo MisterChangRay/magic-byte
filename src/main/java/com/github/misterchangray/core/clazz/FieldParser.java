@@ -103,8 +103,6 @@ public class FieldParser {
         fieldMetaInfo.setField(field);
         fieldMetaInfo.setFullName(classMetaInfo.getFullName() + "." + field.getName());
         fieldMetaInfo.setOwnerClazz(classMetaInfo);
-        fieldMetaInfo.setAutoTrim(fieldMetaInfo.getOwnerClazz().isAutoTrim());
-        fieldMetaInfo.setFillByte(fieldMetaInfo.getOwnerClazz().getFillByte());
         fieldMetaInfo.setSize(1);
         fieldMetaInfo.setClazz(clazz);
         fieldMetaInfo.setType(TypeManager.getType(clazz));
@@ -156,14 +154,15 @@ public class FieldParser {
 
         fieldMetaInfo.setMagicField(magicField);
         fieldMetaInfo.setOrderId(magicField.order());
-        fieldMetaInfo.setAutoTrim(magicField.autoTrim() || classMetaInfo.isAutoTrim());
         fieldMetaInfo.setCharset(magicField.charset());
-        fieldMetaInfo.setFillByte(magicField.fillByte());
+
+        if(magicField.defaultVal() > 0){
+            fieldMetaInfo.setDefaultVal(magicField.defaultVal());
+        }
         if(magicField.size() > 0) {
             fieldMetaInfo.setSize(magicField.size());
         }
         fieldMetaInfo.setDynamicSizeOf(magicField.dynamicSizeOf());
-
         if( fieldMetaInfo.getDynamicSizeOf() > 0 ){
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);

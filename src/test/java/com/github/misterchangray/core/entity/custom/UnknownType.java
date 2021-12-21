@@ -1,4 +1,4 @@
-package com.github.misterchangray.core.entity;
+package com.github.misterchangray.core.entity.custom;
 
 import com.github.misterchangray.core.annotation.MagicField;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class UnknownType {
     @MagicField(order = 1)
     private int id;
-    @MagicField(order = 2, size = 10, autoTrim = true)
+    @MagicField(order = 2, size = 10)
     private String name;
     @MagicField(order = 3)
     private int phoneSize;

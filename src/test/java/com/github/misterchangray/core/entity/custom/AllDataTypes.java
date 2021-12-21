@@ -1,4 +1,4 @@
-package com.github.misterchangray.core.simple;
+package com.github.misterchangray.core.entity.custom;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;

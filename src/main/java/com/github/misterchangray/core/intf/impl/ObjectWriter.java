@@ -31,7 +31,7 @@ public class ObjectWriter extends MWriter {
         if(Objects.isNull(val)) {
             // direct write fill byte if the value is null
             byte[] data = new byte[this.fieldMetaInfo.getElementBytes()];
-            Arrays.fill(data, this.fieldMetaInfo.getFillByte());
+            Arrays.fill(data, (byte) 0);
             buffer.put(data);
             return;
         }

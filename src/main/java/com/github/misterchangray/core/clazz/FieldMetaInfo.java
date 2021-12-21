@@ -41,10 +41,6 @@ public class FieldMetaInfo implements MField {
      * 字符集
      */
     private String charset;
-    /**
-     * 是否自动裁剪
-     */
-    private boolean autoTrim;
 
     /**
      * 当前字段是否为动态的
@@ -67,19 +63,15 @@ public class FieldMetaInfo implements MField {
      */
     private int dynamicSizeOf;
 
-
-    /**
-     * 填充字节
-     * -1 则不启用
-     */
-    private byte fillByte;
-
-
-
     /**
      * 全限定名
      */
     private String fullName;
+
+    /**
+     * 默认值
+     */
+    private int defaultVal;
 
 
     /**
@@ -88,6 +80,14 @@ public class FieldMetaInfo implements MField {
      */
     private FieldMetaInfo genericsField;
 
+
+    public int getDefaultVal() {
+        return defaultVal;
+    }
+
+    public void setDefaultVal(int defaultVal) {
+        this.defaultVal = defaultVal;
+    }
 
     public FieldMetaInfo getGenericsField() {
         return genericsField;
@@ -177,14 +177,6 @@ public class FieldMetaInfo implements MField {
         this.charset = charset;
     }
 
-    public boolean isAutoTrim() {
-        return autoTrim;
-    }
-
-    public void setAutoTrim(boolean autoTrim) {
-        this.autoTrim = autoTrim;
-    }
-
     public boolean isDynamic() {
         return isDynamic;
     }
@@ -207,14 +199,6 @@ public class FieldMetaInfo implements MField {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
-    }
-
-    public byte getFillByte() {
-        return fillByte;
-    }
-
-    public void setFillByte(byte fillByte) {
-        this.fillByte = fillByte;
     }
 
     @Override

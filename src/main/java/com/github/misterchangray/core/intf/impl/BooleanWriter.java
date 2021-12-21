@@ -24,7 +24,7 @@ public class BooleanWriter extends MWriter {
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
         if(Objects.isNull(val)) {
-            val = (boolean) false;
+            val = (boolean) (this.fieldMetaInfo.getDefaultVal() > 0);
         }
         boolean tmp = (boolean) val;
         buffer.put((byte) (tmp ? 1 : 0));

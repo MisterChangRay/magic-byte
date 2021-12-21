@@ -1,17 +1,11 @@
 package com.github.misterchangray.core;
 
 
-import com.github.misterchangray.core.entity.AllDataTypes;
 import com.github.misterchangray.core.entity.Classes;
 import com.github.misterchangray.core.entity.Student;
 import com.github.misterchangray.core.entity.Teacher;
-import com.github.misterchangray.core.simple.*;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
