@@ -3,8 +3,9 @@ package com.github.misterchangray.core.entity.custom;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
-public class AutoTrim {
-    @MagicField(order = 1, size = 30)
+@MagicClass()
+public class StringWithUTF8 {
+    @MagicField(order = 1, size = 30, charset = "UTF8")
    private String name;
     @MagicField(order = 2, size = 50)
    private String email;

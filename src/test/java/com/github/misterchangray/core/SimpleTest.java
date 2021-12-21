@@ -22,12 +22,12 @@ public class SimpleTest {
 
     @Test
     public void testStringObj() {
-        AutoTrim defaultValue = new AutoTrim();
+        StringWithUTF8 defaultValue = new StringWithUTF8();
         defaultValue.setEmail("misterchangray@hotmail.com");
-        defaultValue.setName("changray");
+        defaultValue.setName("小王吧");
 
         byte[] tmp = MagicByte.unpackToByte(defaultValue);
-        AutoTrim pack = MagicByte.pack(tmp, AutoTrim.class);
+        StringWithUTF8 pack = MagicByte.pack(tmp, StringWithUTF8.class);
         Assert.assertEquals(pack.getEmail(), defaultValue.getEmail());
         Assert.assertEquals(pack.getName(), defaultValue.getName());
 
