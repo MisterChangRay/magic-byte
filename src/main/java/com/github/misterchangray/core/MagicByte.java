@@ -41,8 +41,8 @@ public class MagicByte {
      */
     public static <T> ByteBuffer unpack(T t)  throws MagicByteException {
         if (null == t) return null;
-        byte[] bytes = unpackToByte(t);
-        return ByteBuffer.allocate(bytes.length).put(bytes);
+        DynamicByteBuffer res = unPacker.unpackObject(t);
+        return res.buffer();
     }
 
 
@@ -55,6 +55,6 @@ public class MagicByte {
     public static <T> byte[] unpackToByte(T t) throws MagicByteException {
         if (null == t) return null;
 
-        return  unPacker.unpackObject(t);
+        return  unpack(t).array();
     }
 }

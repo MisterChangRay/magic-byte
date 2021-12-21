@@ -10,10 +10,10 @@ import java.util.List;
  * @create: 2021-12-17 17:28
  **/
 public class TestListMatrix {
-    @MagicField(order = 1)
+    @MagicField(order = 1, size = 1)
     private List<String> b;
 
-    @MagicField(order = 2)
+    @MagicField(order = 2, size = 1)
     private List<List<String>> a;
 
     public List<String> getB() {

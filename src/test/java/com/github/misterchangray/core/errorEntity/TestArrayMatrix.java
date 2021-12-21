@@ -10,10 +10,10 @@ import java.util.List;
  * @create: 2021-12-17 17:28
  **/
 public class TestArrayMatrix {
-    @MagicField(order = 1)
+    @MagicField(order = 1, size = 1)
     private int[] b;
 
-    @MagicField(order = 2)
+    @MagicField(order = 2, size = 1)
     private int[][] a;
 
     public TestArrayMatrix(int[] b, int[][] a) {

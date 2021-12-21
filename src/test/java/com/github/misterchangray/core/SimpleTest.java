@@ -114,21 +114,21 @@ public class SimpleTest {
         StringObj stringObj = new StringObj();
         stringObj.setA("hello");
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(stringObj);
+        byte[] bytes = MagicByte.unpackToByte(stringObj);
 
         StringObj pack = MagicByte.pack(bytes, StringObj.class);
         Assert.assertEquals(stringObj.getA(), pack.getA());
 
         // test overflow
         stringObj.setA("helloworld");
-        bytes = UnPacker.getInstance().unpackObject(stringObj);
+        bytes = MagicByte.unpackToByte(stringObj);
 
         pack = MagicByte.pack(bytes, StringObj.class);
         Assert.assertEquals("hello", pack.getA());
 
         // test empty
         stringObj.setA("");
-        bytes = UnPacker.getInstance().unpackObject(stringObj);
+        bytes = MagicByte.unpackToByte(stringObj);
 
         pack = MagicByte.pack(bytes, StringObj.class);
         Assert.assertEquals("",pack.getA());
@@ -136,7 +136,7 @@ public class SimpleTest {
 
         // test null
         stringObj.setA(null);
-        bytes = UnPacker.getInstance().unpackObject(stringObj);
+        bytes = MagicByte.unpackToByte(stringObj);
 
         pack = MagicByte.pack(bytes, StringObj.class);
         Assert.assertEquals("", pack.getA());
@@ -155,7 +155,7 @@ public class SimpleTest {
         byteObj.setA('W');
         byteObj.setB( 'C');
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         CharObj pack = MagicByte.pack(bytes, CharObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA(), 2);
@@ -163,7 +163,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, CharObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA(), 2);
@@ -181,7 +181,7 @@ public class SimpleTest {
         byteObj.setA(7.3D);
         byteObj.setB( 1.4D);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         DoubleObj pack = MagicByte.pack(bytes, DoubleObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA(), 2);
@@ -190,7 +190,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, DoubleObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA(), 2);
@@ -211,7 +211,7 @@ public class SimpleTest {
         byteObj.setA(3.3F);
         byteObj.setB( 4.4F);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         FloatObj pack = MagicByte.pack(bytes, FloatObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA(), 2);
@@ -220,7 +220,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, FloatObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA(), 2);
@@ -239,7 +239,7 @@ public class SimpleTest {
         byteObj.setA(300L);
         byteObj.setB( 4333L);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         LongObj pack = MagicByte.pack(bytes, LongObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());
@@ -247,7 +247,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, LongObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());
@@ -266,7 +266,7 @@ public class SimpleTest {
         byteObj.setA((short) 3);
         byteObj.setB((short) 4);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         ShortObj pack = MagicByte.pack(bytes, ShortObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());
@@ -274,7 +274,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, ShortObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());
@@ -291,7 +291,7 @@ public class SimpleTest {
         byteObj.setA(2);
         byteObj.setB(3);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         IntObj pack = MagicByte.pack(bytes, IntObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());
@@ -300,7 +300,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, IntObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());
@@ -317,7 +317,7 @@ public class SimpleTest {
         byteObj.setA(false);
         byteObj.setB(true);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
 
         BooleanObj pack = MagicByte.pack(bytes, BooleanObj.class);
         Assert.assertEquals(byteObj.isA(), pack.isA());
@@ -327,7 +327,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, BooleanObj.class);
         Assert.assertEquals(byteObj.isA(), pack.isA());
@@ -345,7 +345,7 @@ public class SimpleTest {
         byteObj.setA((byte) 2);
         byteObj.setB((byte) 55);
 
-        byte[] bytes = UnPacker.getInstance().unpackObject(byteObj);
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
         Assert.assertArrayEquals(bytes, new byte[]{2, 55});
 
         ByteObj pack = MagicByte.pack(bytes, ByteObj.class);
@@ -355,7 +355,7 @@ public class SimpleTest {
 
         // test null data
         byteObj.setB(null);
-        bytes = UnPacker.getInstance().unpackObject(byteObj);
+        bytes = MagicByte.unpackToByte(byteObj);
 
         pack = MagicByte.pack(bytes, ByteObj.class);
         Assert.assertEquals(byteObj.getA(), pack.getA());

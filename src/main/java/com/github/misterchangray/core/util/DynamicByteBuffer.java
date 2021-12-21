@@ -170,6 +170,16 @@ public class DynamicByteBuffer {
         return re;
     }
 
+
+    public ByteBuffer buffer() {
+        if(!this.isDynamic) {
+            return this.byteBuffer;
+        }
+
+        byte[] array = this.array();
+        return ByteBuffer.allocate(array.length).put(array);
+    }
+
     public void put(byte[] bytes) {
         autoGrow(bytes.length);
         this.byteBuffer.put(bytes);
@@ -196,4 +206,6 @@ public class DynamicByteBuffer {
         }
         this.byteBuffer.position(0);
     }
+
+
 }
