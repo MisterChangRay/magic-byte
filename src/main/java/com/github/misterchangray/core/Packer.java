@@ -47,6 +47,8 @@ public class Packer {
 
 
     private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data) throws IllegalAccessException{
+        if(fieldMetaInfo.getElementBytes() <= 0) return;
+
         Object val = null;
         try {
             val = fieldMetaInfo.getReader().readFormBuffer(data, object);
