@@ -18,6 +18,30 @@ import java.util.List;
  */
 public class SimpleTest {
 
+    @Test
+    public void testDynamicString() {
+        DynamicString defaultValue = new DynamicString();
+        defaultValue.setLen(30);
+        defaultValue.setEmail("misterchangray@hotmail.com");
+
+        byte[] tmp = MagicByte.unpackToByte(defaultValue);
+        DynamicString pack = MagicByte.pack(tmp, DynamicString.class);
+        Assert.assertEquals(pack.getEmail(), defaultValue.getEmail());
+
+
+        defaultValue.setLen(0);
+        tmp = MagicByte.unpackToByte(defaultValue);
+        pack = MagicByte.pack(tmp, DynamicString.class);
+        Assert.assertEquals(pack.getEmail(), "");
+
+
+        defaultValue.setLen(10);
+        tmp = MagicByte.unpackToByte(defaultValue);
+        pack = MagicByte.pack(tmp, DynamicString.class);
+        Assert.assertEquals(pack.getEmail(), defaultValue.getEmail().substring(0, 10));
+
+
+    }
 
 
     @Test
