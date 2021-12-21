@@ -11,7 +11,7 @@ import java.util.List;
  * @create: 2021-12-20 16:33
  **/
 public class Classes {
-    @MagicField(order = 1, size = 1)
+    @MagicField(order = 1, size = 2)
     private Teacher[] teacher;
     @MagicField(order = 2, size = 2)
     private List<Student> studentList;
@@ -22,7 +22,7 @@ public class Classes {
         List<Classes> classes = new ArrayList<>();
         for (int i = 0; i <count; i++) {
             Classes classes1 = new Classes();
-            classes1.setTeacher(Teacher.build(1).toArray(new Teacher[1]));
+            classes1.setTeacher(Teacher.build(2).toArray(new Teacher[1]));
             classes1.setStudentList(Student.build(2));
             classes.add(classes1);
         }

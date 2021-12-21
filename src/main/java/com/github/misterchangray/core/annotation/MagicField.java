@@ -29,7 +29,7 @@ public @interface MagicField {
      *
      * @return
      */
-    int size() default 0;
+    int size() default -1;
 
     /**
      * take size from another field

@@ -89,8 +89,9 @@ public class FieldParser {
     }
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
-        this.initField(field, fieldMetaInfo, classMetaInfo, field.getType());
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
+
+        this.initField(field, fieldMetaInfo, classMetaInfo, field.getType());
 
         if(TypeManager.isCollection(fieldMetaInfo.getType())) {
             fieldMetaInfo.setGenericsField(this.newGenericsField(fieldMetaInfo));
@@ -103,7 +104,6 @@ public class FieldParser {
         fieldMetaInfo.setField(field);
         fieldMetaInfo.setFullName(classMetaInfo.getFullName() + "." + field.getName());
         fieldMetaInfo.setOwnerClazz(classMetaInfo);
-        fieldMetaInfo.setSize(1);
         fieldMetaInfo.setClazz(clazz);
         fieldMetaInfo.setType(TypeManager.getType(clazz));
         ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassMetaInfo(clazz);
@@ -114,6 +114,23 @@ public class FieldParser {
         }
         fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
         fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
+
+        if(fieldMetaInfo.getSize() < 0) {
+            fieldMetaInfo.setSize(1);
+        }
+
+        if(fieldMetaInfo.getDynamicSizeOf() > 0 ){
+            fieldMetaInfo.setSize(0);
+            fieldMetaInfo.setDynamic(true);
+            classMetaInfo.setDynamic(true);
+            FieldMetaInfo dynamicRef =
+                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
+            if(Objects.isNull(dynamicRef)) {
+                return;
+            }
+            fieldMetaInfo.setDynamicRef(dynamicRef);
+            dynamicRef.setDynamicRef(fieldMetaInfo);
+        }
     }
 
 
@@ -159,21 +176,10 @@ public class FieldParser {
         if(magicField.defaultVal() > 0){
             fieldMetaInfo.setDefaultVal(magicField.defaultVal());
         }
-        if(magicField.size() > 0) {
-            fieldMetaInfo.setSize(magicField.size());
-        }
+
+        fieldMetaInfo.setSize(magicField.size());
         fieldMetaInfo.setDynamicSizeOf(magicField.dynamicSizeOf());
-        if( fieldMetaInfo.getDynamicSizeOf() > 0 ){
-            fieldMetaInfo.setDynamic(true);
-            classMetaInfo.setDynamic(true);
-            FieldMetaInfo dynamicRef =
-                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
-            if(Objects.isNull(dynamicRef)) {
-                return;
-            }
-            fieldMetaInfo.setDynamicRef(dynamicRef);
-            dynamicRef.setDynamicRef(fieldMetaInfo);
-        }
+
     }
 
 

@@ -3,11 +3,43 @@ package com.github.misterchangray.core;
 
 import com.github.misterchangray.core.entity.Classes;
 import com.github.misterchangray.core.entity.Student;
+import com.github.misterchangray.core.entity.Teacher;
 import com.github.misterchangray.core.entity.custom.UnknownType;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class ComplexTest {
+    @Test
+    public void testArrayOverflow2() throws InterruptedException {
+        Classes classes1 = Classes.build(1).get(0);
+        classes1.setTeacher(Arrays.copyOf(classes1.getTeacher(), 1));
+
+        byte[] bytes = MagicByte.unpackToByte(classes1);
+        Classes pack = MagicByte.pack(bytes, Classes.class);
+
+
+        for (int i = 0; i < classes1.getTeacher().length; i++) {
+            Teacher teacher1 = classes1.getTeacher()[i];
+            Teacher teacher2 = pack.getTeacher()[i];
+            Assert.assertEquals(teacher1.getId(), teacher2.getId());
+            Assert.assertEquals(teacher1.getName(), teacher2.getName());
+            Assert.assertArrayEquals(teacher1.getPhones(), teacher2.getPhones());
+
+        }
+
+        for (int i = 0; i < classes1.getStudentList().size(); i++) {
+            Student student1 = classes1.getStudentList().get(i);
+            Student student2 = pack.getStudentList().get(i);
+            Assert.assertEquals(student1.getPhone(), student2.getPhone());
+            Assert.assertEquals(student1.getName(), student2.getName());
+            Assert.assertArrayEquals(student1.getBookids(), student2.getBookids());
+
+        }
+    }
+
+
 
     /**
      * test for array byte fill.
@@ -23,6 +55,15 @@ public class ComplexTest {
         byte[] bytes = MagicByte.unpackToByte(classes1);
         Classes pack = MagicByte.pack(bytes, Classes.class);
 
+
+        for (int i = 0; i < classes1.getTeacher().length; i++) {
+            Teacher teacher1 = classes1.getTeacher()[i];
+            Teacher teacher2 = pack.getTeacher()[i];
+            Assert.assertEquals(teacher1.getId(), teacher2.getId());
+            Assert.assertEquals(teacher1.getName(), teacher2.getName());
+            Assert.assertArrayEquals(teacher1.getPhones(), teacher2.getPhones());
+
+        }
         for (int i = 0; i < pack.getStudentList().size(); i++) {
             Student student1 = classes1.getStudentList().get(i);
             Student student2 = pack.getStudentList().get(i);
