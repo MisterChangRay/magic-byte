@@ -24,10 +24,10 @@ public class ComplexTest {
     public void testUnknownType() throws InterruptedException {
         UnknownType unknownType = UnknownType.build(2).get(0);
         byte[] bytes = MagicByte.unpackToByte(unknownType);
-        Thread.sleep(1000);
         UnknownType pack = MagicByte.pack(bytes, UnknownType.class);
 
-        System.out.println(1);
+        Assert.assertNull(pack.getBrithday());
+        Assert.assertNull(pack.getAttr());
 
     }
 
