@@ -6,6 +6,7 @@ import com.github.misterchangray.core.exception.MagicByteException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ConverterUtil {
 
@@ -16,6 +17,8 @@ public class ConverterUtil {
      * @return
      */
     public static long toNumber(TypeEnum typeEnum, Object o) {
+        if(Objects.isNull(o)) return 0;
+
         switch (typeEnum) {
             case BYTE:
                 return (byte) o;
