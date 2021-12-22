@@ -11,10 +11,40 @@ import com.github.misterchangray.core.entity.custom.UnknownType;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class ComplexTest {
 
+
+    /**
+     * 部分数据测试, 生成数据后删除一部分
+     * @throws InterruptedException
+     */
+    @Test
+    public void testDynamicObjectDataLoss() throws InterruptedException {
+        // use non strict model
+        DynamicClasses classes1 = DynamicClasses.build(1).get(0);
+
+        ByteBuffer unpack = MagicByte.unpack(classes1);
+        byte[] tmp = Arrays.copyOfRange(unpack.array(), 0, 55);
+        DynamicClasses pack = MagicByte.pack(tmp, DynamicClasses.class);
+
+        for (int i = 0; i < 1; i++) {
+            DynamicTeacher teacher1 = classes1.getTeacher()[i];
+            DynamicTeacher teacher2 = pack.getTeacher()[i];
+            Assert.assertEquals(teacher1.getId(), teacher2.getId());
+            Assert.assertEquals(teacher1.getName(), teacher2.getName());
+            Assert.assertArrayEquals(teacher1.getPhones(), teacher2.getPhones());
+        }
+
+    }
+
+
+    /**
+     * 动态对象测试
+     * @throws InterruptedException
+     */
     @Test
     public void testDynamicObject() throws InterruptedException {
         DynamicClasses classes1 = DynamicClasses.build(1).get(0);
@@ -49,6 +79,11 @@ public class ComplexTest {
     }
 
 
+    /**
+     * 数组元素超出测试,
+     * 实际数组元素大于声明大小
+     * @throws InterruptedException
+     */
     @Test
     public void testArrayOverflow2() throws InterruptedException {
         Classes classes1 = Classes.build(1).get(0);
@@ -81,6 +116,8 @@ public class ComplexTest {
 
     /**
      * test for array byte fill.
+     * list 实际大小大于声明大小
+     * 应该自动裁剪
      *
      */
     @Test
@@ -114,7 +151,7 @@ public class ComplexTest {
 
     /**
      * test for array byte fill.
-     *
+     * 实际list大小 小于声明大小，应该自动填充
      */
     @Test
     public void testListFill() throws InterruptedException {
@@ -139,7 +176,7 @@ public class ComplexTest {
 
     /**
      * test for array byte fill.
-     *
+     * 实际数组元素小于声明大小， 应该自动填充
      */
     @Test
     public void testArrayOverflow() throws InterruptedException {
@@ -157,7 +194,7 @@ public class ComplexTest {
 
     /**
      * test for array byte fill.
-     *
+     * 数组自动填充测试
      */
     @Test
     public void testArrayFill() throws InterruptedException {
@@ -174,6 +211,7 @@ public class ComplexTest {
 
     /**
      * 未知数据类型.
+     * 未知数据类型测试
      *
      */
     @Test

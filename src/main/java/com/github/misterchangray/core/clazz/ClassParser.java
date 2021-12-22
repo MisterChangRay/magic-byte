@@ -51,10 +51,21 @@ public class ClassParser {
 
     }
 
+    private void beforeLinkClazz(ClassMetaInfo classMetaInfo, Class<?> clazz) {
+        classMetaInfo.setClazz(clazz);
+        classMetaInfo.setFullName(clazz.getName());
+        classMetaInfo.setByteOrder(ByteOrder.BIG_ENDIAN);
+        classMetaInfo.setFields(new ArrayList<>());
+
+        this.copyConfiguration(classMetaInfo, clazz);
+    }
+
+
     /**
      * 收尾工作
      * - 统计总字节数
-     * - 判断是否为动态大小
+     * - 严格模式自动继承
+     *
      * @param classMetaInfo
      * @param clazz
      */
@@ -66,20 +77,13 @@ public class ClassParser {
         classMetaInfo.setElementBytes(total);
     }
 
-    private void beforeLinkClazz(ClassMetaInfo classMetaInfo, Class<?> clazz) {
-        classMetaInfo.setClazz(clazz);
-        classMetaInfo.setFullName(clazz.getName());
-        classMetaInfo.setByteOrder(ByteOrder.BIG_ENDIAN);
-        classMetaInfo.setFields(new ArrayList<>());
-
-        this.copyConfiguration(classMetaInfo, clazz);
-    }
 
     private void copyConfiguration(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         MagicClass magicClass = AnnotationUtil.getMagicClassAnnotation(clazz);
         if(Objects.isNull(magicClass)) return;
 
         classMetaInfo.setByteOrder(magicClass.byteOrder().getBytes());
+        classMetaInfo.setStrict(magicClass.strict());
     }
 
 }

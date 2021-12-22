@@ -53,12 +53,12 @@ public class FieldParser {
     private void afterVerify(FieldMetaInfo field) {
         // 序号重复
         if(Objects.nonNull(field.getOwnerClazz().getFieldMetaInfoByOrderId(field.getOrderId()))) {
-            throw new MagicParseException("Sorting cannot be repeated; at: " + field.getFullName());
+            throw new InvalidParameterException("Sorting cannot be repeated; at: " + field.getFullName());
         }
 
         // dynamicSize 和 size 不能共存
         if(field.getMagicField().size() > 0 && field.getMagicField().dynamicSizeOf() > 0) {
-            throw new PropertiesInvalidException("size or dynamicSize only can be use one; at: " + field.getFullName());
+            throw new InvalidParameterException("size or dynamicSize only can be use one; at: " + field.getFullName());
         }
 
         // list string array 必须配置 size or dynamicSize
@@ -82,7 +82,7 @@ public class FieldParser {
             if(dynamicRef.getType() != TypeEnum.BYTE &&
                     dynamicRef.getType() != TypeEnum.SHORT &&
                     dynamicRef.getType() != TypeEnum.INT) {
-                throw new InvalidTypeException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + field.getFullName());
+                throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + field.getFullName());
             }
         }
 
@@ -108,9 +108,13 @@ public class FieldParser {
         fieldMetaInfo.setType(TypeManager.getType(clazz));
         ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassMetaInfo(clazz);
         fieldMetaInfo.setElementBytes(fieldClassMetaInfo.getElementBytes());
+        // set parent isDynamic flag if the child true
         if(fieldClassMetaInfo.isDynamic()) {
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
+        }
+        if(classMetaInfo.isStrict()) {
+            fieldClassMetaInfo.setStrict(true);
         }
         fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
         fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
@@ -145,7 +149,7 @@ public class FieldParser {
         Class<?> clazz = null;
         if(origin.getType() == TypeEnum.ARRAY) {
             if(origin.getField().getType().getName().startsWith("[[")) {
-                throw new MagicParseException("not support matrix, such as int[][]; at: " + origin.getFullName());
+                throw new InvalidTypeException("not support matrix, such as int[][]; at: " + origin.getFullName());
             }
             clazz = origin.getField().getType().getComponentType();
         }
@@ -155,7 +159,7 @@ public class FieldParser {
         if (genericType instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) genericType;
             if(pt.getActualTypeArguments()[0] instanceof ParameterizedType) {
-                throw new MagicParseException("not support matrix, such as List<List<String>>; at: " + fieldMetaInfo.getFullName());
+                throw new InvalidTypeException("not support matrix, such as List<List<String>>; at: " + fieldMetaInfo.getFullName());
             }
             clazz =(Class<?>)pt.getActualTypeArguments()[0];
         }

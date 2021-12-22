@@ -1,6 +1,8 @@
 package com.github.misterchangray.core.entity;
 
+import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.enums.ByteOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
  * @author: Ray.chang
  * @create: 2021-12-20 16:32
  **/
+@MagicClass(byteOrder = ByteOrder.BIG_ENDIAN)
 public class Teacher {
     @MagicField(order = 1)
     private int id;
@@ -27,7 +30,7 @@ public class Teacher {
         for (int i = 0; i <count; i++) {
 
             Teacher teacher = new Teacher();
-            teacher.setName("teacher1");
+            teacher.setName("teacher" + i);
             teacher.setId(10 + i);
             teacher.setPhoneSize(3);
             teacher.setPhones(new long[teacher.getPhoneSize()]);

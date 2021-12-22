@@ -17,6 +17,8 @@ public class DynamicByteBuffer {
     private static final int STEP  = 1024;
 
     public static DynamicByteBuffer allocate(int bytes) {
+        AssertUtil.throwIFOOM(bytes, "DynamicByteBuffer allocate field!");
+
         DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer();
         dynamicByteBuffer.isDynamic =false;
         dynamicByteBuffer.byteBuffer = ByteBuffer.allocate(bytes);
@@ -39,6 +41,8 @@ public class DynamicByteBuffer {
             return;
         }
         int newSize = (byteBuffer.capacity() * 2) + bytes;
+        AssertUtil.throwIFOOM(newSize, "DynamicByteBuffer Auto Grow field!");
+
         ByteBuffer tmp = ByteBuffer.allocate(newSize).order(this.byteBuffer.order());
         tmp.put(this.array());
         this.byteBuffer = tmp;
@@ -53,7 +57,7 @@ public class DynamicByteBuffer {
     
     public byte get() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.BYTE.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return byteBuffer.get();
     }
@@ -69,14 +73,14 @@ public class DynamicByteBuffer {
     
     public byte get(int i) {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.BYTE.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.get(i);
     }
 
     public char getChar() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.CHAR.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.getChar();
     }
@@ -90,7 +94,7 @@ public class DynamicByteBuffer {
 
     public short getShort() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.SHORT.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.getShort();
     }
@@ -106,7 +110,7 @@ public class DynamicByteBuffer {
 
     public int getInt() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.INT.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.getInt();
     }
@@ -122,7 +126,7 @@ public class DynamicByteBuffer {
 
     public long getLong() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.LONG.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.getLong();
     }
@@ -136,7 +140,7 @@ public class DynamicByteBuffer {
 
     public float getFloat() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.FLOAT.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.getFloat();
     }
@@ -151,7 +155,7 @@ public class DynamicByteBuffer {
 
     public double getDouble() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.DOUBLE.getBytes()) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         return this.byteBuffer.getDouble();
     }
@@ -177,7 +181,9 @@ public class DynamicByteBuffer {
         }
 
         byte[] array = this.array();
-        return ByteBuffer.allocate(array.length).put(array);
+        return ByteBuffer.allocate(array.length)
+                .order(this.byteBuffer.order())
+                .put(array);
     }
 
     public void put(byte[] bytes) {
@@ -195,7 +201,7 @@ public class DynamicByteBuffer {
 
     public void get(byte[] bytes) {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < bytes.length) {
-            throw new MagicParseException();
+            throw new MagicParseException("Missing data");
         }
         this.byteBuffer.get(bytes);
     }

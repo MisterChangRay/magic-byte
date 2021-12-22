@@ -27,7 +27,7 @@ public class DynamicTeacher {
         for (int i = 0; i <count; i++) {
 
             DynamicTeacher teacher = new DynamicTeacher();
-            teacher.setName("teacher1");
+            teacher.setName("teacher" + i);
             teacher.setId(10 + i);
             teacher.setPhoneSize(3);
             teacher.setPhones(new long[teacher.getPhoneSize()]);

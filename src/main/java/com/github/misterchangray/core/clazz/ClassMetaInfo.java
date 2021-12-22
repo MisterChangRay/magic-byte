@@ -30,7 +30,18 @@ public class ClassMetaInfo implements MClass {
      */
     private String fullName;
 
+    /**
+     * 是否适用严格模式
+     */
+    private boolean strict;
 
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
 
     public String getFullName() {
         return fullName;

@@ -3,16 +3,60 @@ package com.github.misterchangray.core;
 
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.ClassParser;
+import com.github.misterchangray.core.dynamic.DynamicClasses;
+import com.github.misterchangray.core.dynamic.StrictDynamicClasses;
 import com.github.misterchangray.core.entity.error.*;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.exception.InvalidTypeException;
 import com.github.misterchangray.core.exception.MagicParseException;
+import com.github.misterchangray.core.exception.OutOfMemoryDetecteException;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class TestException {
+
+
+    @Test
+    public void testMagicParseException() throws InterruptedException {
+        Assert.assertThrows(MagicParseException.class, () -> {
+            StrictDynamicClasses classes1 = StrictDynamicClasses.build(1).get(0);
+
+            ByteBuffer unpack = MagicByte.unpack(classes1);
+            byte[] tmp = Arrays.copyOfRange(unpack.array(), 0, 100);
+            StrictDynamicClasses pack = MagicByte.pack(tmp, StrictDynamicClasses.class);
+
+        });
+    }
+
+    @Test
+    public void testOOM2() throws InterruptedException {
+        Assert.assertThrows(OutOfMemoryDetecteException.class, () -> {
+            TestLargeString classes1 = new TestLargeString();
+
+            ByteBuffer unpack = MagicByte.unpack(classes1);
+            byte[] tmp = Arrays.copyOfRange(unpack.array(), 0, 100);
+            StrictDynamicClasses pack = MagicByte.pack(tmp, StrictDynamicClasses.class);
+
+        });
+    }
+
+
+
+    @Test
+    public void testOOM() throws InterruptedException {
+        Assert.assertThrows(OutOfMemoryDetecteException.class, () -> {
+            DynamicClasses classes1 = DynamicClasses.build(1).get(0);
+
+            ByteBuffer unpack = MagicByte.unpack(classes1);
+            unpack.position(0);
+            unpack.putInt(0xff);
+            DynamicClasses pack = MagicByte.pack(unpack.array(), DynamicClasses.class);
+
+        });
+    }
 
 
     /**
@@ -46,7 +90,7 @@ public class TestException {
     @Test
     public void testDynamicSizeOf2() {
         TestDynamicSizeOf2 testSameOrder = new TestDynamicSizeOf2();
-        Assert.assertThrows(InvalidTypeException.class, () -> {
+        Assert.assertThrows(InvalidParameterException.class, () -> {
             ByteBuffer unpack = MagicByte.unpack(testSameOrder);
         });
     }
@@ -74,7 +118,7 @@ public class TestException {
         testSameOrder.setA(1);
         testSameOrder.setB(2);
         testSameOrder.setC(3);
-        Assert.assertThrows(MagicParseException.class, () -> {
+        Assert.assertThrows(InvalidParameterException.class, () -> {
             ByteBuffer unpack = MagicByte.unpack(testSameOrder);
         });
     }
@@ -88,7 +132,7 @@ public class TestException {
     public void TestListMatrix() {
         ClassParser classParser = new ClassParser();
 
-        Assert.assertThrows(MagicParseException.class, () -> {
+        Assert.assertThrows(InvalidTypeException.class, () -> {
             ClassMetaInfo parse = classParser.parse(TestListMatrix.class);
         });
     }
@@ -96,7 +140,7 @@ public class TestException {
     @Test
     public void TestArrayMatrix() {
         ClassParser classParser = new ClassParser();
-        Assert.assertThrows(MagicParseException.class, () -> {
+        Assert.assertThrows(InvalidTypeException.class, () -> {
             ClassMetaInfo parse = classParser.parse(TestArrayMatrix.class);
         });
     }

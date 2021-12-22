@@ -47,7 +47,9 @@ public class UnPacker {
             for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 decodeField(fieldMetaInfo, object,  res);
             }
-        } catch (MagicParseException | IllegalAccessException ae) {
+        } catch (MagicParseException ae) {
+            if(classMetaInfo.isStrict()) throw ae;
+        } catch (IllegalAccessException ae) {
             AssertUtil.throwIllegalAccessException(classMetaInfo);
         }
         return res;

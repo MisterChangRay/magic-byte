@@ -7,6 +7,7 @@ import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MReader;
+import com.github.misterchangray.core.util.AssertUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
@@ -39,6 +40,9 @@ public class CollectionReader extends MReader {
         }
 
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
+            long allocSize = count * fieldMetaInfo.getGenericsField().getElementBytes();
+            AssertUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());
+
             Object array = Array.newInstance(fieldMetaInfo.getGenericsField().getClazz(), count);
 
             for(int i=0; i<count; i++) {
@@ -51,6 +55,9 @@ public class CollectionReader extends MReader {
 
 
         if(TypeEnum.LIST == this.fieldMetaInfo.getType()) {
+            long allocSize = count * fieldMetaInfo.getGenericsField().getElementBytes();
+            AssertUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());
+
             List<Object> list = new ArrayList<>(count);
 
             for(int i=0; i<count; i++) {

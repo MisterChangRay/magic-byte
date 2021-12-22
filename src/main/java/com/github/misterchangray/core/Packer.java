@@ -37,7 +37,9 @@ public class Packer {
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 encodeField(object, fieldMetaInfo, data);
             }
-        } catch (MagicParseException | IllegalAccessException ae) {
+        } catch (MagicParseException ae) {
+            if(classMetaInfo.isStrict()) throw ae;
+        } catch (IllegalAccessException ae) {
             AssertUtil.throwIllegalAccessException(classMetaInfo);
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw new MagicByteException("no public and no arguments constructor; at: " + classMetaInfo.getFullName());
