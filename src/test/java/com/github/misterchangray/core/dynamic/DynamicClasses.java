@@ -3,6 +3,7 @@ package com.github.misterchangray.core.dynamic;
 import com.github.misterchangray.core.annotation.MagicField;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class DynamicClasses {
     @MagicField(order = 3)
     private short studentLen;
     @MagicField(order = 4, dynamicSizeOf = 3)
-    private List<DynamicStudent> studentList;
+    private ArrayList<DynamicStudent> studentList;
 
 
     public static List<DynamicClasses> build(int count) {
@@ -59,11 +60,11 @@ public class DynamicClasses {
         this.studentLen = studentLen;
     }
 
-    public List<DynamicStudent> getStudentList() {
+    public ArrayList<DynamicStudent> getStudentList() {
         return studentList;
     }
 
-    public void setStudentList(List<DynamicStudent> studentList) {
+    public void setStudentList(ArrayList<DynamicStudent> studentList) {
         this.studentList = studentList;
     }
 }

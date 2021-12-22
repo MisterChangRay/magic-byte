@@ -27,8 +27,8 @@ public class DynamicStudent {
     @MagicField(order = 16, dynamicSizeOf = 14)
     private String email;
 
-    public static List<DynamicStudent> build(int count) {
-        List<DynamicStudent> students = new ArrayList<>();
+    public static ArrayList<DynamicStudent> build(int count) {
+        ArrayList<DynamicStudent> students = new ArrayList<>();
         for (int i = 0; i <count; i++) {
             DynamicStudent student = new DynamicStudent();
             student.setName("stu-" + i);

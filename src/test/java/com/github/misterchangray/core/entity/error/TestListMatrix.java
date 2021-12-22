@@ -11,10 +11,12 @@ import java.util.List;
  **/
 public class TestListMatrix {
     @MagicField(order = 1, size = 1)
-    private List<String> b;
+    private List<List<String>> a;
 
     @MagicField(order = 2, size = 1)
-    private List<List<String>> a;
+    private List<String> b;
+
+
 
     public List<String> getB() {
         return b;

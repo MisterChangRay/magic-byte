@@ -4,8 +4,8 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.ClassParser;
 import com.github.misterchangray.core.entity.error.*;
-import com.github.misterchangray.core.exception.DynamicRefInvalidException;
 import com.github.misterchangray.core.exception.InvalidParameterException;
+import com.github.misterchangray.core.exception.InvalidTypeException;
 import com.github.misterchangray.core.exception.MagicParseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,9 +20,33 @@ public class TestException {
      *
      */
     @Test
+    public void TestArrayString() {
+        TestArrayString testSameOrder = new TestArrayString();
+        Assert.assertThrows(InvalidTypeException.class, () -> {
+            ByteBuffer unpack = MagicByte.unpack(testSameOrder);
+        });
+    }
+
+    /**
+     * dynamicSize of 只能标记在 list array string 上.
+     *
+     */
+    @Test
+    public void TestListString() {
+        TestListString testSameOrder = new TestListString();
+        Assert.assertThrows(InvalidTypeException.class, () -> {
+            ByteBuffer unpack = MagicByte.unpack(testSameOrder);
+        });
+    }
+
+    /**
+     * dynamicSize of 只能标记在 list array string 上.
+     *
+     */
+    @Test
     public void testDynamicSizeOf2() {
         TestDynamicSizeOf2 testSameOrder = new TestDynamicSizeOf2();
-        Assert.assertThrows(DynamicRefInvalidException.class, () -> {
+        Assert.assertThrows(InvalidTypeException.class, () -> {
             ByteBuffer unpack = MagicByte.unpack(testSameOrder);
         });
     }

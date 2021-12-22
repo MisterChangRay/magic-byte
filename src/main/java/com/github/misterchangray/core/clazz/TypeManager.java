@@ -43,7 +43,7 @@ public class TypeManager {
             return res;
         } else if(clazz.isArray()) {
             res = TypeEnum.ARRAY;
-        } else if(clazz.isAssignableFrom(List.class)) {
+        } else if(List.class.isAssignableFrom(clazz)) {
             res = TypeEnum.LIST;
         } else {
             res = TypeEnum.OBJECT;

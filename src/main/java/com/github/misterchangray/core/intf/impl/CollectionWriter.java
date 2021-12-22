@@ -35,31 +35,29 @@ public class CollectionWriter extends MWriter {
             count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
-        int fillItems = 0;
-        if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
+        if(Objects.nonNull(val) && TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
             int length = Array.getLength(val);
             length = Math.min(length, count);
-            fillItems = Math.abs(length - count);
 
             for (int i = 0; i < length; i++) {
+                count --;
                 fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer, Array.get(val, i), val);
             }
         }
 
 
-        if(TypeEnum.LIST == this.fieldMetaInfo.getType()) {
+        if(Objects.nonNull(val) && TypeEnum.LIST == this.fieldMetaInfo.getType()) {
             List<?> list = (List<?>) val;
 
             int length = list.size();
             length = Math.min(length, count);
-            fillItems = Math.abs(length - count);
-
             for (int i = 0; i < length; i++) {
+                count --;
                 fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer,list.get(i), val);
             }
         }
 
-        for (int i = 0; i < fillItems; i++) {
+        for (int i = 0; i < count; i++) {
             fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer,null, val);
         }
     }

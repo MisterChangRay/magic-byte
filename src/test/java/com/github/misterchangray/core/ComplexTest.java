@@ -184,6 +184,20 @@ public class ComplexTest {
 
         Assert.assertNull(pack.getBrithday());
         Assert.assertNull(pack.getAttr());
+        Assert.assertNull(pack.getBrithday());
+        Assert.assertNull(pack.getClazz());
+        Assert.assertNull(pack.getRemark());
+        Assert.assertNull(pack.getOpt());
+
+        Assert.assertEquals(unknownType.getId(), pack.getId());
+        Assert.assertEquals(unknownType.getName(), pack.getName());
+        Assert.assertEquals(unknownType.getPhoneSize(), pack.getPhoneSize());
+        Assert.assertArrayEquals(unknownType.getPhones(), pack.getPhones());
+
+        Assert.assertEquals(unknownType.getAge(), pack.getAge());
+        Assert.assertEquals(unknownType.getTtl(), pack.getTtl());
+        Assert.assertEquals(unknownType.getHaha(), pack.getHaha());
+
 
     }
 

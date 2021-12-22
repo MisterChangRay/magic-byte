@@ -82,7 +82,7 @@ public class FieldParser {
             if(dynamicRef.getType() != TypeEnum.BYTE &&
                     dynamicRef.getType() != TypeEnum.SHORT &&
                     dynamicRef.getType() != TypeEnum.INT) {
-                throw new DynamicRefInvalidException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + field.getFullName());
+                throw new InvalidTypeException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + field.getFullName());
             }
         }
 
@@ -158,10 +158,15 @@ public class FieldParser {
                 throw new MagicParseException("not support matrix, such as List<List<String>>; at: " + fieldMetaInfo.getFullName());
             }
             clazz =(Class<?>)pt.getActualTypeArguments()[0];
-
         }
         fieldMetaInfo.setClazz(clazz);
+        this.copyConfiguration(origin.getField(), fieldMetaInfo, origin.getOwnerClazz());
         this.initField(origin.getField(), fieldMetaInfo, origin.getOwnerClazz(), fieldMetaInfo.getClazz());
+
+        if(fieldMetaInfo.getType() == TypeEnum.STRING) {
+            throw new InvalidTypeException("not support String with collection, such as List<String> or String[]; at: " + fieldMetaInfo.getFullName());
+        }
+
         return fieldMetaInfo;
     }
 
