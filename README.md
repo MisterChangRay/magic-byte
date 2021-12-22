@@ -34,7 +34,8 @@ maven项目可直接导入:
 下面的对象中, Student 总共分配 42 个字节; School 总共分配 95 个字节
 ```java
 // declare class must use public
-@MagicClass(autoTrim = true)
+// 使用大端模式， 默认为大端
+@MagicClass(byteOrder = ByteOrder.BIG_ENDIAN)
 public class School {
     // 普通数据类型, 字符串长度为 10 byte 
     @MagicField(order = 1, size = 10)
@@ -51,14 +52,14 @@ public class School {
     // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
     @MagicField(order = 7)
     private Date[] birthdays;
-    // 普通数据类型, 通过order配置序列话顺序, 序列号顺序和定义顺序无关
+    // 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
     @MagicField(order = 2)
     private byte age;
    
     // getter and setter ...
 }
 
-@MagicClass(autoTrim = true)
+@MagicClass()
 public class Student {
     // 普通数据, 字符串长度为 10
     @MagicField(order = 1, size = 10)
@@ -66,7 +67,7 @@ public class Student {
     // 普通数据, 整数, 此字段决定后续 phones 字段长度
     @MagicField(order = 2)
     private int length;
-    // 此List并未直接指定大小, 大小由 length 字段决定
+    // 此List并未直接指定大小, 大小由 length 字段决定. length字段数据类型只能为 byte, short, int
     @MagicField(order = 3, dynamicSizeOf = 2)
     private List<Long> phones;
     @MagicField(order = 4)
@@ -91,12 +92,12 @@ void main() {
 工具存在两个注解:
 1. `@MagicClass()` 类注解; 主要用于数据全局配置
 	- byteOrder 配置序列化大小端
-	- autoTrim 自动裁剪, 对于字符串和`List`, 如果数据全为`0x00`或`0xff`将会被裁剪现象
+	- strict 严格模式, 默认false, 严格模式将会抛出更多的异常
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
 	- order 定义序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始依次递增)</b>
 	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
 	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
-	- dynamicSizeFromOrder 从指定的 order 中获取`List或Array`的长度, 仅`List和Array`有效
+	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
 
 
 
@@ -113,18 +114,20 @@ void main() {
 #### 6. 注意事项
 1. 本工具仅用于对象和数据的转换, 报文的效验需在转换前进行; 一般来说有报文头效验和效验和效验
 2. <b>已投入使用的字段请不要修改`order`属性(重要),会影响已有业务;新增字段请递增使用下一个`order`值</b>
-3. 大端小端/默认字符集使用`@MagicClass`进行配置
+3. 大端小端使用`@MagicClass`进行配置
 4. 基本数据类型使用下表默认字节长度, `String/List/Array` 需要使用`size`属性指定成员长度或字符串字节长度
 5. 请使用基础类型定义报文结构,目前仅对以下数据类型支持:
 	1. 四类八种基础类型(byte/char/short/int/long/float/double/boolean)
 	2. String, 字符串的支持
 	3. List和Array的支持, 可以使用泛型; 但不能使用`List<String>`或则`String[]`
-6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 则只会序列化5个元素, 多余的将会被删除
+6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 将序列化集合前5个元素
 7. 字符串默认使用ASCII编码
 8. 不支持List嵌套或二维数组
 9. boolean值 0=false/非0=true
 10. 所有类的定义必须为 public, 不支持内部类
-11. 实体类不支持继承的序列化和反序列化;支持嵌套或组合使用
+11. 不支持类继承的序列化和反序列化;支持类的嵌套或组合使用
+12. 包装数据类型为null时使用对于原始类型默认值
+13. 
 
 #### 7. 开发建议
 
@@ -132,9 +135,8 @@ void main() {
 2. 不建议网络传输有符号数即负数
 3. 不建议网络传输字符串
 4. 不建议类中大量声明字符串
-5. 建议使用`protobuf`作为通讯,储存方案
-6. 集合建议使用数组(Array)而非列表(List), List可能存在数据溢出情况而被裁剪
-7. 二进制协议不建议单包超过1KB
+5. 条件允许的话可以考虑使用`protobuf`作为通讯
+7. 二进制协议建议单包大小在1KB以内
 8. <b>对于属性的`order`配置, 已经投入使用的一定不要修改; 新增字段时必须使用新的(递增后)order值; 重要的事强调3次</b>
 
 #### 8. 最后
