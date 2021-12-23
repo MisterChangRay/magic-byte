@@ -83,8 +83,13 @@ public class ClassParser {
                 FieldMetaInfo dynamicRef =
                         fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
                 if(Objects.isNull(dynamicRef)) {
+                    throw new InvalidParameterException("not found  target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
+                }
+
+                if(dynamicRef.getOrderId() > fieldMetaInfo.getOrderId()) {
                     throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
                 }
+
                 fieldMetaInfo.setDynamicRef(dynamicRef);
                 dynamicRef.setDynamicRef(fieldMetaInfo);
 
