@@ -127,6 +127,7 @@ void main() {
 10. 所有类的定义必须为 public, 不支持内部类
 11. 不支持类继承的序列化和反序列化;支持类的嵌套或组合使用
 12. 序列化null值,如果是包装数据类型,则使用原始类型默认值;如`Short a = null;` 序列化为 `0`; 其他数据类型将会直接填充,如数组，对象等。
+13. 更多问题请前往WIKI页面查看 >> [WIKI_HOME](https://github.com/MisterChangRay/magic-byte/wiki)
 
 #### 7. 开发建议
 
