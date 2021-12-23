@@ -4,8 +4,12 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.entity.Classes;
 import com.github.misterchangray.core.entity.Student;
 import com.github.misterchangray.core.entity.Teacher;
+import com.github.misterchangray.core.entity.custom.OrderConfuse;
+import com.github.misterchangray.core.util.AssertUtil;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -14,6 +18,29 @@ import org.junit.Test;
 
  */
 public class NormalTest {
+
+
+    /**
+     * test byte.
+     *
+     */
+    @Test
+    public void testOrderConfuse() {
+        OrderConfuse orderConfuse = new OrderConfuse();
+        orderConfuse.setA(1);
+        orderConfuse.setB(2);
+        orderConfuse.setC(3);
+
+        ByteBuffer unpack = MagicByte.unpack(orderConfuse);
+        unpack.position(0);
+        Assert.assertEquals(unpack.getInt(), 2);
+        Assert.assertEquals(unpack.getInt(), 3);
+        Assert.assertEquals(unpack.getInt(), 1);
+        OrderConfuse pack  = MagicByte.pack(unpack.array(), OrderConfuse.class);
+        Assert.assertEquals(orderConfuse.getA(), pack.getA());
+        Assert.assertEquals(orderConfuse.getB(), pack.getB());
+        Assert.assertEquals(orderConfuse.getC(), pack.getC());
+    }
 
 
     /**

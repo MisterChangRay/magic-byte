@@ -84,6 +84,45 @@ public class TestException {
     }
 
     /**
+     * size or dynamicSize only use one
+     *
+     */
+    @Test
+    public void testList2() {
+        TestList2 testSameOrder = new TestList2();
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            ByteBuffer unpack = MagicByte.unpack(testSameOrder);
+        });
+    }
+
+    /**
+     * list string 必须配置size 或者dynamicsize
+     *
+     */
+    @Test
+    public void testList() {
+        TestList testSameOrder = new TestList();
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            ByteBuffer unpack = MagicByte.unpack(testSameOrder);
+        });
+    }
+
+
+
+    /**
+     * dynamicSize of 只能标记在 list array string 上.
+     *
+     */
+    @Test
+    public void testDynamicSizeOf3() {
+        TestDynamicSizeOf3 testSameOrder = new TestDynamicSizeOf3();
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            ByteBuffer unpack = MagicByte.unpack(testSameOrder);
+        });
+    }
+
+
+    /**
      * dynamicSize of 只能标记在 list array string 上.
      *
      */

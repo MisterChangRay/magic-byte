@@ -4,11 +4,13 @@ package com.github.misterchangray.core.clazz;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.util.AnnotationUtil;
 
 import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -64,15 +66,34 @@ public class ClassParser {
     /**
      * 收尾工作
      * - 统计总字节数
-     * - 严格模式自动继承
+     * - 链接动态字段引用
      *
      * @param classMetaInfo
      * @param clazz
      */
     private void afterLinkClazz(ClassMetaInfo classMetaInfo, Class<?> clazz) {
+        if(Objects.nonNull(classMetaInfo.getFields()) && classMetaInfo.getFields().size() == 0) return;
+
         int total = 0;
-        for (FieldMetaInfo field : classMetaInfo.getFields()) {
-            total += field.getElementBytes() * field.getSize();
+        classMetaInfo.getFields().sort((Comparator.comparingInt(FieldMetaInfo::getOrderId)));
+        for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
+            total += fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
+
+            if(fieldMetaInfo.isDynamic() ){
+                FieldMetaInfo dynamicRef =
+                        fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
+                if(Objects.isNull(dynamicRef)) {
+                    throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
+                }
+                fieldMetaInfo.setDynamicRef(dynamicRef);
+                dynamicRef.setDynamicRef(fieldMetaInfo);
+
+                if(dynamicRef.getType() != TypeEnum.BYTE &&
+                        dynamicRef.getType() != TypeEnum.SHORT &&
+                        dynamicRef.getType() != TypeEnum.INT) {
+                    throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+                }
+            }
         }
         classMetaInfo.setElementBytes(total);
     }
