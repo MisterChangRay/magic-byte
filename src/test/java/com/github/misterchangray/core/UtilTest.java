@@ -36,7 +36,20 @@ public class UtilTest {
 
         a = "9876";
         Assert.assertArrayEquals(new byte[]{(byte) 0x98, 0x76}, ConverterUtil.hexStringToByte(a));
+
+        a = "876";
+        Assert.assertArrayEquals(new byte[]{(byte) 0x8, 0x76}, ConverterUtil.hexStringToByte(a));
     }
+
+
+    @Test
+    public void testIntToHexString() {
+        Assert.assertEquals("10", ConverterUtil.intToHexString(16));
+
+        Assert.assertEquals("22b8", ConverterUtil.intToHexString(8888));
+
+    }
+
 
 
 
