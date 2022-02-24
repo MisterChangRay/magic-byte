@@ -23,7 +23,7 @@ public class Packer {
     }
 
 
-    public  <T> T packObject(DynamicByteBuffer data, Class<?> clazz) throws MagicByteException {
+    public  <T> T packObject(DynamicByteBuffer data, Class<?> clazz, MagicChecker checker) throws MagicByteException {
         ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(clazz);
         if(Objects.isNull(classMetaInfo)) {
             return null;

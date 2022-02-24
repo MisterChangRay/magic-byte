@@ -50,4 +50,24 @@ public @interface MagicField {
      * @return
      */
     int defaultVal() default -1;
+
+    /**
+     * 自动计算长度
+     * @return
+     */
+    boolean calcLength() default false;
+
+    /**
+     * 自动计算校验和字段
+     * @return
+     */
+    boolean calcCheckCode() default false;
+
+    /**
+     * 自动裁剪
+     * 当整个数据只有一个可变数据项时可使用。因为其他数据项长度固定。所以可以反推出可变数据长度
+     * 不建议使用此配置, 序列化很影响性能。
+     * @return
+     */
+    boolean autoTrim() default false;
 }

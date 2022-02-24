@@ -81,6 +81,52 @@ public class FieldMetaInfo implements MField {
     private FieldMetaInfo genericsField;
 
 
+
+    /**
+     * 自动计算长度
+     * @return
+     */
+    private boolean calcLength;
+
+    /**
+     * 自动计算校验和字段
+     * @return
+     */
+    private boolean calcCheckCode;
+
+    /**
+     * 自动裁剪
+     * 当整个数据只有一个可变数据项时可使用。因为其他数据项长度固定。所以可以反推出可变数据长度
+     * 不建议使用此配置, 序列化很影响性能。
+     * @return
+     */
+    private boolean autoTrim;
+
+
+    public boolean isCalcLength() {
+        return calcLength;
+    }
+
+    public void setCalcLength(boolean calcLength) {
+        this.calcLength = calcLength;
+    }
+
+    public boolean isCalcCheckCode() {
+        return calcCheckCode;
+    }
+
+    public void setCalcCheckCode(boolean calcCheckCode) {
+        this.calcCheckCode = calcCheckCode;
+    }
+
+    public boolean isAutoTrim() {
+        return autoTrim;
+    }
+
+    public void setAutoTrim(boolean autoTrim) {
+        this.autoTrim = autoTrim;
+    }
+
     public int getDefaultVal() {
         return defaultVal;
     }

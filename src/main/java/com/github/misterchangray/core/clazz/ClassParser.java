@@ -67,6 +67,7 @@ public class ClassParser {
      * 收尾工作
      * - 统计总字节数
      * - 链接动态字段引用
+     * - autoTrim 属性 和 dynamicSize 不能共存， 且 autoTrime只能使用一次
      *
      * @param classMetaInfo
      * @param clazz
@@ -74,12 +75,41 @@ public class ClassParser {
     private void afterLinkClazz(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         if(Objects.nonNull(classMetaInfo.getFields()) && classMetaInfo.getFields().size() == 0) return;
 
-        int total = 0;
+        int
+                totalBytes = 0, // 总字节
+                autoTrimCount = 0, // autoTrim = true, 个数
+                dynamicCount = 0,  // 动态字段总数
+                fixedBytes = 0,  // 固定字节总数， 即总字节数减去动态字段的字节数
+                fieldBytes = 0
+        ;
         classMetaInfo.getFields().sort((Comparator.comparingInt(FieldMetaInfo::getOrderId)));
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-            total += fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
+            fieldBytes =  fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
+
+            if(fieldMetaInfo.isAutoTrim()) {
+                autoTrimCount ++;
+            }
+
+            if(fieldMetaInfo.isCalcLength()) {
+                if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
+                        fieldMetaInfo.getType() != TypeEnum.SHORT &&
+                        fieldMetaInfo.getType() != TypeEnum.INT) {
+                    throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+                }
+            }
+
+            if(fieldMetaInfo.isCalcCheckCode()) {
+                if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
+                        fieldMetaInfo.getType() != TypeEnum.SHORT &&
+                        fieldMetaInfo.getType() != TypeEnum.INT &&
+                        fieldMetaInfo.getType() != TypeEnum.LONG) {
+                    throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
+                }
+            }
 
             if(fieldMetaInfo.isDynamic() ){
+                dynamicCount ++;
+
                 FieldMetaInfo dynamicRef =
                         fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
                 if(Objects.isNull(dynamicRef)) {
@@ -98,9 +128,22 @@ public class ClassParser {
                         dynamicRef.getType() != TypeEnum.INT) {
                     throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
                 }
+            } else {
+                fixedBytes = fieldBytes;
             }
+            totalBytes += fieldBytes;
+
         }
-        classMetaInfo.setElementBytes(total);
+
+        if(autoTrimCount > 1) {
+            throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
+        }
+
+        if(autoTrimCount > 1 && dynamicCount > 0) {
+            throw new InvalidParameterException("autoTrim & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
+        }
+        classMetaInfo.setElementBytes(totalBytes);
+        classMetaInfo.setFixedBytes(fixedBytes);
     }
 
 

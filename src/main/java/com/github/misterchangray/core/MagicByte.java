@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 
 public class MagicByte {
     private static UnPacker unPacker = UnPacker.getInstance();
-
     private static Packer packer = Packer.getInstance();
 
     /**
@@ -21,6 +20,21 @@ public class MagicByte {
      * @return
      */
     public static <T> T pack(byte[] data, Class<?> clazz) throws MagicByteException {
+        return pack(data, clazz, null);
+    }
+
+
+    /**
+     *
+     * 将字节数组按照Class的定义封装成对象
+     *
+     * @param data
+     * @param clazz
+     * @param <T>
+     * @param checker
+     * @return
+     */
+    public static <T> T pack(byte[] data, Class<?> clazz, MagicChecker checker) throws MagicByteException {
         if(null == data || null == clazz) return null;
         if(0 == data.length) return null;
 
@@ -28,33 +42,48 @@ public class MagicByte {
         res.put(data);
         res.position(0);
 
-        return packer.packObject(res, clazz);
+        return packer.packObject(res, clazz, checker);
     }
 
     /**
      *
      * 将对象封装成字节Buffer, 方便后续操作
      *
-     * @param t
+     * @param data
      * @param <T>
      * @return
      */
-    public static <T> ByteBuffer unpack(T t)  throws MagicByteException {
-        if (null == t) return null;
-        DynamicByteBuffer res = unPacker.unpackObject(t);
-        return res.buffer();
+    public static <T> ByteBuffer unpack(T data)  throws MagicByteException {
+        if (null == data) return null;
+
+        return unpack(data, null);
     }
 
 
     /**
      *  将对象转为字节数组
-     * @param t
+     * @param data
      * @param <T>
      * @return
      */
-    public static <T> byte[] unpackToByte(T t) throws MagicByteException {
-        if (null == t) return null;
+    public static <T> byte[] unpackToByte(T data) throws MagicByteException {
+        if (null == data) return null;
 
-        return  unpack(t).array();
+        return  unpack(data).array();
     }
+
+    /**
+     * 携带检查器, 可以计算校验和计算校验和
+     * @param data
+     * @param checker
+     * @param <T>
+     * @return
+     * @throws MagicByteException
+     */
+    public static <T> ByteBuffer unpack(T data, MagicChecker checker)  throws MagicByteException {
+        if (null == data) return null;
+        DynamicByteBuffer res = unPacker.unpackObject(data);
+        return res.buffer();
+    }
+
 }

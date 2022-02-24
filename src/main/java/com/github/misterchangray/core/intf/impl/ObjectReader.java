@@ -1,9 +1,6 @@
 package com.github.misterchangray.core.intf.impl;
 
-import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.Packer;
-import com.github.misterchangray.core.clazz.ClassManager;
-import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
@@ -27,7 +24,7 @@ public class ObjectReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException {
-        return Packer.getInstance().packObject(buffer, this.fieldMetaInfo.getClazz());
+        return Packer.getInstance().packObject(buffer, this.fieldMetaInfo.getClazz(), checker);
     }
 
 }

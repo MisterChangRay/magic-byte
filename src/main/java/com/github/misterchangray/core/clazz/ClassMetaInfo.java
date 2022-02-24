@@ -31,9 +31,26 @@ public class ClassMetaInfo implements MClass {
     private String fullName;
 
     /**
-     * 是否适用严格模式
+     * 是否使用严格模式
      */
     private boolean strict;
+
+
+    /**
+     * 固定字节总数
+     * 即: 非动态字段字节总数
+     *
+     * 配合 autoTrim 属性进行字节反推时使用
+     */
+    private int fixedBytes;
+
+    public int getFixedBytes() {
+        return fixedBytes;
+    }
+
+    public void setFixedBytes(int fixedBytes) {
+        this.fixedBytes = fixedBytes;
+    }
 
     public boolean isStrict() {
         return strict;
