@@ -227,10 +227,14 @@ public class DynamicByteBuffer {
         }
     }
 
+    public int capacity() {
+        return this.buffer().capacity();
+    }
+
     public byte[] array() {
         byte[] re= new byte[this.byteBuffer.position()];
         this.byteBuffer.flip();
-       this.byteBuffer.get(re);
+        this.byteBuffer.get(re);
         return re;
     }
 

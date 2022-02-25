@@ -61,11 +61,6 @@ public class FieldParser {
             throw new InvalidParameterException("size or dynamicSize only can be use one; at: " + field.getFullName());
         }
 
-        // autoTrim 必须和 size 属性共同使用
-        if(field.getMagicField().size() <= 0 && field.getMagicField().autoTrim()) {
-            throw new InvalidParameterException("autoTrim must use with size properties; at: " + field.getFullName());
-        }
-
         // list string array 必须配置 size or dynamicSize
         if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
             throw new InvalidParameterException("not yet configuration size or dynamicSize of the field,;at: " + field.getFullName());
@@ -77,8 +72,13 @@ public class FieldParser {
         }
 
         // autoTrim only use the list string and array
-        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSizeOf() > 0) {
+        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().autoTrim()) {
             throw new InvalidParameterException("autoTrim only use the list string and array; at: " + field.getFullName());
+        }
+
+        // autoTrim 必须和 size 属性共同使用
+        if(field.getMagicField().size() <= 0 && field.getMagicField().autoTrim()) {
+            throw new InvalidParameterException("autoTrim must use with size properties; at: " + field.getFullName());
         }
     }
 
@@ -128,7 +128,7 @@ public class FieldParser {
     /**
      * 泛型的字段为虚拟字段
      *
-     * @param fieldMetaInfo
+     * @param origin
      * @return
      */
     private FieldMetaInfo newGenericsField(FieldMetaInfo origin) {
