@@ -22,13 +22,17 @@ public class LongWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+        writeToBuffer(buffer, val, parent, buffer.position());
+
+    }
+
+    @Override
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
         if(Objects.isNull(val)) {
             val = (long) this.fieldMetaInfo.getDefaultVal();
         }
 
         buffer.putLong((long) val);
     }
-
-
 }

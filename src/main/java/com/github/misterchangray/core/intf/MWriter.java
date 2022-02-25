@@ -18,4 +18,6 @@ public abstract class MWriter {
     public abstract void writeToObject(Object target, Object val) throws IllegalAccessException;
 
     public abstract void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException;
+
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {};
 }

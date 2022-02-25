@@ -70,7 +70,15 @@ public class DynamicByteBuffer {
         return this.byteBuffer.put(b);
     }
 
-    
+    public ByteBuffer put(int index, byte b) {
+        if(index >= this.position()) {
+            return put(b);
+        } else {
+            return this.byteBuffer.put(index, b);
+        }
+    }
+
+
     public byte get(int i) {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.BYTE.getBytes()) {
             throw new MagicParseException("Missing data");
@@ -91,6 +99,15 @@ public class DynamicByteBuffer {
         return this.byteBuffer.putChar(c);
     }
 
+    public ByteBuffer putChar(int index, char c) {
+        if(index >= this.position()) {
+            return putChar(c);
+        } else {
+            return this.byteBuffer.putChar(index, c);
+        }
+
+    }
+
 
     public short getShort() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.SHORT.getBytes()) {
@@ -105,6 +122,16 @@ public class DynamicByteBuffer {
         return this.byteBuffer.putShort(i);
     }
 
+
+    public ByteBuffer putShort(int index, short i) {
+        if(index >= this.position()) {
+            return putShort(i);
+        } else {
+            return this.byteBuffer.putShort(index, i);
+
+        }
+
+    }
 
 
 
@@ -121,6 +148,13 @@ public class DynamicByteBuffer {
         return this.byteBuffer.putInt(i);
     }
 
+    public ByteBuffer putInt(int index, int i) {
+        if(index >= this.position()) {
+            return putInt(i);
+        } else {
+            return this.byteBuffer.putInt(index, i);
+        }
+    }
 
 
 
@@ -137,6 +171,15 @@ public class DynamicByteBuffer {
         return this.byteBuffer.putLong(l);
     }
 
+    public ByteBuffer putLong(int index, long l) {
+        if(index >= this.position()) {
+            return putLong(l);
+        } else {
+            return this.byteBuffer.putLong(index, l);
+
+        }
+
+    }
 
     public float getFloat() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.FLOAT.getBytes()) {
@@ -152,6 +195,16 @@ public class DynamicByteBuffer {
     }
 
 
+    public ByteBuffer putFloat(int index, float v) {
+        if(index >= this.position()) {
+            return putFloat(v);
+        } else {
+            return this.byteBuffer.putFloat(index, v);
+
+        }
+
+    }
+
 
     public double getDouble() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.DOUBLE.getBytes()) {
@@ -166,6 +219,13 @@ public class DynamicByteBuffer {
         return this.byteBuffer.putDouble(v);
     }
 
+    public ByteBuffer putDouble(int index, double v) {
+        if(index >= this.position()) {
+            return putDouble(v);
+        } else {
+            return this.byteBuffer.putDouble(index, v);
+        }
+    }
 
     public byte[] array() {
         byte[] re= new byte[this.byteBuffer.position()];

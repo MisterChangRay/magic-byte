@@ -22,13 +22,17 @@ public class ShortWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+        writeToBuffer(buffer, val, parent, buffer.position());
+
+    }
+
+    @Override
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
         if(Objects.isNull(val)) {
             val = (short) this.fieldMetaInfo.getDefaultVal();
         }
 
         buffer.putShort((short) val);
     }
-
-
 }
