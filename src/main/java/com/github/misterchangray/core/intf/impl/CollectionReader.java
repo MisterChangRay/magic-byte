@@ -39,6 +39,15 @@ public class CollectionReader extends MReader {
             count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
+        int elementBytes = this.fieldMetaInfo.getOwnerClazz().getElementBytes();
+        if(this.fieldMetaInfo.isAutoTrim() && buffer.capacity() < elementBytes) {
+            int tmp =  elementBytes - buffer.capacity();
+            tmp = this.fieldMetaInfo.getSize() - (tmp / this.fieldMetaInfo.getElementBytes());
+            if(tmp >= 0) {
+                count = tmp;
+            }
+        }
+
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
             long allocSize = count * fieldMetaInfo.getGenericsField().getElementBytes();
             AssertUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());

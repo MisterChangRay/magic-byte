@@ -31,6 +31,14 @@ public class StringReader extends MReader {
             byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
+        int elementBytes = this.fieldMetaInfo.getOwnerClazz().getElementBytes();
+        if(this.fieldMetaInfo.isAutoTrim() && buffer.capacity() < elementBytes) {
+            int tmp =  elementBytes - buffer.capacity();
+            tmp = this.fieldMetaInfo.getSize() - tmp;
+            if(tmp >= 0) {
+                byteLen = tmp;
+            }
+        }
 
         byte[] tmp = new byte[byteLen];
         int actualLen = tmp.length;

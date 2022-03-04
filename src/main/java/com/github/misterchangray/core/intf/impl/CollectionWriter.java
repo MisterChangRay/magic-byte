@@ -57,9 +57,14 @@ public class CollectionWriter extends MWriter {
             }
         }
 
-        for (int i = 0; i < count; i++) {
-            fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer,null, val);
+        if(this.fieldMetaInfo.isAutoTrim()) {
+            return;
+        } else {
+            for (int i = 0; i < count; i++) {
+                fieldMetaInfo.getGenericsField().getWriter().writeToBuffer(buffer,null, val);
+            }
         }
+
     }
 
 

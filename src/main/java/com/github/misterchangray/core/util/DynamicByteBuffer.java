@@ -228,7 +228,7 @@ public class DynamicByteBuffer {
     }
 
     public int capacity() {
-        return this.buffer().capacity();
+        return this.byteBuffer.capacity();
     }
 
     public byte[] array() {
@@ -240,12 +240,14 @@ public class DynamicByteBuffer {
 
 
     public ByteBuffer buffer() {
-        if(!this.isDynamic) {
+        if(!this.isDynamic &&
+                this.byteBuffer.capacity() == this.byteBuffer.position()) {
             return this.byteBuffer;
         }
 
-        byte[] array = this.array();
-        return ByteBuffer.allocate(array.length)
+        byte[] array = new byte[this.byteBuffer.position()];
+        this.byteBuffer.get(0, array);
+        return ByteBuffer.allocate(this.position())
                 .order(this.byteBuffer.order())
                 .put(array);
     }
@@ -258,6 +260,11 @@ public class DynamicByteBuffer {
     public void position(int i) {
         this.byteBuffer.position(i);
     }
+
+    public void flip() {
+        this.byteBuffer.flip();
+    }
+
 
     public int position() {
         return this.byteBuffer.position();
