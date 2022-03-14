@@ -25,10 +25,14 @@ public class TestAutoChecker {
             byteObj.setB((byte) (i + 10));
             arrayList.add(byteObj);
         }
-        autoTrimObjWithDynamic.setBoodsId(arrayList);
-        autoTrimObjWithDynamic.setStudent(DynamicStudent.build(3).get(1));
-        ByteBuffer unpack = MagicByte.unpack(autoTrimObjWithDynamic);
-        AutoTrimObjWithDynamic pack = MagicByte.pack(unpack.array(), AutoTrimObjWithDynamic.class);
+
+        Assert.assertThrows(InvalidParameterException.class, ()-> {
+            autoTrimObjWithDynamic.setBoodsId(arrayList);
+            autoTrimObjWithDynamic.setStudent(DynamicStudent.build(3).get(1));
+            ByteBuffer unpack = MagicByte.unpack(autoTrimObjWithDynamic);
+            AutoTrimObjWithDynamic pack = MagicByte.pack(unpack.array(), AutoTrimObjWithDynamic.class);
+        });
+
 
     }
 
