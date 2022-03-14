@@ -2,6 +2,7 @@ package com.github.misterchangray.core.autochecker;
 
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.autochecker.pojo.*;
+import com.github.misterchangray.core.common.dynamic.DynamicStudent;
 import com.github.misterchangray.core.common.simple.ByteObj;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import org.junit.Assert;
@@ -11,6 +12,25 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class TestAutoChecker {
+
+    @Test
+    public void testAutoTrimObjWithDynamic() throws InterruptedException {
+        AutoTrimObjWithDynamic autoTrimObjWithDynamic = new AutoTrimObjWithDynamic();
+        autoTrimObjWithDynamic.setName("fffd");
+        ArrayList<ByteObj> arrayList = new ArrayList();
+
+        for (int i = 0; i < 3; i++) {
+            ByteObj byteObj = new ByteObj();
+            byteObj.setA((byte) i);
+            byteObj.setB((byte) (i + 10));
+            arrayList.add(byteObj);
+        }
+        autoTrimObjWithDynamic.setBoodsId(arrayList);
+        autoTrimObjWithDynamic.setStudent(DynamicStudent.build(3).get(1));
+        ByteBuffer unpack = MagicByte.unpack(autoTrimObjWithDynamic);
+        AutoTrimObjWithDynamic pack = MagicByte.pack(unpack.array(), AutoTrimObjWithDynamic.class);
+
+    }
 
     /**
      * autoTrim 只能使用 string 和 数组 成员
@@ -26,7 +46,7 @@ public class TestAutoChecker {
 
         for (int i = 0; i < 3; i++) {
             ByteObj byteObj = new ByteObj();
-            byteObj.setB((byte) i);
+            byteObj.setA((byte) i);
             byteObj.setB((byte) (i + 10));
             arrayList.add(byteObj);
         }

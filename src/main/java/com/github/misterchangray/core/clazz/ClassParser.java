@@ -107,9 +107,11 @@ public class ClassParser {
                 }
             }
 
-            if(fieldMetaInfo.isDynamic() ){
+            if(fieldMetaInfo.isDynamic()) {
                 dynamicCount ++;
+            }
 
+            if(fieldMetaInfo.isDynamic() && fieldMetaInfo.getDynamicSizeOf() > 0){
                 FieldMetaInfo dynamicRef =
                         fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
                 if(Objects.isNull(dynamicRef)) {
@@ -139,7 +141,7 @@ public class ClassParser {
             throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
         }
 
-        if(autoTrimCount > 1 && dynamicCount > 0) {
+        if(autoTrimCount > 0 && dynamicCount > 0) {
             throw new InvalidParameterException("autoTrim & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
         }
         classMetaInfo.setElementBytes(totalBytes);
