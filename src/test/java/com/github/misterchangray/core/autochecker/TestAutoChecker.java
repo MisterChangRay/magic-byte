@@ -14,6 +14,30 @@ import java.util.ArrayList;
 public class TestAutoChecker {
 
     @Test
+    public void testAutoTrimNesting() throws InterruptedException {
+
+        AutoTrimNesting autoTrimNesting = new AutoTrimNesting();
+
+        autoTrimNesting.setName("ff");
+
+        AutoTrimArray autoTrimArray = new AutoTrimArray();
+        autoTrimArray.setName("www");
+        autoTrimArray.setBoodsId(new int[]{3,4});
+        autoTrimArray.setAge(66);
+
+        autoTrimNesting.setAutoTrimArray(autoTrimArray);
+
+
+        ByteBuffer unpack = MagicByte.unpack(autoTrimNesting);
+        AutoTrimNesting pack = MagicByte.pack(unpack.array(), AutoTrimNesting.class);
+        Assert.assertEquals(autoTrimNesting.getName(), pack.getName());
+        Assert.assertArrayEquals(autoTrimArray.getBoodsId(), pack.getAutoTrimArray().getBoodsId());
+        Assert.assertEquals(autoTrimArray.getAge(), pack.getAutoTrimArray().getAge());
+        Assert.assertEquals(autoTrimArray.getName(), pack.getAutoTrimArray().getName());
+    }
+
+
+    @Test
     public void testAutoTrimObjWithDynamic() throws InterruptedException {
         AutoTrimObjWithDynamic autoTrimObjWithDynamic = new AutoTrimObjWithDynamic();
         autoTrimObjWithDynamic.setName("fffd");
