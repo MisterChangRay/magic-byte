@@ -102,6 +102,9 @@ public class FieldMetaInfo implements MField {
      */
     private boolean autoTrim;
 
+    public boolean isDynamicSizeOf() {
+        return dynamicSizeOf > -1;
+    }
 
     public boolean isCalcLength() {
         return calcLength;

@@ -90,51 +90,17 @@ public class ClassParser {
                 autoTrimCount ++;
             }
 
-            if(fieldMetaInfo.isCalcLength()) {
-                if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
-                        fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                        fieldMetaInfo.getType() != TypeEnum.INT) {
-                    throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
-                }
-            }
-
-            if(fieldMetaInfo.isCalcCheckCode()) {
-                if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
-                        fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                        fieldMetaInfo.getType() != TypeEnum.INT &&
-                        fieldMetaInfo.getType() != TypeEnum.LONG) {
-                    throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
-                }
-            }
+            verifyCalcLength(fieldMetaInfo);
+            verifyCalcCheckCode(fieldMetaInfo);
 
             if(fieldMetaInfo.isDynamic()) {
                 dynamicCount ++;
             }
-
-            if(fieldMetaInfo.isDynamic() && fieldMetaInfo.getDynamicSizeOf() > 0){
-                FieldMetaInfo dynamicRef =
-                        fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
-                if(Objects.isNull(dynamicRef)) {
-                    throw new InvalidParameterException("not found  target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
-                }
-
-                if(dynamicRef.getOrderId() > fieldMetaInfo.getOrderId()) {
-                    throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
-                }
-
-                fieldMetaInfo.setDynamicRef(dynamicRef);
-                dynamicRef.setDynamicRef(fieldMetaInfo);
-
-                if(dynamicRef.getType() != TypeEnum.BYTE &&
-                        dynamicRef.getType() != TypeEnum.SHORT &&
-                        dynamicRef.getType() != TypeEnum.INT) {
-                    throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
-                }
-            } else {
+            if(!verifyDynamicSizeOf(fieldMetaInfo)) {
                 fixedBytes = fieldBytes;
             }
-            totalBytes += fieldBytes;
 
+            totalBytes += fieldBytes;
         }
 
         if(autoTrimCount > 1) {
@@ -146,6 +112,55 @@ public class ClassParser {
         }
         classMetaInfo.setElementBytes(totalBytes);
         classMetaInfo.setFixedBytes(fixedBytes);
+    }
+
+    private boolean verifyDynamicSizeOf(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()){
+            FieldMetaInfo dynamicRef =
+                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
+            if(Objects.isNull(dynamicRef)) {
+                throw new InvalidParameterException("not found  target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
+            }
+
+            if(dynamicRef.getOrderId() > fieldMetaInfo.getOrderId()) {
+                throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
+            }
+
+            fieldMetaInfo.setDynamicRef(dynamicRef);
+            dynamicRef.setDynamicRef(fieldMetaInfo);
+
+            if(dynamicRef.getType() != TypeEnum.BYTE &&
+                    dynamicRef.getType() != TypeEnum.SHORT &&
+                    dynamicRef.getType() != TypeEnum.INT) {
+                throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void verifyCalcCheckCode(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcCheckCode()) {
+            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
+                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
+                    fieldMetaInfo.getType() != TypeEnum.INT &&
+                    fieldMetaInfo.getType() != TypeEnum.LONG) {
+                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
+            }
+        }
+
+    }
+
+    private void verifyCalcLength(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcLength()) {
+            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
+                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
+                    fieldMetaInfo.getType() != TypeEnum.INT) {
+                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+            }
+        }
     }
 
 
