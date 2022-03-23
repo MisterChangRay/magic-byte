@@ -39,12 +39,16 @@ public class CollectionReader extends MReader {
             count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
-        int elementBytes = this.fieldMetaInfo.getOwnerClazz().getElementBytes();
-        if(this.fieldMetaInfo.isAutoTrim() && buffer.capacity() < elementBytes) {
-            int tmp =  elementBytes - buffer.capacity();
-            tmp = this.fieldMetaInfo.getSize() - (tmp / this.fieldMetaInfo.getElementBytes());
-            if(tmp >= 0) {
-                count = tmp;
+        if(this.fieldMetaInfo.isAutoTrim()) {
+            // 获取总字节数
+            int elementBytes = this.fieldMetaInfo.getOwnerClazz().getRoot().getElementBytes();
+            // 后续字节数 = 定义总字节数 - 已读字节数 - 填充最大字节数
+            int suffixBytes = elementBytes - (buffer.position() + (this.fieldMetaInfo.getSize() * this.fieldMetaInfo.getElementBytes()));
+            // 填充字节数 = 传输总字节数 - 已读字节数 - 后续字节数
+            int fillBytes = buffer.capacity() - buffer.position() - suffixBytes;
+
+            if(fillBytes >= 0) {
+                count = fillBytes / this.fieldMetaInfo.getElementBytes();
             }
         }
 

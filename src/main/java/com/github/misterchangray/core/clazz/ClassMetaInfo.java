@@ -5,11 +5,24 @@ import com.github.misterchangray.core.intf.MClass;
 
 import java.nio.ByteOrder;
 import java.util.List;
+import java.util.Objects;
 
 public class ClassMetaInfo implements MClass {
     private Class<?> clazz;
     private List<FieldMetaInfo> fields;
     private ByteOrder byteOrder;
+
+    /**
+     * 类嵌套
+     *
+     * 值为上级信息
+     */
+    private ClassMetaInfo parent;
+
+    /**
+     * 获取根节点信息
+     */
+    private ClassMetaInfo root;
 
     /**
      * 是否为动态大小
@@ -43,6 +56,32 @@ public class ClassMetaInfo implements MClass {
      * 配合 autoTrim 属性进行字节反推时使用
      */
     private int fixedBytes;
+
+    /**
+     * 获取根节点
+     * @return
+     */
+    public ClassMetaInfo getRoot() {
+        if(Objects.nonNull(root)) {
+            return root;
+        }
+        ClassMetaInfo self = this, parent = this.parent;
+        for (; Objects.nonNull(parent) ;) {
+            self = parent;
+            parent = self.parent;
+        }
+
+        this.root = self;
+        return self;
+    }
+
+    public ClassMetaInfo getParent() {
+        return parent;
+    }
+
+    public void setParent(ClassMetaInfo parent) {
+        this.parent = parent;
+    }
 
     public int getFixedBytes() {
         return fixedBytes;

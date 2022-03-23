@@ -101,6 +101,7 @@ public class FieldParser {
         fieldMetaInfo.setClazz(clazz);
         fieldMetaInfo.setType(TypeManager.getType(clazz));
         ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassMetaInfo(clazz);
+        fieldClassMetaInfo.setParent(classMetaInfo);
         fieldMetaInfo.setElementBytes(fieldClassMetaInfo.getElementBytes());
         // set parent isDynamic flag if the child true
         if(fieldClassMetaInfo.isDynamic()) {
