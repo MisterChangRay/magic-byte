@@ -31,10 +31,16 @@ public class Packer {
             return null;
         }
 
+        return doPackObject(data, classMetaInfo, checker);
+    }
+
+
+
+    public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker) throws MagicByteException {
         data.order(classMetaInfo.getByteOrder());
         T object = null;
         try {
-            object = (T) clazz.getDeclaredConstructor().newInstance();
+            object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
 
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 encodeField(object, fieldMetaInfo, data, checker);

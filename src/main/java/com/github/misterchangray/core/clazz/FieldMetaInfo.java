@@ -37,6 +37,7 @@ public class FieldMetaInfo implements MField {
      * 字段class
      */
     private Class<?> clazz;
+    private ClassMetaInfo clazzMetaInfo;
     /**
      * 字符集
      */
@@ -104,6 +105,14 @@ public class FieldMetaInfo implements MField {
 
     public boolean isDynamicSizeOf() {
         return dynamicSizeOf > -1;
+    }
+
+    public ClassMetaInfo getClazzMetaInfo() {
+        return clazzMetaInfo;
+    }
+
+    public void setClazzMetaInfo(ClassMetaInfo clazzMetaInfo) {
+        this.clazzMetaInfo = clazzMetaInfo;
     }
 
     public boolean isCalcLength() {

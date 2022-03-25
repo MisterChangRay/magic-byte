@@ -28,4 +28,7 @@ public class ClassManager {
     }
 
 
+    public static ClassMetaInfo getClassFieldMetaInfo(Class<?> clazz) {
+        return parseClass(clazz);
+    }
 }
