@@ -80,7 +80,37 @@ public class FieldParser {
         if(field.getMagicField().size() <= 0 && field.getMagicField().autoTrim()) {
             throw new InvalidParameterException("autoTrim must use with size properties; at: " + field.getFullName());
         }
+
+        // calcLength only use byte, short, int
+        verifyCalcLength(field);
+
+        // checkCode only use byte, short, int ,long
+        verifyCalcCheckCode(field);
     }
+
+
+    private void verifyCalcCheckCode(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcCheckCode()) {
+            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
+                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
+                    fieldMetaInfo.getType() != TypeEnum.INT &&
+                    fieldMetaInfo.getType() != TypeEnum.LONG) {
+                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
+            }
+        }
+
+    }
+
+    private void verifyCalcLength(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcLength()) {
+            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
+                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
+                    fieldMetaInfo.getType() != TypeEnum.INT) {
+                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+            }
+        }
+    }
+
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);

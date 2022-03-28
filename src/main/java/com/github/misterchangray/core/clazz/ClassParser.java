@@ -66,9 +66,9 @@ public class ClassParser {
     /**
      * 收尾工作
      * - 统计总字节数
-     * - 链接动态字段引用
-     * - autoTrim 属性 和 dynamicSize 不能共存， 且 autoTrime只能使用一次
-     *
+     * - 一些类型的校验
+     * - 将字段维护到到线性字段中
+     * -
      * @param classMetaInfo
      * @param clazz
      */
@@ -77,41 +77,21 @@ public class ClassParser {
 
         int
                 totalBytes = 0, // 总字节
-                autoTrimCount = 0, // autoTrim = true, 个数
-                dynamicCount = 0,  // 动态字段总数
-                fixedBytes = 0,  // 固定字节总数， 即总字节数减去动态字段的字节数
                 fieldBytes = 0
         ;
         classMetaInfo.getFields().sort((Comparator.comparingInt(FieldMetaInfo::getOrderId)));
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
             fieldBytes =  fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
 
-            if(fieldMetaInfo.isAutoTrim()) {
-                autoTrimCount ++;
-            }
 
-            verifyCalcLength(fieldMetaInfo);
-            verifyCalcCheckCode(fieldMetaInfo);
-
-            if(fieldMetaInfo.isDynamic()) {
-                dynamicCount ++;
-            }
-            if(!verifyDynamicSizeOf(fieldMetaInfo)) {
-                fixedBytes = fieldBytes;
-            }
+            verifyDynamicSizeOf(fieldMetaInfo);
 
             totalBytes += fieldBytes;
         }
 
-        if(autoTrimCount > 1) {
-            throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
-        }
-
-        if(autoTrimCount > 0 && dynamicCount > 0) {
-            throw new InvalidParameterException("autoTrim & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
-        }
         classMetaInfo.setElementBytes(totalBytes);
-        classMetaInfo.setFixedBytes(fixedBytes);
+        classMetaInfo.getRoot().getFlatFields().addAll(classMetaInfo.getFields());
+
     }
 
     private boolean verifyDynamicSizeOf(FieldMetaInfo fieldMetaInfo) {
@@ -140,29 +120,6 @@ public class ClassParser {
 
         return false;
     }
-
-    private void verifyCalcCheckCode(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcCheckCode()) {
-            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
-                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.INT &&
-                    fieldMetaInfo.getType() != TypeEnum.LONG) {
-                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
-            }
-        }
-
-    }
-
-    private void verifyCalcLength(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcLength()) {
-            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
-                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.INT) {
-                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
-            }
-        }
-    }
-
 
     private void copyConfiguration(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         MagicClass magicClass = AnnotationUtil.getMagicClassAnnotation(clazz);

@@ -4,6 +4,7 @@ package com.github.misterchangray.core.clazz;
 import com.github.misterchangray.core.intf.MClass;
 
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +19,13 @@ public class ClassMetaInfo implements MClass {
      * 值为上级信息
      */
     private ClassMetaInfo parent;
+
+    /**
+     * 展开模式下的所有字段
+     *
+     * 只有最上级有维护此值
+     */
+    private List<FieldMetaInfo> flatFields = new ArrayList<>();
 
     /**
      * 获取根节点信息
@@ -48,15 +56,6 @@ public class ClassMetaInfo implements MClass {
      */
     private boolean strict;
 
-
-    /**
-     * 固定字节总数
-     * 即: 非动态字段字节总数
-     *
-     * 配合 autoTrim 属性进行字节反推时使用
-     */
-    private int fixedBytes;
-
     /**
      * 获取根节点
      * @return
@@ -75,6 +74,14 @@ public class ClassMetaInfo implements MClass {
         return self;
     }
 
+    public List<FieldMetaInfo> getFlatFields() {
+        return flatFields;
+    }
+
+    public void setFlatFields(List<FieldMetaInfo> flatFields) {
+        this.flatFields = flatFields;
+    }
+
     public ClassMetaInfo getParent() {
         return parent;
     }
@@ -82,15 +89,6 @@ public class ClassMetaInfo implements MClass {
     public void setParent(ClassMetaInfo parent) {
         this.parent = parent;
     }
-
-    public int getFixedBytes() {
-        return fixedBytes;
-    }
-
-    public void setFixedBytes(int fixedBytes) {
-        this.fixedBytes = fixedBytes;
-    }
-
     public boolean isStrict() {
         return strict;
     }
