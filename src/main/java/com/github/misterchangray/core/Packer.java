@@ -64,14 +64,30 @@ public class Packer {
         try {
             val = fieldMetaInfo.getReader().readFormBuffer(data, object);
 
-            checkCheckCode(fieldMetaInfo, data, val, checker);
+            verifyLength(fieldMetaInfo, data, val);
+            verifyCheckCode(fieldMetaInfo, data, val, checker);
+
         } catch (UnsupportedEncodingException e) {
             throw new MagicByteException("not support charset of " + fieldMetaInfo.getCharset() + "; at :" + fieldMetaInfo.getFullName());
         }
         fieldMetaInfo.getWriter().writeToObject(object, val);
     }
 
-    private void checkCheckCode(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, MagicChecker checker) {
+    private void verifyLength(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val) {
+        if(!fieldMetaInfo.isCalcLength()) {
+            return;
+        }
+
+
+        long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), val);
+        long expect = data.capacity();
+        if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
+            byte[] array = data.array();
+            throw new MagicParseException("the length isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
+        }
+    }
+
+    private void verifyCheckCode(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, MagicChecker checker) {
         if(checker == null) {
             return;
         }

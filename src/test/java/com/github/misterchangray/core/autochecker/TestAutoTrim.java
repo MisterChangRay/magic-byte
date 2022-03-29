@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-public class TestAutoChecker {
+public class TestAutoTrim {
 
     @Test
     public void testAutoTrimNesting() throws InterruptedException {
