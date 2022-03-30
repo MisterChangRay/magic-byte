@@ -1,19 +1,16 @@
-package com.github.misterchangray.core.autochecker.pojo;
+package com.github.misterchangray.core.autotrim.pojo;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
-import com.github.misterchangray.core.common.simple.ByteObj;
-
-import java.util.List;
 
 @MagicClass
-public class AutoTrimObj {
-    @MagicField(order = 1, size = 10)
+public class AutoTrimString {
+    @MagicField(order = 1, size = 10, autoTrim = true)
     private String name;
     @MagicField(order = 3)
     private int age;
-    @MagicField(order = 5, autoTrim = true, size = 5)
-    private List<ByteObj> boodsId;
+    @MagicField(order = 5, size = 3)
+    private int[] boodsId;
 
 
     public String getName() {
@@ -32,11 +29,11 @@ public class AutoTrimObj {
         this.age = age;
     }
 
-    public List<ByteObj> getBoodsId() {
+    public int[] getBoodsId() {
         return boodsId;
     }
 
-    public void setBoodsId(List<ByteObj> boodsId) {
+    public void setBoodsId(int[] boodsId) {
         this.boodsId = boodsId;
     }
 }

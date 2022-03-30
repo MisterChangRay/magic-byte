@@ -1,4 +1,4 @@
-package com.github.misterchangray.core.autochecker.pojo;
+package com.github.misterchangray.core.autotrim.pojo;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;

@@ -1,7 +1,7 @@
-package com.github.misterchangray.core.autochecker;
+package com.github.misterchangray.core.autotrim;
 
 import com.github.misterchangray.core.MagicByte;
-import com.github.misterchangray.core.autochecker.pojo.*;
+import com.github.misterchangray.core.autotrim.pojo.*;
 import com.github.misterchangray.core.common.dynamic.DynamicStudent;
 import com.github.misterchangray.core.common.simple.ByteObj;
 import com.github.misterchangray.core.exception.InvalidParameterException;
