@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.util;
 
+import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicParseException;
 
@@ -7,7 +8,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * @description: 动态的bytebuffer 可以自动扩容
+ * @description:
+ * 动态的bytebuffer 可以自动扩容
+ * 支持固定长度和非固定长度
  * @author: Ray.chang
  * @create: 2021-12-17 15:05
  **/
@@ -15,6 +18,11 @@ public class DynamicByteBuffer {
     private ByteBuffer byteBuffer;
     private boolean isDynamic;
     private static final int STEP  = 1024;
+
+    // 保存长度偏移, 方便滞后计算并重置值
+    private int lengthOffset = -1;
+    // 保存 校验位 偏移, 方便滞后计算并重置值
+    private int checkCodeOffset = -1;
 
     public static DynamicByteBuffer allocate(int bytes) {
         AssertUtil.throwIFOOM(bytes, "DynamicByteBuffer allocate field!");
@@ -284,5 +292,23 @@ public class DynamicByteBuffer {
         this.byteBuffer.position(0);
     }
 
+    public int getLengthOffset() {
+        return lengthOffset;
+    }
 
+    public void setLengthOffset(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcLength() && this.lengthOffset == -1) {
+            this.lengthOffset = this.position();
+        }
+    }
+
+    public int getCheckCodeOffset() {
+        return checkCodeOffset;
+    }
+
+    public void setCheckCodeOffset(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcCheckCode() && this.checkCodeOffset == -1) {
+            this.checkCodeOffset = this.position();
+        }
+    }
 }

@@ -36,7 +36,7 @@ public class ObjectWriter extends MWriter {
             return;
         }
 
-        UnPacker.getInstance().unpackObject(buffer, val, this.fieldMetaInfo.getClazzMetaInfo(), null);
+        UnPacker.getInstance().unpackObject(buffer, val, this.fieldMetaInfo.getClazzMetaInfo());
     }
 
 
