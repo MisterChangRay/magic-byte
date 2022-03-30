@@ -6,6 +6,7 @@ import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.exception.MagicParseException;
 import com.github.misterchangray.core.util.AssertUtil;
+import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class UnPacker {
      * @return
      */
     private  void doDelayCalcField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res, MagicChecker checker) throws IllegalAccessException {
-        Object val = 0;
+        long val = 0;
         int offset = 0;
         if(fieldMetaInfo.isCalcLength()) {
             val = res.position();
@@ -82,7 +83,7 @@ public class UnPacker {
             offset = res.getCheckCodeOffset();
         }
 
-        fieldMetaInfo.getWriter().writeToBuffer(res, val, object, offset);
+        fieldMetaInfo.getWriter().writeToBuffer(res, ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val), object, offset);
     }
 
 

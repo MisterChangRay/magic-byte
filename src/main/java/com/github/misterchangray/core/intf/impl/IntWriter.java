@@ -33,6 +33,6 @@ public class IntWriter extends MWriter {
         }
 
 
-        buffer.putInt((int) val);
+        buffer.putInt(writeOffset, (int) val);
     }
 }

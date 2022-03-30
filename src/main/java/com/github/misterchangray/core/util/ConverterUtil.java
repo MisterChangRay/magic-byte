@@ -101,4 +101,25 @@ public class ConverterUtil {
     }
 
 
+    /**
+     * 对象转为具体的值
+     * @param typeEnum
+     * @param val
+     * @return
+     */
+    public static Object toTargetObject(TypeEnum typeEnum, long val) {
+        if(Objects.isNull(val)) return 0;
+
+        switch (typeEnum) {
+            case BYTE:
+                return (byte) val;
+            case SHORT:
+                return (short) val;
+            case INT:
+                return (int) val;
+            case LONG:
+                return (long) val;
+        }
+        return 0;
+    }
 }

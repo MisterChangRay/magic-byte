@@ -33,6 +33,6 @@ public class ShortWriter extends MWriter {
             val = (short) this.fieldMetaInfo.getDefaultVal();
         }
 
-        buffer.putShort((short) val);
+        buffer.putShort(writeOffset, (short) val);
     }
 }

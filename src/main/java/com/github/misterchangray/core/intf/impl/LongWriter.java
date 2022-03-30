@@ -33,6 +33,6 @@ public class LongWriter extends MWriter {
             val = (long) this.fieldMetaInfo.getDefaultVal();
         }
 
-        buffer.putLong((long) val);
+        buffer.putLong(writeOffset, (long) val);
     }
 }
