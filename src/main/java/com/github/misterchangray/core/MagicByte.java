@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 public class MagicByte {
     private static UnPacker unPacker = UnPacker.getInstance();
     private static Packer packer = Packer.getInstance();
+    private static MagicChecker magicChecker;
 
     /**
      *
@@ -20,7 +21,7 @@ public class MagicByte {
      * @return
      */
     public static <T> T pack(byte[] data, Class<?> clazz) throws MagicByteException {
-        return pack(data, clazz, null);
+        return pack(data, clazz, magicChecker);
     }
 
 
@@ -56,7 +57,7 @@ public class MagicByte {
     public static <T> ByteBuffer unpack(T data)  throws MagicByteException {
         if (null == data) return null;
 
-        return unpack(data, null);
+        return unpack(data, magicChecker);
     }
 
 
@@ -84,6 +85,11 @@ public class MagicByte {
         if (null == data) return null;
         DynamicByteBuffer res = unPacker.unpackObject(data, checker);
         return res.buffer();
+    }
+
+
+    public static void configMagicChecker(MagicChecker checker) {
+        magicChecker = checker;
     }
 
 }
