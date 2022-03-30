@@ -9,7 +9,7 @@ public class TestFunctional {
 
     public static long checker(byte[] data) {
         System.out.println(111);
-        return 0;
+        return 0x3341;
     }
 
     @Test
