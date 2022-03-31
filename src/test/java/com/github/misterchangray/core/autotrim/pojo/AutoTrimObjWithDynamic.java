@@ -11,7 +11,7 @@ import java.util.List;
 public class AutoTrimObjWithDynamic {
     @MagicField(order = 1, size = 10)
     private String name;
-    @MagicField(order = 5, autoTrim = true, size = 5)
+    @MagicField(order = 5, dynamicSize = true, size = 5)
     private List<ByteObj> boodsId;
     @MagicField(order = 8)
     private DynamicStudent student;

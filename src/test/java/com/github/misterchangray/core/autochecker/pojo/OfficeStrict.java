@@ -5,8 +5,8 @@ import com.github.misterchangray.core.annotation.MagicField;
 
 import java.util.List;
 
-@MagicClass
-public class Office {
+@MagicClass(strict = true)
+public class OfficeStrict {
     @MagicField(order = 1)
     private int head;
     @MagicField(order = 3, calcLength = true)

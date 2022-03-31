@@ -5,11 +5,11 @@ import com.github.misterchangray.core.annotation.MagicField;
 
 @MagicClass
 public class AutoTrimWith2Field {
-    @MagicField(order = 1, size = 10, autoTrim = true)
+    @MagicField(order = 1, size = 10, dynamicSize = true)
     private String name;
     @MagicField(order = 3)
     private int age;
-    @MagicField(order = 5, autoTrim = true, size = 3)
+    @MagicField(order = 5, dynamicSize = true, size = 3)
     private int[] boodsId;
 
 

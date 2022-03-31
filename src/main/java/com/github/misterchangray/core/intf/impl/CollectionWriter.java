@@ -7,8 +7,6 @@ import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,7 +55,7 @@ public class CollectionWriter extends MWriter {
             }
         }
 
-        if(this.fieldMetaInfo.isAutoTrim()) {
+        if(this.fieldMetaInfo.isDynamicSize()) {
             return;
         } else {
             for (int i = 0; i < count; i++) {

@@ -32,7 +32,7 @@ public class StringReader extends MReader {
         }
 
         int elementBytes = this.fieldMetaInfo.getOwnerClazz().getElementBytes();
-        if(this.fieldMetaInfo.isAutoTrim() && buffer.capacity() < elementBytes) {
+        if(this.fieldMetaInfo.isDynamicSize() && buffer.capacity() < elementBytes) {
             int tmp =  elementBytes - buffer.capacity();
             tmp = this.fieldMetaInfo.getSize() - tmp;
             if(tmp >= 0) {

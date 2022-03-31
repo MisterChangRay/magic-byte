@@ -39,7 +39,7 @@ public class StringWriter extends MWriter {
         byte[] tmp = val.toString().getBytes(Charset.forName(fieldMetaInfo.getCharset()));
         System.arraycopy(tmp, 0, data, 0, Math.min(tmp.length, byteLen));
 
-        if(this.fieldMetaInfo.isAutoTrim()) {
+        if(this.fieldMetaInfo.isDynamicSize()) {
             data = Arrays.copyOfRange(data, 0, tmp.length);
         }
         buffer.put(data);

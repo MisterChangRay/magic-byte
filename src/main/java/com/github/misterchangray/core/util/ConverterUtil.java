@@ -28,7 +28,7 @@ public class ConverterUtil {
 
     /**
      * byte转换为无符号数
-     * @param aint
+     * @param abyte
      * @return
      */
     public static int byteToUnsigned(byte abyte) {
@@ -100,6 +100,30 @@ public class ConverterUtil {
         return 0;
     }
 
+
+
+
+    /**
+     * 对象转为具体的值
+     * @param typeEnum
+     * @param o
+     * @return
+     */
+    public static long toNumber(TypeEnum typeEnum, long o) {
+        if(Objects.isNull(o)) return 0;
+
+        switch (typeEnum) {
+            case BYTE:
+                return (byte) o;
+            case SHORT:
+                return (short) o;
+            case INT:
+                return (int) o;
+            case LONG:
+                return (long) o;
+        }
+        return 0;
+    }
 
     /**
      * 对象转为具体的值

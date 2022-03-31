@@ -101,7 +101,7 @@ public class FieldMetaInfo implements MField {
      * 不建议使用此配置, 序列化很影响性能。
      * @return
      */
-    private boolean autoTrim;
+    private boolean dynamicSize;
 
     public boolean isDynamicSizeOf() {
         return dynamicSizeOf > -1;
@@ -131,12 +131,12 @@ public class FieldMetaInfo implements MField {
         this.calcCheckCode = calcCheckCode;
     }
 
-    public boolean isAutoTrim() {
-        return autoTrim;
+    public boolean isDynamicSize() {
+        return dynamicSize;
     }
 
-    public void setAutoTrim(boolean autoTrim) {
-        this.autoTrim = autoTrim;
+    public void setDynamicSize(boolean dynamicSize) {
+        this.dynamicSize = dynamicSize;
     }
 
     public int getDefaultVal() {

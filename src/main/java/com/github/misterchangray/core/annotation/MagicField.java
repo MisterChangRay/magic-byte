@@ -69,5 +69,5 @@ public @interface MagicField {
      * 不建议使用此配置, 序列化很影响性能。
      * @return
      */
-    boolean autoTrim() default false;
+    boolean dynamicSize() default false;
 }

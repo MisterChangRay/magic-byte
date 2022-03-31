@@ -9,7 +9,7 @@ public class AutoTrimWithoutSize {
     private String name;
     @MagicField(order = 3)
     private int age;
-    @MagicField(order = 5, autoTrim = true)
+    @MagicField(order = 5, dynamicSize = true)
     private int[] boodsId;
 
 

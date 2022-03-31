@@ -9,7 +9,7 @@ public class AutoTrimArray {
     private String name;
     @MagicField(order = 3)
     private int age;
-    @MagicField(order = 5, autoTrim = true, size = 5)
+    @MagicField(order = 5, dynamicSize = true, size = 5)
     private int[] boodsId;
 
 

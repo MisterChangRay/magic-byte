@@ -32,7 +32,7 @@ public class ClassManager {
     private static void afterLink(ClassMetaInfo classMetaInfo) {
         List<FieldMetaInfo>
                 dynamicFields =  new ArrayList<>(),  // all dynamicSizeOf > 0 fields
-                autoTrimFields =  new ArrayList<>(), // all autoTrim = true fields
+                dynamicSizeFields =  new ArrayList<>(), // all autoTrim = true fields
                 calcLengthFields =  new ArrayList<>(), // all calcLength = true fields
                 calcCheckCodeFields =  new ArrayList<>() //  all checkCode = true fields
                         ;
@@ -40,8 +40,8 @@ public class ClassManager {
             if(fieldMetaInfo.isDynamic()) {
                 dynamicFields.add(fieldMetaInfo);
             }
-            if(fieldMetaInfo.isAutoTrim()) {
-                autoTrimFields.add(fieldMetaInfo);
+            if(fieldMetaInfo.isDynamicSize()) {
+                dynamicSizeFields.add(fieldMetaInfo);
             }
             if(fieldMetaInfo.isCalcCheckCode()) {
                 calcCheckCodeFields.add(fieldMetaInfo);
@@ -51,7 +51,7 @@ public class ClassManager {
             }
         }
 
-        if(autoTrimFields.size() > 1) {
+        if(dynamicSizeFields.size() > 1) {
             throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
         }
 
@@ -63,7 +63,7 @@ public class ClassManager {
             throw new InvalidParameterException("calcLength only use once in the class; at: " + classMetaInfo.getFullName());
         }
 
-        if(dynamicFields.size() > 0 && autoTrimFields.size() > 0) {
+        if(dynamicFields.size() > 0 && dynamicSizeFields.size() > 0) {
             throw new InvalidParameterException("autoTrim & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
         }
     }

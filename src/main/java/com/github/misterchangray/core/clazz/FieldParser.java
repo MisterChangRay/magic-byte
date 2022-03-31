@@ -71,13 +71,13 @@ public class FieldParser {
             throw new InvalidParameterException("dynamicSize only use the list string and array; at: " + field.getFullName());
         }
 
-        // autoTrim only use the list string and array
-        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().autoTrim()) {
+        // dynamicSize only use the list string and array
+        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSize()) {
             throw new InvalidParameterException("autoTrim only use the list string and array; at: " + field.getFullName());
         }
 
-        // autoTrim 必须和 size 属性共同使用
-        if(field.getMagicField().size() <= 0 && field.getMagicField().autoTrim()) {
+        // dynamicSize 必须和 size 属性共同使用
+        if(field.getMagicField().size() <= 0 && field.getMagicField().dynamicSize()) {
             throw new InvalidParameterException("autoTrim must use with size properties; at: " + field.getFullName());
         }
 
@@ -200,7 +200,7 @@ public class FieldParser {
         fieldMetaInfo.setMagicField(magicField);
         fieldMetaInfo.setOrderId(magicField.order());
         fieldMetaInfo.setCharset(magicField.charset());
-        fieldMetaInfo.setAutoTrim(magicField.autoTrim());
+        fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
         fieldMetaInfo.setCalcLength(magicField.calcLength());
 

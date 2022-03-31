@@ -3,9 +3,10 @@ package com.github.misterchangray.core.autochecker;
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.TestFunctional;
 import com.github.misterchangray.core.autochecker.pojo.Office;
+import com.github.misterchangray.core.autochecker.pojo.OfficeStrict;
 import com.github.misterchangray.core.autochecker.pojo.Staff;
-import com.github.misterchangray.core.autotrim.pojo.AutoTrimArray;
-import com.github.misterchangray.core.autotrim.pojo.AutoTrimNesting;
+import com.github.misterchangray.core.exception.InvalidCheckCodeException;
+import com.github.misterchangray.core.exception.InvalidLengthException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,6 +20,37 @@ import java.util.ArrayList;
  */
 public class TestAutoCalc {
 
+
+    @Test
+    public void testInvalidLengthException() throws InterruptedException {
+        OfficeStrict officeStrict = new OfficeStrict();
+        officeStrict.setHead(11);
+        officeStrict.setAddr("chengdu");
+        officeStrict.setName("xiudian");
+
+        MagicByte.configMagicChecker(TestFunctional::checker);
+        ByteBuffer unpack = MagicByte.unpack(officeStrict, TestFunctional::checker2);
+        unpack.putInt(4, 111);
+        Assert.assertThrows(InvalidLengthException.class, () -> {
+            OfficeStrict officeStrict2 = MagicByte.pack(unpack.array(), OfficeStrict.class, TestFunctional::checker2);
+        });
+    }
+
+    @Test
+    public void testInvalidCheckCodeException() throws InterruptedException {
+        OfficeStrict officeStrict = new OfficeStrict();
+        officeStrict.setHead(11);
+        officeStrict.setAddr("chengdu");
+        officeStrict.setName("xiudian");
+
+        MagicByte.configMagicChecker(TestFunctional::checker);
+
+        ByteBuffer unpack = MagicByte.unpack(officeStrict, TestFunctional::checker2);
+
+        Assert.assertThrows(InvalidCheckCodeException.class, () -> {
+            OfficeStrict officeStrict2 = MagicByte.pack(unpack.array(), OfficeStrict.class);
+        });
+    }
 
     @Test
     public void testCalcLengthAndCheckCode() throws InterruptedException {

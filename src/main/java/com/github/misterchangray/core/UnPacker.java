@@ -3,14 +3,11 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.exception.MagicParseException;
 import com.github.misterchangray.core.util.AssertUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class UnPacker {

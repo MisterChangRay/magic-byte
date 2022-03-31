@@ -1,10 +1,6 @@
 package com.github.misterchangray.core.intf.impl;
 
-import com.github.misterchangray.core.Packer;
-import com.github.misterchangray.core.clazz.ClassManager;
-import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.AssertUtil;
@@ -39,7 +35,7 @@ public class CollectionReader extends MReader {
             count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
         }
 
-        if(this.fieldMetaInfo.isAutoTrim()) {
+        if(this.fieldMetaInfo.isDynamicSize()) {
             // 获取总字节数
             int elementBytes = this.fieldMetaInfo.getClazzMetaInfo().getRoot().getElementBytes();
             // 后续字节数 = 定义总字节数 - 已读字节数 - 填充最大字节数
