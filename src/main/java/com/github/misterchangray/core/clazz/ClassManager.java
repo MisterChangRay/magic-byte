@@ -55,6 +55,10 @@ public class ClassManager {
             throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
         }
 
+        if(calcCheckCodeFields.size() > 1) {
+            throw new InvalidParameterException("calcCheckCode only use once in the class; at: " + classMetaInfo.getFullName());
+        }
+
         if(calcLengthFields.size() > 1) {
             throw new InvalidParameterException("calcLength only use once in the class; at: " + classMetaInfo.getFullName());
         }
