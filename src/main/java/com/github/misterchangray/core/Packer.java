@@ -3,6 +3,8 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.exception.InvalidCheckCodeException;
+import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.exception.MagicParseException;
 import com.github.misterchangray.core.util.AssertUtil;
@@ -83,7 +85,7 @@ public class Packer {
         long expect = data.capacity();
         if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
             byte[] array = data.array();
-            throw new MagicParseException("the length isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
+            throw new InvalidLengthException("the length isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
         }
     }
 
@@ -100,7 +102,7 @@ public class Packer {
         long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), val);
         long expect = checker.calcCheckCode(array);
         if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
-            throw new MagicParseException("the checkCode isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
+            throw new InvalidCheckCodeException("the checkCode isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
         }
     }
 
