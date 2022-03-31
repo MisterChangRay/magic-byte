@@ -47,7 +47,7 @@ public class ClassManager {
                 calcCheckCodeFields.add(fieldMetaInfo);
             }
             if(fieldMetaInfo.isCalcLength()) {
-                calcCheckCodeFields.add(fieldMetaInfo);
+                calcLengthFields.add(fieldMetaInfo);
             }
         }
 
