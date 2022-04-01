@@ -39,50 +39,9 @@ public class UnPacker {
         }
 
         this.unpackObject(res, object, classMetaInfo);
-
-        this.unpackDelayFields(object, classMetaInfo, res, checker);
+        res.delayCalc(checker);
         return res;
     }
-
-    private <T> void unpackDelayFields(T object, ClassMetaInfo classMetaInfo, DynamicByteBuffer res, MagicChecker checker) {
-        try {
-            for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFlatFields()) {
-                if(!fieldMetaInfo.isCalcCheckCode() && !fieldMetaInfo.isCalcLength()) continue;
-
-                doDelayCalcField(fieldMetaInfo, object,  res, checker);
-            }
-        } catch (MagicParseException ae) {
-            if(classMetaInfo.isStrict()) throw ae;
-        } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(classMetaInfo);
-        } catch (Exception ae) {
-            throw  ae;
-        }
-    }
-
-    /**
-     * 反射获取实体类中的每个字段; 封装 byte 数组
-     * @param fieldMetaInfo
-     * @param object
-     * @param res
-     * @return
-     */
-    private  void doDelayCalcField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res, MagicChecker checker) throws IllegalAccessException {
-        long val = 0;
-        int offset = 0;
-        if(fieldMetaInfo.isCalcLength()) {
-            val = res.position();
-            offset = res.getLengthOffset();
-        }
-
-        if(fieldMetaInfo.isCalcCheckCode() && Objects.nonNull(checker)) {
-            val = checker.calcCheckCode(res.array());
-            offset = res.getCheckCodeOffset();
-        }
-
-        fieldMetaInfo.getWriter().writeToBuffer(res, ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val), object, offset);
-    }
-
 
     public  <T> DynamicByteBuffer unpackObject(DynamicByteBuffer res, T object, ClassMetaInfo classMetaInfo) {
         if(Objects.isNull(classMetaInfo)) return null;
@@ -108,8 +67,8 @@ public class UnPacker {
      * @return
      */
     private  void decodeField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res) throws IllegalAccessException {
-        res.setCheckCodeOffset(fieldMetaInfo);
-        res.setLengthOffset(fieldMetaInfo);
+        if(fieldMetaInfo.isCalcLength()) res.setLengthFieldWrapper(fieldMetaInfo);
+        if(fieldMetaInfo.isCalcCheckCode()) res.setCheckCodeFieldWrapper(fieldMetaInfo);
 
         Object val = fieldMetaInfo.getReader().readFormObject(object);
         fieldMetaInfo.getWriter().writeToBuffer(res, val, object);

@@ -1,11 +1,14 @@
 package com.github.misterchangray.core.util;
 
+import com.github.misterchangray.core.MagicChecker;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicParseException;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Objects;
 
 /**
  * @description:
@@ -20,9 +23,9 @@ public class DynamicByteBuffer {
     private static final int STEP  = 1024;
 
     // 保存长度偏移, 方便滞后计算并重置值
-    private int lengthOffset = -1;
+    private FieldMetaInfoWrapper lengthFieldWrapper;
     // 保存 校验位 偏移, 方便滞后计算并重置值
-    private int checkCodeOffset = -1;
+    private FieldMetaInfoWrapper checkCodeFieldWrapper;
 
     public static DynamicByteBuffer allocate(int bytes) {
         AssertUtil.throwIFOOM(bytes, "DynamicByteBuffer allocate field!");
@@ -292,23 +295,51 @@ public class DynamicByteBuffer {
         this.byteBuffer.position(0);
     }
 
-    public int getLengthOffset() {
-        return lengthOffset;
+    public FieldMetaInfoWrapper getLengthFieldWrapper() {
+        return lengthFieldWrapper;
     }
 
-    public void setLengthOffset(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcLength() && this.lengthOffset == -1) {
-            this.lengthOffset = this.position();
+    public void setLengthFieldWrapper(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcLength() && Objects.isNull(this.lengthFieldWrapper)) {
+            this.lengthFieldWrapper = new FieldMetaInfoWrapper(fieldMetaInfo, this.position());
+        }
+
+    }
+
+    public FieldMetaInfoWrapper getCheckCodeFieldWrapper() {
+        return checkCodeFieldWrapper;
+    }
+
+    public void setCheckCodeFieldWrapper(FieldMetaInfo fieldMetaInfo) {
+        if(fieldMetaInfo.isCalcCheckCode() && Objects.isNull(this.checkCodeFieldWrapper)) {
+            this.checkCodeFieldWrapper = new FieldMetaInfoWrapper(fieldMetaInfo, this.position());
         }
     }
 
-    public int getCheckCodeOffset() {
-        return checkCodeOffset;
-    }
-
-    public void setCheckCodeOffset(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcCheckCode() && this.checkCodeOffset == -1) {
-            this.checkCodeOffset = this.position();
+    public void delayCalc(MagicChecker magicChecker) {
+        FieldMetaInfo fieldMetaInfo = null;
+        if(Objects.nonNull(this.lengthFieldWrapper)) {
+            try {
+                fieldMetaInfo = this.lengthFieldWrapper.getFieldMetaInfo();
+                fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), this.position()), null, this.lengthFieldWrapper.getStartOffset());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        if(Objects.nonNull(this.checkCodeFieldWrapper) && Objects.nonNull(magicChecker)) {
+            long val = 0;
+            try {
+                val = magicChecker.calcCheckCode(this.array());
+            } catch (Exception ae) {
+                throw ae;
+            }
+            try {
+                fieldMetaInfo = this.checkCodeFieldWrapper.getFieldMetaInfo();
+                fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val),
+                        null, this.checkCodeFieldWrapper.getStartOffset());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
