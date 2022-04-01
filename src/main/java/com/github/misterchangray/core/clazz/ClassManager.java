@@ -36,7 +36,13 @@ public class ClassManager {
                 calcLengthFields =  new ArrayList<>(), // all calcLength = true fields
                 calcCheckCodeFields =  new ArrayList<>() //  all checkCode = true fields
                         ;
+        int suffixBytes = 0;
+
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFlatFields()) {
+            if(dynamicSizeFields.size() > 0) {
+                suffixBytes += fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
+            }
+
             if(fieldMetaInfo.isDynamic()) {
                 dynamicFields.add(fieldMetaInfo);
             }
@@ -53,6 +59,8 @@ public class ClassManager {
 
         if(dynamicSizeFields.size() > 1) {
             throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
+        } else if(dynamicSizeFields.size() == 1){
+            dynamicSizeFields.get(0).setSuffixBytes(suffixBytes);
         }
 
         if(calcCheckCodeFields.size() > 1) {

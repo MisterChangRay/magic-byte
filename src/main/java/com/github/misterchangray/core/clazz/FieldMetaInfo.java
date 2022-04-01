@@ -103,6 +103,22 @@ public class FieldMetaInfo implements MField {
      */
     private boolean dynamicSize;
 
+    /**
+     * 如果当前字段为 dynamicSize,
+     *
+     * 此字段值为当前字段后续所有字段的总字节数
+     */
+    private int suffixBytes;
+
+
+    public int getSuffixBytes() {
+        return suffixBytes;
+    }
+
+    public void setSuffixBytes(int suffixBytes) {
+        this.suffixBytes = suffixBytes;
+    }
+
     public boolean isDynamicSizeOf() {
         return dynamicSizeOf > -1;
     }
