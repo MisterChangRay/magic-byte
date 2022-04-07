@@ -173,7 +173,8 @@ public class TestException {
         ClassParser classParser = new ClassParser();
 
         Assert.assertThrows(InvalidTypeException.class, () -> {
-            ClassMetaInfo parse = classParser.parse(TestListMatrix.class);
+            ClassMetaInfo classMetaInfo = new ClassMetaInfo(TestListMatrix.class);
+            ClassMetaInfo parse = classParser.parse(classMetaInfo);
         });
     }
 
@@ -181,7 +182,8 @@ public class TestException {
     public void TestArrayMatrix() {
         ClassParser classParser = new ClassParser();
         Assert.assertThrows(InvalidTypeException.class, () -> {
-            ClassMetaInfo parse = classParser.parse(TestArrayMatrix.class);
+            ClassMetaInfo classMetaInfo = new ClassMetaInfo(TestArrayMatrix.class);
+            ClassMetaInfo parse = classParser.parse(classMetaInfo);
         });
     }
 

@@ -5,8 +5,10 @@ import com.github.misterchangray.core.TestFunctional;
 import com.github.misterchangray.core.autochecker.pojo.Office;
 import com.github.misterchangray.core.autochecker.pojo.OfficeStrict;
 import com.github.misterchangray.core.autochecker.pojo.Staff;
+import com.github.misterchangray.core.autochecker.pojo_error.OfficeWith2CalcLength;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
+import com.github.misterchangray.core.exception.InvalidParameterException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,6 +22,19 @@ import java.util.ArrayList;
  */
 public class TestAutoCalc {
 
+    @Test
+    public void testOfficeWith2CalcLength() throws InterruptedException {
+        OfficeWith2CalcLength officeStrict = new OfficeWith2CalcLength();
+        officeStrict.setHead(11);
+        officeStrict.setAddr("chengdu");
+        officeStrict.setName("xiudian");
+
+        MagicByte.configMagicChecker(TestFunctional::checker);
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            ByteBuffer unpack = MagicByte.unpack(officeStrict, TestFunctional::checker2);
+            OfficeWith2CalcLength officeStrict2 = MagicByte.pack(unpack.array(), OfficeWith2CalcLength.class, TestFunctional::checker2);
+        });
+    }
 
     @Test
     public void testInvalidLengthException() throws InterruptedException {
