@@ -130,7 +130,7 @@ public class FieldParser {
         fieldMetaInfo.setOwnerClazz(classMetaInfo);
         fieldMetaInfo.setClazz(clazz);
         fieldMetaInfo.setType(TypeManager.getType(clazz));
-        ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassFieldMetaInfo(clazz);
+        ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassFieldMetaInfo(clazz, classMetaInfo);
         fieldMetaInfo.setClazzMetaInfo(fieldClassMetaInfo);
         fieldClassMetaInfo.setParent(classMetaInfo);
         fieldMetaInfo.setElementBytes(fieldClassMetaInfo.getElementBytes());

@@ -74,6 +74,10 @@ public class ClassMetaInfo implements MClass {
         return self;
     }
 
+    public ClassMetaInfo(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
     public List<FieldMetaInfo> getFlatFields() {
         return flatFields;
     }

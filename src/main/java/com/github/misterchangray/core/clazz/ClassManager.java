@@ -18,13 +18,15 @@ public class ClassManager {
             return classMetaInfo;
         }
 
-        classMetaInfo = parseClass(clazz);
+        classMetaInfo = new ClassMetaInfo(clazz);
+        classMetaInfo = parseClass(classMetaInfo);
+
         cache.put(clazz, classMetaInfo);
         return classMetaInfo;
     }
 
-    private static ClassMetaInfo parseClass(Class<?> clazz) {
-        ClassMetaInfo classMetaInfo = ClassParser.getInstance().parse(clazz);
+    private static ClassMetaInfo parseClass(ClassMetaInfo classMetaInfo) {
+        ClassParser.getInstance().parse(classMetaInfo);
         afterLink(classMetaInfo);
         return classMetaInfo;
     }
@@ -77,8 +79,11 @@ public class ClassManager {
     }
 
 
-    public static ClassMetaInfo getClassFieldMetaInfo(Class<?> clazz) {
-        ClassMetaInfo classMetaInfo = parseClass(clazz);
+    public static ClassMetaInfo getClassFieldMetaInfo(Class<?> clazz, ClassMetaInfo parent) {
+        ClassMetaInfo classMetaInfo = new ClassMetaInfo(clazz);
+        classMetaInfo.setParent(parent);
+
+        parseClass(classMetaInfo);
         afterLink(classMetaInfo);
         return classMetaInfo;
     }

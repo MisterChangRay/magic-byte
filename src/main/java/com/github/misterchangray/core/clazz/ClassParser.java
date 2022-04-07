@@ -29,8 +29,8 @@ public class ClassParser {
     }
 
 
-    public ClassMetaInfo parse(Class<?> clazz) {
-        ClassMetaInfo classMetaInfo = new ClassMetaInfo();
+    public ClassMetaInfo parse(ClassMetaInfo classMetaInfo) {
+        Class clazz  = classMetaInfo.getClazz();
         TypeEnum type = TypeManager.getType(clazz);
         if(type.getBytes() > 0) {
             classMetaInfo.setElementBytes(type.getBytes());
