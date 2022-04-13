@@ -97,8 +97,10 @@ void main() {
 	- order 定义序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始依次递增)</b>
 	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
 	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
+	- dynamicSize 标记字段为动态长度, 整个数据结构只能标记一次且仅能标记`String&List&Array`类型字段
 	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
-
+    - calcLength 标记字段为长度字段, 反序列化时将自动将长度填充到此字段; 可能抛出: InvalidLengthException
+    - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
 
 
 #### 5. 支持的数据类型及字节大小;
