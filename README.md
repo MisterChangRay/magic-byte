@@ -40,21 +40,28 @@ public class School {
     // 普通数据类型, 字符串长度为 10 byte 
     @MagicField(order = 1, size = 10)
     private String name;
+    // 长度字段, 数据序列化时将自动填充实际值
+    @MagicField(order = 3, calcLength = true)
+    private short length;
     // 支持组合模式, 这里嵌入了 Student 对象
-    @MagicField(order = 3, size = 2)
+    @MagicField(order = 5, size = 2)
     private Student[] students;
     // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
-    @MagicField(order = 5)
-    private byte List<Object>
+    @MagicField(order = 7)
+    private List<Object> notSupport;
     // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
-    @MagicField(order = 6)
+    @MagicField(order = 9)
     private Object age;
     // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
-    @MagicField(order = 7)
+    @MagicField(order = 13)
     private Date[] birthdays;
     // 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
-    @MagicField(order = 2)
+    @MagicField(order = 15)
     private byte age;
+    // 校验和字段, 序列化时将会自动填充
+    @MagicField(order = 17)
+    private byte checkCode;
+
    
     // getter and setter ...
 }
@@ -65,24 +72,43 @@ public class Student {
     @MagicField(order = 1, size = 10)
     private String name;
     // 普通数据, 整数, 此字段决定后续 phones 字段长度
-    @MagicField(order = 2)
+    @MagicField(order = 5)
     private int length;
     // 此List并未直接指定大小, 大小由 length 字段决定. length字段数据类型只能为 byte, short, int
-    @MagicField(order = 3, dynamicSizeOf = 2)
+    @MagicField(order = 10, dynamicSizeOf = 5)
     private List<Long> phones;
-    @MagicField(order = 4)
+    @MagicField(order = 15)
     private byte age;
     // getter and setter ...
 }
 
-void main() {
-    School school = new School();
-    school.setAge((byte) 23);
-    // you can set other propertis
-    byte[] bytes = Magic.unpack(school); // object to bytes
-    School school2 = Magic.pack(bytes, School.class); // bytes to object
-    System.out.println(school.getAge() == school2.getAge()); // out put true
+public class Hello {
+    void main() {
+        // 全局配置校验和计算函数
+        MagicByte.configMagicChecker(Checker::customChecker);
+        School school = new School();
+        school.setAge((byte) 23);
+    
+        // you can set other propertis
+        // object to bytes
+        // 也可以单独传入计算函数
+        byte[] bytes = Magic.unpack(school, Checker::customChecker); 
+        School school2 = Magic.pack(bytes, School.class); // bytes to object
+        System.out.println(school.getAge() == school2.getAge()); // out put true
+    
+    }
+}
 
+public class Checker {
+    /**
+     * 序列化时： data数据中包含所有已序列化的数据(包括 calcLength 也已经调用并序列化)
+     * 反序列化时: data数据为传入数据的副本
+     * @param data
+     * @return
+     */
+    public static long customChecker(byte[] data) {
+        return 0xff;
+    }
 }
 
 ```
