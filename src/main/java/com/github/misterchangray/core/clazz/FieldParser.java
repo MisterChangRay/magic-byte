@@ -95,7 +95,7 @@ public class FieldParser {
                     fieldMetaInfo.getType() != TypeEnum.SHORT &&
                     fieldMetaInfo.getType() != TypeEnum.INT &&
                     fieldMetaInfo.getType() != TypeEnum.LONG) {
-                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
+                throw new InvalidParameterException("calcCheckCode field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
             }
         }
 
