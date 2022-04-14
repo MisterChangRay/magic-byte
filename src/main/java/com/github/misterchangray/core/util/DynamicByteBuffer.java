@@ -257,7 +257,8 @@ public class DynamicByteBuffer {
         }
 
         byte[] array = new byte[this.byteBuffer.position()];
-        this.byteBuffer.get(0, array);
+        this.byteBuffer.flip();
+        this.byteBuffer.get(array);
         return ByteBuffer.allocate(this.position())
                 .order(this.byteBuffer.order())
                 .put(array);
