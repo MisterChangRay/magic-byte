@@ -70,7 +70,19 @@ public class MagicByte {
     public static <T> byte[] unpackToByte(T data) throws MagicByteException {
         if (null == data) return null;
 
-        return  unpack(data).array();
+        return  unpack(data, null).array();
+    }
+
+    /**
+     *  将对象转为字节数组
+     * @param data
+     * @param <T>
+     * @return
+     */
+    public static <T> byte[] unpackToByte(T data, MagicChecker checker) throws MagicByteException {
+        if (null == data) return null;
+
+        return  unpack(data, checker).array();
     }
 
     /**
