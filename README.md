@@ -31,34 +31,35 @@ maven项目可直接导入:
 3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 
 #### 3. 代码示例
-下面的对象中, Student 总共分配 42 个字节; School 总共分配 95 个字节
+下面的对象中, 共有 Student 和 School 两个对象
 ```java
 // declare class must use public
 // 使用大端模式， 默认为大端
 @MagicClass(byteOrder = ByteOrder.BIG_ENDIAN)
 public class School {
-    // 普通数据类型, 字符串长度为 10 byte 
+    // 10 byte, 普通数据类型
     @MagicField(order = 1, size = 10)
     private String name;
-    // 长度字段, 数据序列化时将自动填充实际值
+    // 2 byte, 长度字段, 数据序列化时将自动填充实际值
     @MagicField(order = 3, calcLength = true)
     private short length;
     // 支持组合模式, 这里嵌入了 Student 对象
+    // 总字节数 = students.bytes * length
     @MagicField(order = 5, size = 2)
     private Student[] students;
-    // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
+    // 0 byte, 注意, 此处无法序列化, 不支持的数据类型将会被忽略
     @MagicField(order = 7)
     private List<Object> notSupport;
-    // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
+    // 0 byte, 注意, 此处无法序列化, 不支持的数据类型将会被忽略
     @MagicField(order = 9)
     private Object age;
-    // 注意, 此处无法序列化, 不支持的数据类型将会被忽略
+    // 0 byte, 注意, 此处无法序列化, 不支持的数据类型将会被忽略
     @MagicField(order = 13)
     private Date[] birthdays;
-    // 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
+    // 1 byte, 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
     @MagicField(order = 15)
     private byte age;
-    // 校验和字段, 序列化时将会自动填充
+    // 1 byte, 校验和字段, 序列化时将会自动填充
     @MagicField(order = 17)
     private byte checkCode;
 
@@ -68,15 +69,17 @@ public class School {
 
 @MagicClass()
 public class Student {
-    // 普通数据, 字符串长度为 10
+    // 10 byte, 普通数据, 字符串长度为 10
     @MagicField(order = 1, size = 10)
     private String name;
-    // 普通数据, 整数, 此字段决定后续 phones 字段长度
+    // 4 byte, 普通数据, 整数, 此字段决定后续 phones 字段长度
     @MagicField(order = 5)
     private int length;
-    // 此List并未直接指定大小, 大小由 length 字段决定. length字段数据类型只能为 byte, short, int
+    // 总字节数 = phones.size * length
+    // 单个元素 8 byte, 此List并未直接指定大小, 大小由 length 字段决定. length字段数据类型只能为 byte, short, int
     @MagicField(order = 10, dynamicSizeOf = 5)
     private List<Long> phones;
+    // 1 byte
     @MagicField(order = 15)
     private byte age;
     // getter and setter ...
