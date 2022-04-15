@@ -34,7 +34,7 @@ public class ClassManager {
     private static void afterLink(ClassMetaInfo classMetaInfo) {
         List<FieldMetaInfo>
                 dynamicFields =  new ArrayList<>(),  // all dynamicSizeOf > 0 fields
-                dynamicSizeFields =  new ArrayList<>(), // all autoTrim = true fields
+                dynamicSizeFields =  new ArrayList<>(), // all dynamicSize = true fields
                 calcLengthFields =  new ArrayList<>(), // all calcLength = true fields
                 calcCheckCodeFields =  new ArrayList<>() //  all checkCode = true fields
                         ;
@@ -60,7 +60,7 @@ public class ClassManager {
         }
 
         if(dynamicSizeFields.size() > 1) {
-            throw new InvalidParameterException("autoTrim only use once in the class; at: " + classMetaInfo.getFullName());
+            throw new InvalidParameterException("dynamicSize only use once in the class; at: " + classMetaInfo.getFullName());
         } else if(dynamicSizeFields.size() == 1){
             dynamicSizeFields.get(0).setSuffixBytes(suffixBytes);
         }
@@ -74,7 +74,7 @@ public class ClassManager {
         }
 
         if(dynamicFields.size() > 0 && dynamicSizeFields.size() > 0) {
-            throw new InvalidParameterException("autoTrim & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
+            throw new InvalidParameterException("dynamicSize & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
         }
     }
 

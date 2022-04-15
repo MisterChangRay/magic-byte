@@ -1,15 +1,15 @@
-package com.github.misterchangray.core.autotrim.pojo;
+package com.github.misterchangray.core.dynamicsize.pojo;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
 
 @MagicClass
-public class AutoTrimNesting {
+public class DynamicSizeNesting {
     @MagicField(order = 1, size = 10)
     private String name;
 
     @MagicField(order = 3)
-    private AutoTrimArray autoTrimArray;
+    private DynamicSizeArray dynamicSizeArray;
 
 
     public String getName() {
@@ -20,11 +20,11 @@ public class AutoTrimNesting {
         this.name = name;
     }
 
-    public AutoTrimArray getAutoTrimArray() {
-        return autoTrimArray;
+    public DynamicSizeArray getDynamicSizeArray() {
+        return dynamicSizeArray;
     }
 
-    public void setAutoTrimArray(AutoTrimArray autoTrimArray) {
-        this.autoTrimArray = autoTrimArray;
+    public void setDynamicSizeArray(DynamicSizeArray dynamicSizeArray) {
+        this.dynamicSizeArray = dynamicSizeArray;
     }
 }

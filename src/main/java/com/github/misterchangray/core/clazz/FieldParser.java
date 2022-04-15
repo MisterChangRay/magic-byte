@@ -73,12 +73,12 @@ public class FieldParser {
 
         // dynamicSize only use the list string and array
         if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSize()) {
-            throw new InvalidParameterException("autoTrim only use the list string and array; at: " + field.getFullName());
+            throw new InvalidParameterException("dynamicSize only use the list string and array; at: " + field.getFullName());
         }
 
         // dynamicSize 必须和 size 属性共同使用
         if(field.getMagicField().size() <= 0 && field.getMagicField().dynamicSize()) {
-            throw new InvalidParameterException("autoTrim must use with size properties; at: " + field.getFullName());
+            throw new InvalidParameterException("dynamicSize must use with size properties; at: " + field.getFullName());
         }
 
         // calcLength only use byte, short, int
