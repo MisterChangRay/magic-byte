@@ -27,7 +27,7 @@ maven项目可直接导入:
 #### 2. 快速入门:
 1. 引入Jar包;
 2. `@MagicClass`对当前类进行全局配置
-2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象嵌套
+2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套
 3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 
 #### 3. 代码示例
@@ -147,16 +147,16 @@ public class Checker {
 2. <b>已投入使用的字段请不要修改`order`属性(重要),会影响已有业务;新增字段请递增使用下一个`order`值</b>
 3. 大端小端使用`@MagicClass`进行配置
 4. 基本数据类型使用下表默认字节长度, `String/List/Array` 需要使用`size`属性指定成员长度或字符串字节长度
-5. 请使用基础类型定义报文结构,目前仅对以下数据类型支持:
+5. 请使用基础类型定义报文结构,目前仅支持以下数据类型:
 	1. 四类八种基础类型(byte/char/short/int/long/float/double/boolean)
-	2. String, 字符串的支持
-	3. List和Array的支持, 可以使用泛型; 但不能使用`List<String>`或则`String[]`
+	2. 支持 String, 但必须申明 Size
+	3. 支持 List & Array, 可以使用泛型; 仅支持一维数组且不能使用`List<String>`或`String[]`
 6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 将序列化集合前5个元素
 7. 字符串默认使用ASCII编码
-8. 不支持List嵌套或二维数组
+8. 不支持一维以上的List或者Array
 9. boolean值 0=false/非0=true
-10. 所有类的定义必须为 public, 不支持内部类
-11. 不支持类继承的序列化和反序列化;支持类的嵌套或组合使用
+10. 所有类的定义必须为 public, 不支持私有内部类; 支持 `public static class XXX {}`
+11. 不支持类继承的序列化和反序列化;支持类的嵌套组合使用
 12. 序列化null值,如果是包装数据类型,则使用原始类型默认值;如`Short a = null;` 序列化为 `0`; 其他数据类型将会直接填充,如数组，对象等。
 13. 更多问题请前往WIKI页面查看 >> [WIKI_HOME](https://github.com/MisterChangRay/magic-byte/wiki)
 
@@ -166,7 +166,7 @@ public class Checker {
 2. 不建议网络传输有符号数即负数
 3. 不建议网络传输字符串
 4. 不建议类中大量声明字符串
-5. 条件允许的话可以考虑使用`protobuf`作为通讯
+5. 条件允许建议使用`protobuf`作为序列化框架
 7. 二进制协议建议单包大小在1KB以内
 8. `order`属性建议跳跃配置(如1,3,5,7), <b>且对于已经投入使用的一定不要修改; 新增字段时必须使用新的(递增后)order值; 重要的事强调3次</b>
 
