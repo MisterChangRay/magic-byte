@@ -330,12 +330,7 @@ public class DynamicByteBuffer {
             }
         }
         if(Objects.nonNull(this.checkCodeFieldWrapper) && Objects.nonNull(magicChecker)) {
-            long val = 0;
-            try {
-                val = magicChecker.calcCheckCode(this.array());
-            } catch (Exception ae) {
-                throw ae;
-            }
+            long val = magicChecker.calcCheckCode(this.array());
             try {
                 fieldMetaInfo = this.checkCodeFieldWrapper.getFieldMetaInfo();
                 fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val),
