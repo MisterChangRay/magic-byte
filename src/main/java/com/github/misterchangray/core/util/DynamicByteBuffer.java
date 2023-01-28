@@ -5,6 +5,7 @@ import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicParseException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -17,6 +18,7 @@ import java.util.Objects;
  * @author: Ray.chang
  * @create: 2021-12-17 15:05
  **/
+@Slf4j
 public class DynamicByteBuffer {
     private ByteBuffer byteBuffer;
     private boolean isDynamic;
@@ -324,7 +326,7 @@ public class DynamicByteBuffer {
                 fieldMetaInfo = this.lengthFieldWrapper.getFieldMetaInfo();
                 fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), this.position()), null, this.lengthFieldWrapper.getStartOffset());
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         if(Objects.nonNull(this.checkCodeFieldWrapper) && Objects.nonNull(magicChecker)) {
@@ -339,7 +341,7 @@ public class DynamicByteBuffer {
                 fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val),
                         null, this.checkCodeFieldWrapper.getStartOffset());
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
     }
