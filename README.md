@@ -27,8 +27,9 @@ maven项目可直接导入:
 #### 2. 快速入门:
 1. 引入Jar包;
 2. `@MagicClass`对当前类进行全局配置
-2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套
-3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
+3. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套
+4. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
+5. 项目使用 slf4j 输出日志，未引入日志框架，请自行搭配日志框架进行使用
 
 #### 3. 代码示例
 下面的对象中, 共有 Student 和 School 两个对象
