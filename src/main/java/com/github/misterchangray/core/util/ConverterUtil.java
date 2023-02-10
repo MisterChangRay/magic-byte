@@ -3,6 +3,7 @@ package com.github.misterchangray.core.util;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -12,6 +13,39 @@ public class ConverterUtil {
     public static BigInteger DWORD = new BigInteger("FFFF", 16);
     public static BigInteger QWORD = new BigInteger("FFFFFFFF", 16);
 
+
+    /**
+     * 将正整数转换为字节数组
+     *
+     * 只支持正整数
+     * @param p
+     * @return
+     */
+    public static byte[] numberToByte(long p, int length) {
+        byte[] res = new byte[length];
+        for (int i = length - 1; i >= 0 && p>=0 ; i--) {
+            res[i] = (byte)(p & 0xff);
+            p = p >>8 ;
+        }
+
+        return res;
+    }
+
+    /**
+     * 数组转为正整数
+     *
+     * 只支持正整数
+     * @param p
+     * @return
+     */
+    public static long byteToNumber(byte[] p) {
+        long res = 0;
+        for (byte b : p) {
+            res <<= 8;
+            res |= (b & 0xff);
+        }
+        return res;
+    }
 
     /**
      * 16进制转换为字节;这里16进制是无符号的
