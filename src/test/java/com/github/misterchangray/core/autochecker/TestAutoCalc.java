@@ -53,7 +53,7 @@ public class TestAutoCalc {
     }
 
     @Test
-    public void testInvalidLengthException() throws InterruptedException {
+    public void testInvalidLengthException()  {
         OfficeStrict officeStrict = new OfficeStrict();
         officeStrict.setHead(11);
         officeStrict.setAddr("chengdu");
