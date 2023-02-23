@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.clazz;
 
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.exception.InvalidTypeException;
 import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.intf.MWriter;
@@ -8,6 +9,8 @@ import com.github.misterchangray.core.intf.impl.*;
 import com.github.misterchangray.core.util.AssertUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +22,7 @@ import java.util.Objects;
  * @create: 2021-12-17 15:11
  **/
 public class TypeManager {
-    private static Map<Class, CustomConverterInfo> customConverterCache = new HashMap<>();
+//    private static Map<Class, CustomConverterInfo> customConverterCache = new HashMap<>();
 
     /**
      * fast get class type
@@ -41,11 +44,6 @@ public class TypeManager {
      */
     public static TypeEnum getType(Class<?> clazz) {
         TypeEnum res = null;
-        if(customConverterCache.containsKey(clazz)) {
-            res = TypeEnum.CUSTOM;
-            return res;
-        }
-
         res = SUPPORTED_TYPES.get(clazz);
         if(Objects.nonNull(res)) {
             return res;
@@ -173,28 +171,24 @@ public class TypeManager {
         return TypeEnum.STRING == type || TypeEnum.LIST == type || TypeEnum.ARRAY == type;
     }
 
-    public static CustomConverterInfo registerCustomConverter(Class targetClazz, Class<? extends MConverter> mConverterClazz, String attachParams, Integer fixSize) {
-        MConverter mConverter = null;
-        try {
-            mConverter = mConverterClazz.getDeclaredConstructor().newInstance();
-        } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(mConverterClazz);
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            AssertUtil.throwInstanceErrorException(mConverterClazz);
+
+    public static Class<?> getGenericsFieldType(FieldMetaInfo origin) {
+        if(origin.getType() == TypeEnum.ARRAY) {
+            if(origin.getField().getType().getName().startsWith("[[")) {
+                throw new InvalidTypeException("not support matrix, such as int[][]; at: " + origin.getFullName());
+            }
+            return origin.getField().getType().getComponentType();
         }
 
-        CustomConverterInfo magicConverterInfo =
-                new CustomConverterInfo(attachParams, mConverter, fixSize);
 
-        customConverterCache.put(targetClazz, magicConverterInfo);
-        return magicConverterInfo;
-    }
-
-    public static CustomConverterInfo getCustomConverter(Class clz) {
-        return customConverterCache.get(clz);
-    }
-
-    public static boolean hasCustomConverter(Class<?> clazz) {
-        return customConverterCache.containsKey(clazz);
+        Type genericType = origin.getField().getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) genericType;
+            if(pt.getActualTypeArguments()[0] instanceof ParameterizedType) {
+                throw new InvalidTypeException("not support matrix, such as List<List<String>>; at: " + origin.getFullName());
+            }
+            return (Class<?>)pt.getActualTypeArguments()[0];
+        }
+        return null;
     }
 }

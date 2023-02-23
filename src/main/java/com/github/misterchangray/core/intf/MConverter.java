@@ -15,11 +15,10 @@ public interface MConverter<T> {
      *
      * 将字节数据打包为对象
      * 注意这里是全部的字节数据
-     *
      * @param nextReadIndex 起始位置，即在此之前的都已读取
      * @param fullBytes 完整字节数据
-     * @Param attachParams 附加参数
-     * @return `MResult`里返回解析的对象和消费的字节数
+     * @param attachParams 附加参数
+     * @return
      */
     default MResult<T> pack(int nextReadIndex, byte[] fullBytes, String attachParams) {
         return MResult.build(0, null);

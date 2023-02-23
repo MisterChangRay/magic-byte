@@ -27,14 +27,10 @@ public class CustomWriter extends MWriter {
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
 
-        int byteLen = Integer.MAX_VALUE;
-        CustomConverterInfo customConverter = TypeManager.getCustomConverter(fieldMetaInfo.getClazz());
-        if(Objects.nonNull(customConverter) && customConverter.isFixsize()) {
-            byteLen = customConverter.getFixSize();
-        }
+        CustomConverterInfo customConverter = this.fieldMetaInfo.getCustomConverter();
 
         byte[] unpack = customConverter.getConverter().unpack(val, customConverter.getAttachParams());
-        byteLen = Math.min(byteLen, unpack.length);
+        int byteLen = customConverter.isFixsize() ? customConverter.getFixSize() : unpack.length;
 
         // direct write fill byte if the value is null
         byte[] data = new byte[byteLen];

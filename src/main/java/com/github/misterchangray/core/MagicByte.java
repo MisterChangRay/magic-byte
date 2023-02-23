@@ -25,14 +25,6 @@ public class MagicByte {
     }
 
 
-    public static  void registerCustomConverter(Class targetClazz, Class<? extends MConverter> mConverterClazz, String attachParams, Integer fixSize) {
-        if(Objects.isNull(targetClazz) || Objects.isNull(mConverterClazz)) {
-            throw new InvalidParameterException("[targetClazz, mConverterClazz] parameter should not be null");
-        }
-
-        TypeManager.registerCustomConverter(targetClazz, mConverterClazz, attachParams, fixSize);
-    }
-
 
 
     /**

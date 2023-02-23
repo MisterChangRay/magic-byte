@@ -125,15 +125,6 @@ public class FieldMetaInfo implements MField {
      */
     private DateFormatEnum dateFormatEnum;
 
-    private boolean hasCustomConverter;
-
-    public boolean isHasCustomConverter() {
-        return hasCustomConverter;
-    }
-
-    public void setHasCustomConverter(boolean hasCustomConverter) {
-        this.hasCustomConverter = hasCustomConverter;
-    }
 
     public DateFormatEnum getDateFormatEnum() {
         return dateFormatEnum;

@@ -5,9 +5,12 @@ import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.InvalidParameterException;
+import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.AnnotationUtil;
+import com.github.misterchangray.core.util.AssertUtil;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -60,7 +63,7 @@ public class ClassParser {
         classMetaInfo.setByteOrder(ByteOrder.BIG_ENDIAN);
         classMetaInfo.setFields(new ArrayList<>());
 
-        this.registerCustomConverter(classMetaInfo, clazz);
+        this.linkCustomConverter(classMetaInfo, clazz);
         this.copyConfiguration(classMetaInfo, clazz);
     }
 
@@ -69,21 +72,32 @@ public class ClassParser {
      * @param classMetaInfo
      * @param clazz
      */
-    private void registerCustomConverter(ClassMetaInfo classMetaInfo, Class<?> clazz) {
-        MagicConverter magicClass = AnnotationUtil.getMagicClassConverterAnnotation(clazz);
-        if(Objects.nonNull(magicClass)) {
-            CustomConverterInfo customConverterInfo =
-                    TypeManager.registerCustomConverter(clazz, magicClass.converter(), magicClass.attachParams(), magicClass.fixSize());
-            classMetaInfo.setCustomConverter(customConverterInfo);
+    private void linkCustomConverter(ClassMetaInfo classMetaInfo, Class<?> clazz) {
+        MagicConverter magicConverter = AnnotationUtil.getMagicClassConverterAnnotation(clazz);
+        if(Objects.nonNull(magicConverter)) {
+            MConverter mConverter = null;
+            try {
+                mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
+            } catch (IllegalAccessException ae) {
+                AssertUtil.throwIllegalAccessException(magicConverter.converter());
+            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                AssertUtil.throwInstanceErrorException(magicConverter.converter());
+            }
 
-            FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
-            fieldMetaInfo.setClazz(clazz);
-            fieldMetaInfo.setType(TypeEnum.CUSTOM);
-            classMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
-            classMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
-            if(magicClass.fixSize() > 0) {
-                fieldMetaInfo.setElementBytes(magicClass.fixSize());
-                classMetaInfo.setElementBytes(magicClass.fixSize());
+            CustomConverterInfo magicConverterInfo =
+                    new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize());
+
+            classMetaInfo.setCustomConverter(magicConverterInfo);
+
+            FieldMetaInfo virtualField = new FieldMetaInfo();
+            virtualField.setClazz(clazz);
+            virtualField.setType(TypeEnum.CUSTOM);
+            virtualField.setCustomConverter(magicConverterInfo);
+            classMetaInfo.setWriter(TypeManager.newWriter(virtualField));
+            classMetaInfo.setReader(TypeManager.newReader(virtualField));
+            if(magicConverter.fixSize() > 0) {
+                virtualField.setElementBytes(magicConverter.fixSize());
+                classMetaInfo.setElementBytes(magicConverter.fixSize());
             } else {
                 classMetaInfo.setElementBytes(1);
                 classMetaInfo.setDynamic(true);

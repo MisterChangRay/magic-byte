@@ -118,7 +118,7 @@ public class Checker {
 
 
 #### 4. 注解和属性说明
-工具存在两个注解:
+工具存在三个注解:
 1. `@MagicClass()` 类注解; 主要用于数据全局配置
 	- byteOrder 配置序列化大小端
 	- strict 严格模式, 默认false, 严格模式将会抛出更多的异常
@@ -130,8 +130,12 @@ public class Checker {
 	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
     - calcLength 标记字段为长度字段, 反序列化时将自动将长度填充到此字段; 可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
-
-
+    - timestampFormat 指定日期时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可配置size进行调整;如秒其实4个字节就够了
+3. `@MagicConverter()`配置自定义序列化
+    - converter, 序列化类, 该类必须为`MConverter`的子类
+    - attachParams, 附加参数;序列化时将会传入
+    - fixSize, 固定数据长度, 可以统一指定自定义数据长度;可忽略并在实际序列化后返回
+    
 #### 5. 支持的数据类型及字节大小;
 | 数据类型 |数据类型 |字节大小|
 |--------|--------|--------|
@@ -139,6 +143,7 @@ public class Checker {
 |short|char|2|
 |int|float|4|
 |long|double|8|
+|Date,Instant,DateTime|LocalTime,LocalDate,LocalDateTime|6|
 |String| |custom|
 
 

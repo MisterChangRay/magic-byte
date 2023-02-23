@@ -5,9 +5,12 @@ import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.*;
+import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.AnnotationUtil;
+import com.github.misterchangray.core.util.AssertUtil;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -34,6 +37,8 @@ public class FieldParser {
         }
         FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
         linkField(field, fieldMetaInfo, classMetaInfo);
+        this.linkCustomConverter(field, fieldMetaInfo);
+
         afterVerify(fieldMetaInfo);
 
         field.setAccessible(true);
@@ -64,8 +69,8 @@ public class FieldParser {
         }
 
         // list string array 必须配置 size or dynamicSize
-        if(!field.isHasCustomConverter() && TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
-            throw new InvalidParameterException("not yet configuration size or dynamicSize of the field,;at: " + field.getFullName());
+        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
+            throw new InvalidParameterException("not yet configuration size or dynamicSize of the field; at: " + field.getFullName());
         }
 
         // dynamicSize only use the list string and array
@@ -116,12 +121,12 @@ public class FieldParser {
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
-        this.registerCustomConverter(field, fieldMetaInfo);
 
         this.initField(field, fieldMetaInfo, classMetaInfo, field.getType());
 
         if(TypeManager.isCollection(fieldMetaInfo.getType())) {
             fieldMetaInfo.setGenericsField(this.newGenericsField(fieldMetaInfo));
+            fieldMetaInfo.getGenericsField().setCustomConverter(fieldMetaInfo.getCustomConverter());
             fieldMetaInfo.setElementBytes(fieldMetaInfo.getGenericsField().getElementBytes());
         }
 
@@ -174,15 +179,35 @@ public class FieldParser {
      * @param field
      * @param fieldMetaInfo
      */
-    private void registerCustomConverter(Field field, FieldMetaInfo fieldMetaInfo) {
-        MagicConverter magicClass = AnnotationUtil.getMagicFieldConverterAnnotation(field);
-        if(Objects.nonNull(magicClass)) {
-            CustomConverterInfo customConverterInfo =
-                    TypeManager.registerCustomConverter(field.getType(), magicClass.converter(), magicClass.attachParams(), magicClass.fixSize());
-            fieldMetaInfo.setHasCustomConverter(true);
+    private void linkCustomConverter(Field field, FieldMetaInfo fieldMetaInfo) {
+        MagicConverter magicConverter = AnnotationUtil.getMagicFieldConverterAnnotation(field);
+        if(Objects.isNull(magicConverter)) return;
 
-            fieldMetaInfo.setCustomConverter(customConverterInfo);
+        Class clazz = field.getType();
+        if(TypeManager.isCollection(TypeManager.getType(clazz))) {
+            clazz = TypeManager.getGenericsFieldType(fieldMetaInfo);
+        } else {
+            fieldMetaInfo.setType(TypeEnum.CUSTOM);
+            fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
+            fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
+            if(magicConverter.fixSize() == -1) {
+                fieldMetaInfo.getOwnerClazz().setDynamic(true);
+            }
         }
+
+        MConverter mConverter = null;
+        try {
+            mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
+        } catch (IllegalAccessException ae) {
+            AssertUtil.throwIllegalAccessException(magicConverter.converter());
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            AssertUtil.throwInstanceErrorException(magicConverter.converter());
+        }
+
+        CustomConverterInfo magicConverterInfo =
+                new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize());
+
+        fieldMetaInfo.setCustomConverter(magicConverterInfo);
     }
 
 
@@ -194,23 +219,7 @@ public class FieldParser {
      */
     private FieldMetaInfo newGenericsField(FieldMetaInfo origin) {
         FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
-        Class<?> clazz = null;
-        if(origin.getType() == TypeEnum.ARRAY) {
-            if(origin.getField().getType().getName().startsWith("[[")) {
-                throw new InvalidTypeException("not support matrix, such as int[][]; at: " + origin.getFullName());
-            }
-            clazz = origin.getField().getType().getComponentType();
-        }
-
-
-        Type genericType = origin.getField().getGenericType();
-        if (genericType instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) genericType;
-            if(pt.getActualTypeArguments()[0] instanceof ParameterizedType) {
-                throw new InvalidTypeException("not support matrix, such as List<List<String>>; at: " + fieldMetaInfo.getFullName());
-            }
-            clazz =(Class<?>)pt.getActualTypeArguments()[0];
-        }
+        Class<?> clazz = TypeManager.getGenericsFieldType(origin);
         fieldMetaInfo.setClazz(clazz);
         this.copyConfiguration(origin.getField(), fieldMetaInfo, origin.getOwnerClazz());
         this.initField(origin.getField(), fieldMetaInfo, origin.getOwnerClazz(), fieldMetaInfo.getClazz());
@@ -232,7 +241,7 @@ public class FieldParser {
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
         fieldMetaInfo.setCalcLength(magicField.calcLength());
-        fieldMetaInfo.setDateFormatEnum(magicField.dateFormatter());
+        fieldMetaInfo.setDateFormatEnum(magicField.timestampFormat());
 
         if(magicField.defaultVal() > 0){
             fieldMetaInfo.setDefaultVal(magicField.defaultVal());

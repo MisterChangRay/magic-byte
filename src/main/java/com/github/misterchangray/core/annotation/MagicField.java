@@ -74,10 +74,10 @@ public @interface MagicField {
     boolean dynamicSize() default false;
 
     /**
-     * 日期格式化方式
+     * 时间戳格式
      * 提供转为时间戳，可以将日期直接转换为时间戳
      *
      * @return
      */
-    DateFormatEnum dateFormatter() default DateFormatEnum.TO_TIMESTAMP_MILLIS;
+    DateFormatEnum timestampFormat() default DateFormatEnum.TO_TIMESTAMP_MILLIS;
 }

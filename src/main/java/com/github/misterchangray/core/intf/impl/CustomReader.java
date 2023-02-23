@@ -33,21 +33,24 @@ public class CustomReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
-        CustomConverterInfo converterInfo = TypeManager.getCustomConverter(fieldMetaInfo.getClazz());
+        CustomConverterInfo converterInfo = this.fieldMetaInfo.getCustomConverter();
         MConverter converter = converterInfo.getConverter();
-
 
         MResult pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams());
 
         if((Objects.isNull(pack) || Objects.isNull(pack.getBytes())) && !converterInfo.isFixsize()) {
-            throw new InvalidLengthException("you should return actually read bytes length when you not set fixSize property");
+            throw new InvalidLengthException("you should return actually read bytes length when you not set fixSize property, at: " + converter.getClass().getTypeName());
         }
 
         Integer length = pack.getBytes();
         if(Objects.nonNull(converter) && converterInfo.isFixsize()) {
             length = converterInfo.getFixSize();
         }
-        buffer.position(buffer.position() + length);
+        int newPosition = buffer.position() + length;
+        if(newPosition > buffer.capacity()) {
+            throw new InvalidLengthException("the data incomplete, maybe you custom read or custom write error, at: " + converter.getClass().getTypeName());
+        }
+        buffer.position(newPosition);
 
         return pack.getData();
     }
