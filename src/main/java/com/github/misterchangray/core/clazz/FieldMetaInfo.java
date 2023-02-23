@@ -8,6 +8,7 @@ import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.intf.MWriter;
 
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 
 public class FieldMetaInfo implements MField {
     private ClassMetaInfo ownerClazz;
@@ -42,7 +43,7 @@ public class FieldMetaInfo implements MField {
     /**
      * 字符集
      */
-    private String charset;
+    private Charset charset;
 
     /**
      * 当前字段是否为动态的
@@ -274,11 +275,11 @@ public class FieldMetaInfo implements MField {
         this.clazz = clazz;
     }
 
-    public String getCharset() {
+    public Charset getCharset() {
         return charset;
     }
 
-    public void setCharset(String charset) {
+    public void setCharset(Charset charset) {
         this.charset = charset;
     }
 

@@ -6,6 +6,7 @@ import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Objects;
@@ -71,7 +72,7 @@ public class MagicByte {
      * @param <T>
      * @return
      */
-    public static <T> ByteBuffer unpack(T data)  throws MagicByteException {
+    public static <T> ByteBuffer unpack(T data) throws MagicByteException {
         if (null == data) return null;
 
         return unpack(data, magicChecker);
@@ -110,7 +111,7 @@ public class MagicByte {
      * @return
      * @throws MagicByteException
      */
-    public static <T> ByteBuffer unpack(T data, MagicChecker checker)  throws MagicByteException {
+    public static <T> ByteBuffer unpack(T data, MagicChecker checker) throws MagicByteException {
         if (null == data) return null;
         DynamicByteBuffer res = unPacker.unpackObject(data, checker);
         return res.buffer();

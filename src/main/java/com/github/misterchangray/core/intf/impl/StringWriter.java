@@ -36,7 +36,7 @@ public class StringWriter extends MWriter {
         Arrays.fill(data, (byte) 0);
         if(Objects.isNull(val)) val = "";
 
-        byte[] tmp = val.toString().getBytes(Charset.forName(fieldMetaInfo.getCharset()));
+        byte[] tmp = val.toString().getBytes(fieldMetaInfo.getCharset());
         System.arraycopy(tmp, 0, data, 0, Math.min(tmp.length, byteLen));
 
         if(this.fieldMetaInfo.isDynamicSize()) {

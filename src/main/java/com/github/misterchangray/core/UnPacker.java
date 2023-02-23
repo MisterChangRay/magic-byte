@@ -4,8 +4,7 @@ import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.exception.MagicParseException;
-import com.github.misterchangray.core.util.AssertUtil;
-import com.github.misterchangray.core.util.ConverterUtil;
+import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.util.Objects;
@@ -39,7 +38,13 @@ public class UnPacker {
         }
 
         this.unpackObject(res, object, classMetaInfo);
-        res.delayCalc(checker);
+
+        try {
+            res.delayCalc(checker);
+        } catch (IllegalAccessException e) {
+            ExceptionUtil.throwIllegalAccessException(classMetaInfo.getClazz());
+        }
+
         return res;
     }
 
@@ -54,10 +59,11 @@ public class UnPacker {
             for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 decodeField(fieldMetaInfo, object,  res);
             }
+
         } catch (MagicParseException ae) {
             if(classMetaInfo.isStrict()) throw ae;
         } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(classMetaInfo.getClazz());
+            ExceptionUtil.throwIllegalAccessException(classMetaInfo.getClazz());
         }
         return res;
     }

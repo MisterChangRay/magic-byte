@@ -7,7 +7,7 @@ import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.AnnotationUtil;
-import com.github.misterchangray.core.util.AssertUtil;
+import com.github.misterchangray.core.util.ExceptionUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +15,6 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * @description:
@@ -79,9 +78,9 @@ public class ClassParser {
             try {
                 mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
             } catch (IllegalAccessException ae) {
-                AssertUtil.throwIllegalAccessException(magicConverter.converter());
+                ExceptionUtil.throwIllegalAccessException(magicConverter.converter());
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-                AssertUtil.throwInstanceErrorException(magicConverter.converter());
+                ExceptionUtil.throwInstanceErrorException(magicConverter.converter());
             }
 
             CustomConverterInfo magicConverterInfo =

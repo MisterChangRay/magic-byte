@@ -10,7 +10,11 @@ import com.github.misterchangray.core.exception.OutOfMemoryDetecteException;
  * @author: Ray.chang
  * @create: 2021-12-20 09:54
  **/
-public class AssertUtil {
+public class ExceptionUtil {
+    public static void throwIllegalCharset(FieldMetaInfo fieldMetaInfo) {
+        throw new MagicByteException("not support charset of " + fieldMetaInfo.getCharset() + "; at :" + fieldMetaInfo.getFullName());
+    }
+
     public static void throwIllegalAccessException(Class clazz) {
         throw new MagicByteException("class must be declared public; inner class is not supported; at: " + clazz.getTypeName());
     }

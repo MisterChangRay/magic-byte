@@ -3,12 +3,11 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.exception.MagicParseException;
-import com.github.misterchangray.core.util.AssertUtil;
+import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
@@ -56,20 +55,15 @@ public class Packer {
         } catch (MagicParseException ae) {
             if(classMetaInfo.isStrict()) throw ae;
         } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(classMetaInfo.getClazz());
+            ExceptionUtil.throwIllegalAccessException(classMetaInfo.getClazz());
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            AssertUtil.throwInstanceErrorException(classMetaInfo.getClazz());
+            ExceptionUtil.throwInstanceErrorException(classMetaInfo.getClazz());
         }
         return object;
     }
 
     private <T> T doCustomPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo) throws IllegalAccessException {
-        try {
-            return  (T)  classMetaInfo.getReader().readFormBuffer(data, null);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return  (T)  classMetaInfo.getReader().readFormBuffer(data, null);
     }
 
 
@@ -78,15 +72,10 @@ public class Packer {
 
 
         Object val = null;
-        try {
-            val = fieldMetaInfo.getReader().readFormBuffer(data, object);
+        val = fieldMetaInfo.getReader().readFormBuffer(data, object);
 
-            verifyLength(fieldMetaInfo, data, val);
-            verifyCheckCode(fieldMetaInfo, data, val, checker);
-
-        } catch (UnsupportedEncodingException e) {
-            throw new MagicByteException("not support charset of " + fieldMetaInfo.getCharset() + "; at :" + fieldMetaInfo.getFullName());
-        }
+        verifyLength(fieldMetaInfo, data, val);
+        verifyCheckCode(fieldMetaInfo, data, val, checker);
         fieldMetaInfo.getWriter().writeToObject(object, val);
     }
 

@@ -28,7 +28,7 @@ public class DynamicByteBuffer {
     private FieldMetaInfoWrapper checkCodeFieldWrapper;
 
     public static DynamicByteBuffer allocate(int bytes) {
-        AssertUtil.throwIFOOM(bytes, "DynamicByteBuffer allocate field!");
+        ExceptionUtil.throwIFOOM(bytes, "DynamicByteBuffer allocate field!");
 
         DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer();
         dynamicByteBuffer.isDynamic =false;
@@ -52,7 +52,7 @@ public class DynamicByteBuffer {
             return;
         }
         int newSize = (byteBuffer.capacity() * 2) + bytes;
-        AssertUtil.throwIFOOM(newSize, "DynamicByteBuffer Auto Grow field!");
+        ExceptionUtil.throwIFOOM(newSize, "DynamicByteBuffer Auto Grow field!");
 
         ByteBuffer tmp = ByteBuffer.allocate(newSize).order(this.byteBuffer.order());
         tmp.put(this.array());
@@ -321,15 +321,12 @@ public class DynamicByteBuffer {
         }
     }
 
-    public void delayCalc(MagicChecker magicChecker) {
+    public void delayCalc(MagicChecker magicChecker) throws IllegalAccessException {
         FieldMetaInfo fieldMetaInfo = null;
         if(Objects.nonNull(this.lengthFieldWrapper)) {
-            try {
-                fieldMetaInfo = this.lengthFieldWrapper.getFieldMetaInfo();
-                fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), this.position()), null, this.lengthFieldWrapper.getStartOffset());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            fieldMetaInfo = this.lengthFieldWrapper.getFieldMetaInfo();
+            fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), this.position()), null, this.lengthFieldWrapper.getStartOffset());
+
         }
         if(Objects.nonNull(this.checkCodeFieldWrapper) && Objects.nonNull(magicChecker)) {
             long val = 0;
@@ -338,13 +335,10 @@ public class DynamicByteBuffer {
             } catch (Exception ae) {
                 throw ae;
             }
-            try {
-                fieldMetaInfo = this.checkCodeFieldWrapper.getFieldMetaInfo();
-                fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val),
-                        null, this.checkCodeFieldWrapper.getStartOffset());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            fieldMetaInfo = this.checkCodeFieldWrapper.getFieldMetaInfo();
+            fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val),
+                    null, this.checkCodeFieldWrapper.getStartOffset());
+
         }
     }
 }

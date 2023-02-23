@@ -24,7 +24,7 @@ public class StringReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws  IllegalAccessException {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);

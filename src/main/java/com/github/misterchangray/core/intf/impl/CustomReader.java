@@ -32,7 +32,7 @@ public class CustomReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  {
         CustomConverterInfo converterInfo = this.fieldMetaInfo.getCustomConverter();
         MConverter converter = converterInfo.getConverter();
 

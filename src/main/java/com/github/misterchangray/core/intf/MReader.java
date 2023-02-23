@@ -15,7 +15,7 @@ public abstract class MReader {
 
     public abstract Object readFormObject(Object object) throws IllegalAccessException;
 
-    public abstract Object  readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException;
+    public abstract Object  readFormBuffer(DynamicByteBuffer buffer, Object entity) throws IllegalAccessException;
 
     public MReader(FieldMetaInfo _fieldMetaInfo) {
         this.fieldMetaInfo = _fieldMetaInfo;

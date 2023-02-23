@@ -3,7 +3,7 @@ package com.github.misterchangray.core.intf.impl;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MReader;
-import com.github.misterchangray.core.util.AssertUtil;
+import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
@@ -28,7 +28,7 @@ public class CollectionReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws UnsupportedEncodingException, IllegalAccessException {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws  IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
@@ -50,7 +50,7 @@ public class CollectionReader extends MReader {
 
         if(TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {
             long allocSize = count * fieldMetaInfo.getGenericsField().getElementBytes();
-            AssertUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());
+            ExceptionUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());
 
             Object array = Array.newInstance(fieldMetaInfo.getGenericsField().getClazz(), count);
 
@@ -65,7 +65,7 @@ public class CollectionReader extends MReader {
 
         if(TypeEnum.LIST == this.fieldMetaInfo.getType()) {
             long allocSize = count * fieldMetaInfo.getGenericsField().getElementBytes();
-            AssertUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());
+            ExceptionUtil.throwIFOOM(allocSize, fieldMetaInfo.getGenericsField().getFullName());
 
             List<Object> list = new ArrayList<>(count);
 

@@ -7,12 +7,12 @@ import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.*;
 import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.AnnotationUtil;
-import com.github.misterchangray.core.util.AssertUtil;
+import com.github.misterchangray.core.util.ExceptionUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Objects;
 
 /**
@@ -120,9 +120,14 @@ public class FieldParser {
 
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
+        fieldMetaInfo.setField(field);
+        fieldMetaInfo.setFullName(classMetaInfo.getFullName() + "." + field.getName());
+        fieldMetaInfo.setOwnerClazz(classMetaInfo);
+        fieldMetaInfo.setClazz(field.getType());
+
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
 
-        this.initField(field, fieldMetaInfo, classMetaInfo, field.getType());
+        this.initField(fieldMetaInfo, classMetaInfo, field.getType());
 
         if(TypeManager.isCollection(fieldMetaInfo.getType())) {
             fieldMetaInfo.setGenericsField(this.newGenericsField(fieldMetaInfo));
@@ -133,11 +138,7 @@ public class FieldParser {
     }
 
 
-    private void initField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo, Class<?> clazz) {
-        fieldMetaInfo.setField(field);
-        fieldMetaInfo.setFullName(classMetaInfo.getFullName() + "." + field.getName());
-        fieldMetaInfo.setOwnerClazz(classMetaInfo);
-        fieldMetaInfo.setClazz(clazz);
+    private void initField( FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo, Class<?> clazz) {
         fieldMetaInfo.setType(TypeManager.getType(clazz));
         ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassFieldMetaInfo(clazz, classMetaInfo);
         fieldMetaInfo.setClazzMetaInfo(fieldClassMetaInfo);
@@ -199,9 +200,9 @@ public class FieldParser {
         try {
             mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
         } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(magicConverter.converter());
+            ExceptionUtil.throwIllegalAccessException(magicConverter.converter());
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            AssertUtil.throwInstanceErrorException(magicConverter.converter());
+            ExceptionUtil.throwInstanceErrorException(magicConverter.converter());
         }
 
         CustomConverterInfo magicConverterInfo =
@@ -222,7 +223,7 @@ public class FieldParser {
         Class<?> clazz = TypeManager.getGenericsFieldType(origin);
         fieldMetaInfo.setClazz(clazz);
         this.copyConfiguration(origin.getField(), fieldMetaInfo, origin.getOwnerClazz());
-        this.initField(origin.getField(), fieldMetaInfo, origin.getOwnerClazz(), fieldMetaInfo.getClazz());
+        this.initField( fieldMetaInfo, origin.getOwnerClazz(), fieldMetaInfo.getClazz());
 
         if(fieldMetaInfo.getType() == TypeEnum.STRING) {
             throw new InvalidTypeException("not support String with collection, such as List<String> or String[]; at: " + fieldMetaInfo.getFullName());
@@ -237,7 +238,13 @@ public class FieldParser {
 
         fieldMetaInfo.setMagicField(magicField);
         fieldMetaInfo.setOrderId(magicField.order());
-        fieldMetaInfo.setCharset(magicField.charset());
+        Charset charset = null;
+        try {
+            charset = Charset.forName(magicField.charset());
+        } catch (UnsupportedCharsetException ae) {
+            ExceptionUtil.throwIllegalCharset(fieldMetaInfo);
+        }
+        fieldMetaInfo.setCharset(charset);
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
         fieldMetaInfo.setCalcLength(magicField.calcLength());
