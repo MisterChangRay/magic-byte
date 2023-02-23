@@ -131,7 +131,7 @@ public class Checker {
     - calcLength 标记字段为长度字段, 反序列化时将自动将长度填充到此字段; 可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
     - timestampFormat 指定日期时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可配置size进行调整;如秒其实4个字节就够了
-3. `@MagicConverter()`配置自定义序列化
+3. `@MagicConverter()`配置自定义序列化,更多说明参考 [自定义序列化最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
     - converter, 序列化类, 该类必须为`MConverter`的子类
     - attachParams, 附加参数;序列化时将会传入
     - fixSize, 固定数据长度, 可以统一指定自定义数据长度;可忽略并在实际序列化后返回
