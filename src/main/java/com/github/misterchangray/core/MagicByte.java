@@ -1,14 +1,39 @@
 package com.github.misterchangray.core;
 
+import com.github.misterchangray.core.clazz.TypeManager;
+import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
+
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.util.Objects;
 
 
 public class MagicByte {
     private static UnPacker unPacker = UnPacker.getInstance();
     private static Packer packer = Packer.getInstance();
     private static MagicChecker magicChecker;
+    private static Charset defaultCharset = Charset.forName("ASCII");
+
+    /**
+     * 全局配置默认字符集
+     */
+    public static void configDefaultCharset(Charset charset) {
+        defaultCharset = charset;
+    }
+
+
+    public static  void registerCustomConverter(Class targetClazz, Class<? extends MConverter> mConverterClazz, String attachParams, Integer fixSize) {
+        if(Objects.isNull(targetClazz) || Objects.isNull(mConverterClazz)) {
+            throw new InvalidParameterException("[targetClazz, mConverterClazz] parameter should not be null");
+        }
+
+        TypeManager.registerCustomConverter(targetClazz, mConverterClazz, attachParams, fixSize);
+    }
+
+
 
     /**
      *

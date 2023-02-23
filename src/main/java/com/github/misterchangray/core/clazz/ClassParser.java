@@ -2,7 +2,7 @@ package com.github.misterchangray.core.clazz;
 
 
 import com.github.misterchangray.core.annotation.MagicClass;
-import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.util.AnnotationUtil;
@@ -12,6 +12,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * @description:
@@ -59,7 +60,35 @@ public class ClassParser {
         classMetaInfo.setByteOrder(ByteOrder.BIG_ENDIAN);
         classMetaInfo.setFields(new ArrayList<>());
 
+        this.registerCustomConverter(classMetaInfo, clazz);
         this.copyConfiguration(classMetaInfo, clazz);
+    }
+
+    /**
+     * 将自定义的注解注册到类型管理器中
+     * @param classMetaInfo
+     * @param clazz
+     */
+    private void registerCustomConverter(ClassMetaInfo classMetaInfo, Class<?> clazz) {
+        MagicConverter magicClass = AnnotationUtil.getMagicClassConverterAnnotation(clazz);
+        if(Objects.nonNull(magicClass)) {
+            CustomConverterInfo customConverterInfo =
+                    TypeManager.registerCustomConverter(clazz, magicClass.converter(), magicClass.attachParams(), magicClass.fixSize());
+            classMetaInfo.setCustomConverter(customConverterInfo);
+
+            FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
+            fieldMetaInfo.setClazz(clazz);
+            fieldMetaInfo.setType(TypeEnum.CUSTOM);
+            classMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
+            classMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
+            if(magicClass.fixSize() > 0) {
+                fieldMetaInfo.setElementBytes(magicClass.fixSize());
+                classMetaInfo.setElementBytes(magicClass.fixSize());
+            } else {
+                classMetaInfo.setElementBytes(1);
+                classMetaInfo.setDynamic(true);
+            }
+        }
     }
 
 
@@ -123,10 +152,10 @@ public class ClassParser {
 
     private void copyConfiguration(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         MagicClass magicClass = AnnotationUtil.getMagicClassAnnotation(clazz);
-        if(Objects.isNull(magicClass)) return;
-
-        classMetaInfo.setByteOrder(magicClass.byteOrder().getBytes());
-        classMetaInfo.setStrict(magicClass.strict());
+        if(Objects.nonNull(magicClass)) {
+            classMetaInfo.setByteOrder(magicClass.byteOrder().getBytes());
+            classMetaInfo.setStrict(magicClass.strict());
+        }
     }
 
 }

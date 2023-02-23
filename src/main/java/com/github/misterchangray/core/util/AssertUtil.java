@@ -11,8 +11,12 @@ import com.github.misterchangray.core.exception.OutOfMemoryDetecteException;
  * @create: 2021-12-20 09:54
  **/
 public class AssertUtil {
-    public static void throwIllegalAccessException(ClassMetaInfo classMetaInfo) {
-        throw new MagicByteException("class must be declared public; inner class is not supported; at: " + classMetaInfo.getFullName());
+    public static void throwIllegalAccessException(Class clazz) {
+        throw new MagicByteException("class must be declared public; inner class is not supported; at: " + clazz.getTypeName());
+    }
+
+    public static void throwInstanceErrorException(Class clazz) {
+        throw new MagicByteException("no public and no arguments constructor; at: " + clazz.getTypeName());
     }
 
     public static void throwIFOOM(long allocBytes, String at) {

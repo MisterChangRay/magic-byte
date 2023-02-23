@@ -45,17 +45,25 @@ public class UnPacker {
 
     public  <T> DynamicByteBuffer unpackObject(DynamicByteBuffer res, T object, ClassMetaInfo classMetaInfo) {
         if(Objects.isNull(classMetaInfo)) return null;
-
         try {
+            if(Objects.nonNull(classMetaInfo.getCustomConverter())) {
+                doCustomUnPackObject(res, object, classMetaInfo);
+                return res;
+            }
+
             for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 decodeField(fieldMetaInfo, object,  res);
             }
         } catch (MagicParseException ae) {
             if(classMetaInfo.isStrict()) throw ae;
         } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(classMetaInfo);
+            AssertUtil.throwIllegalAccessException(classMetaInfo.getClazz());
         }
         return res;
+    }
+
+    private <T> void doCustomUnPackObject(DynamicByteBuffer res, T object, ClassMetaInfo classMetaInfo) throws IllegalAccessException {
+        classMetaInfo.getWriter().writeToBuffer(res, object, null);
     }
 
 

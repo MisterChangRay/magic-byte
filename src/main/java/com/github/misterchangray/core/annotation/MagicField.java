@@ -1,5 +1,7 @@
 package com.github.misterchangray.core.annotation;
 
+import com.github.misterchangray.core.enums.DateFormatEnum;
+
 import java.lang.annotation.*;
 
 @Documented
@@ -70,4 +72,12 @@ public @interface MagicField {
      * @return
      */
     boolean dynamicSize() default false;
+
+    /**
+     * 日期格式化方式
+     * 提供转为时间戳，可以将日期直接转换为时间戳
+     *
+     * @return
+     */
+    DateFormatEnum dateFormatter() default DateFormatEnum.TO_TIMESTAMP_MILLIS;
 }

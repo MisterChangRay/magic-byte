@@ -1,10 +1,13 @@
 package com.github.misterchangray.core.clazz;
 
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.intf.MWriter;
 import com.github.misterchangray.core.intf.impl.*;
+import com.github.misterchangray.core.util.AssertUtil;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,7 @@ import java.util.Objects;
  * @create: 2021-12-17 15:11
  **/
 public class TypeManager {
+    private static Map<Class, CustomConverterInfo> customConverterCache = new HashMap<>();
 
     /**
      * fast get class type
@@ -23,9 +27,8 @@ public class TypeManager {
     public static Map<Class<?>, TypeEnum> SUPPORTED_TYPES = new HashMap<Class<?>, TypeEnum>(20);
     static {
         for (TypeEnum value : TypeEnum.values()) {
-            SUPPORTED_TYPES.put(value.getType(), value);
-            if(Objects.nonNull(value.getRawType())) {
-                SUPPORTED_TYPES.put(value.getRawType(), value);
+            for (Class<?> type : value.getTypes()) {
+                SUPPORTED_TYPES.put(type, value);
             }
         }
     };
@@ -38,6 +41,11 @@ public class TypeManager {
      */
     public static TypeEnum getType(Class<?> clazz) {
         TypeEnum res = null;
+        if(customConverterCache.containsKey(clazz)) {
+            res = TypeEnum.CUSTOM;
+            return res;
+        }
+
         res = SUPPORTED_TYPES.get(clazz);
         if(Objects.nonNull(res)) {
             return res;
@@ -92,6 +100,12 @@ public class TypeManager {
             case LIST:
                 res = new CollectionReader(fieldMetaInfo);
                 break;
+            case CUSTOM:
+                res = new CustomReader(fieldMetaInfo);
+                break;
+            case DATETIME:
+                res = new DateTimeReader(fieldMetaInfo);
+                break;
             case OBJECT:
                 res = new ObjectReader(fieldMetaInfo);
                 break;
@@ -138,6 +152,12 @@ public class TypeManager {
             case LIST:
                 res = new CollectionWriter(fieldMetaInfo);
                 break;
+            case DATETIME:
+                res = new DateTimeWriter(fieldMetaInfo);
+                break;
+            case CUSTOM:
+                res = new CustomWriter(fieldMetaInfo);
+                break;
             case OBJECT:
                 res = new ObjectWriter(fieldMetaInfo);
                 break;
@@ -151,5 +171,30 @@ public class TypeManager {
 
     public static boolean isVariable(TypeEnum type) {
         return TypeEnum.STRING == type || TypeEnum.LIST == type || TypeEnum.ARRAY == type;
+    }
+
+    public static CustomConverterInfo registerCustomConverter(Class targetClazz, Class<? extends MConverter> mConverterClazz, String attachParams, Integer fixSize) {
+        MConverter mConverter = null;
+        try {
+            mConverter = mConverterClazz.getDeclaredConstructor().newInstance();
+        } catch (IllegalAccessException ae) {
+            AssertUtil.throwIllegalAccessException(mConverterClazz);
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            AssertUtil.throwInstanceErrorException(mConverterClazz);
+        }
+
+        CustomConverterInfo magicConverterInfo =
+                new CustomConverterInfo(attachParams, mConverter, fixSize);
+
+        customConverterCache.put(targetClazz, magicConverterInfo);
+        return magicConverterInfo;
+    }
+
+    public static CustomConverterInfo getCustomConverter(Class clz) {
+        return customConverterCache.get(clz);
+    }
+
+    public static boolean hasCustomConverter(Class<?> clazz) {
+        return customConverterCache.containsKey(clazz);
     }
 }

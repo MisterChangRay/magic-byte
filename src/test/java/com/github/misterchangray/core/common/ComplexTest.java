@@ -221,11 +221,10 @@ public class ComplexTest {
         byte[] bytes = MagicByte.unpackToByte(unknownType);
         UnknownType pack = MagicByte.pack(bytes, UnknownType.class);
 
-        Assert.assertNull(pack.getBrithday());
+        Assert.assertNotNull(pack.getBrithday());
         Assert.assertNull(pack.getAttr());
-        Assert.assertNull(pack.getBrithday());
         Assert.assertNull(pack.getClazz());
-        Assert.assertNull(pack.getRemark());
+        Assert.assertNotNull(pack.getRemark());
         Assert.assertNull(pack.getOpt());
 
         Assert.assertEquals(unknownType.getId(), pack.getId());

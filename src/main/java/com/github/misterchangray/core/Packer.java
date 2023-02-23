@@ -3,6 +3,7 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.MagicByteException;
@@ -41,20 +42,34 @@ public class Packer {
     public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker) throws MagicByteException {
         data.order(classMetaInfo.getByteOrder());
         T object = null;
-        try {
-            object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
 
+        try {
+            if(Objects.nonNull(classMetaInfo.getCustomConverter())) {
+                 object = doCustomPackObject(data, classMetaInfo);
+                return object;
+            }
+
+            object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 encodeField(object, fieldMetaInfo, data, checker);
             }
         } catch (MagicParseException ae) {
             if(classMetaInfo.isStrict()) throw ae;
         } catch (IllegalAccessException ae) {
-            AssertUtil.throwIllegalAccessException(classMetaInfo);
+            AssertUtil.throwIllegalAccessException(classMetaInfo.getClazz());
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            throw new MagicByteException("no public and no arguments constructor; at: " + classMetaInfo.getFullName());
+            AssertUtil.throwInstanceErrorException(classMetaInfo.getClazz());
         }
         return object;
+    }
+
+    private <T> T doCustomPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo) throws IllegalAccessException {
+        try {
+            return  (T)  classMetaInfo.getReader().readFormBuffer(data, null);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

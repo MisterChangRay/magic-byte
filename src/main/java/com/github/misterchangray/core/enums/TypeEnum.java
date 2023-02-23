@@ -1,6 +1,10 @@
 package com.github.misterchangray.core.enums;
 
 import java.lang.reflect.Array;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public enum TypeEnum {
@@ -14,28 +18,32 @@ public enum TypeEnum {
     FLOAT(4, Float.class, float.class),
     DOUBLE(8, Double.class, double.class),
 
-    STRING(1, String.class, null),
+    STRING(1, String.class),
 
-    ARRAY(-1, Array.class, null),
-    LIST(-1, List.class, null),
-    OBJECT(-1, Object.class, null),
+    DATETIME(6, Date.class, Instant.class, LocalTime.class, LocalDate.class, LocalDateTime.class),
+
+    ARRAY(-1, Array.class),
+    LIST(-1, List.class),
+    OBJECT(-1, Object.class),
+
+    CUSTOM(-1, TypeEnum.class)
     ;
 
     private int bytes;
-    private Class<?> type;
-    private Class<?> rawType;
+    private List<Class<?>> types;
 
 
     /**
      *
      * @param bytes
-     * @param type  class of type
-     * @param rawType  class of raw type, such as , int is raw type of Integer
+     * @param types  class of types
      */
-    TypeEnum(int bytes, Class<?> type, Class<?> rawType) {
+    TypeEnum(int bytes, Class<?> ...types) {
         this.bytes = bytes;
-        this.type = type;
-        this.rawType = rawType;
+        this.types = new ArrayList<>();
+        for (Class<?> type : types) {
+            this.types.add(type);
+        }
     }
 
     public int getBytes() {
@@ -43,11 +51,8 @@ public enum TypeEnum {
     }
 
 
-    public Class<?> getType() {
-        return type;
+    public List<Class<?>> getTypes() {
+        return types;
     }
 
-    public Class<?> getRawType() {
-        return rawType;
-    }
 }

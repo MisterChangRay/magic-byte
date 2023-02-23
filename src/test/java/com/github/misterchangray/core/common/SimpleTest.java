@@ -2,13 +2,18 @@ package com.github.misterchangray.core.common;
 
 
 import com.github.misterchangray.core.MagicByte;
-import com.github.misterchangray.core.common.entity.custom.*;
 import com.github.misterchangray.core.common.entity.custom.AllDataTypes;
+import com.github.misterchangray.core.common.entity.custom.*;
 import com.github.misterchangray.core.common.simple.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,7 +25,46 @@ import java.util.List;
 public class SimpleTest {
 
 
+    @Test
+    public void testDateObjNull() {
+        DateObject dateObject = new DateObject();
+        dateObject.setA(new Date());
+        dateObject.setB(Instant.now());
+        byte[] tmp = MagicByte.unpackToByte(dateObject);
+        DateObject pack = MagicByte.pack(tmp, DateObject.class);
+        Assert.assertEquals(dateObject.getA().getTime(), pack.getA().getTime());
+        Assert.assertEquals(dateObject.getB().toEpochMilli(), pack.getB().toEpochMilli());
+    }
 
+    @Test
+    public void testDateObj() {
+        DateObject dateObject = new DateObject();
+        dateObject.setA(new Date());
+        dateObject.setB(Instant.now());
+        dateObject.setC(LocalTime.of(12, 23));
+        dateObject.setD(LocalDate.of(2022, 12, 2));
+        dateObject.setE(LocalDateTime.of(2022,12,3, 13, 15));
+
+        byte[] tmp = MagicByte.unpackToByte(dateObject);
+        DateObject pack = MagicByte.pack(tmp, DateObject.class);
+
+
+        Assert.assertEquals(dateObject.getA().getTime(), pack.getA().getTime());
+        Assert.assertEquals(dateObject.getB().toEpochMilli(), pack.getB().toEpochMilli());
+
+        Assert.assertEquals(dateObject.getC().toSecondOfDay(), pack.getC().toSecondOfDay());
+
+        Assert.assertEquals(dateObject.getD().getYear(), pack.getD().getYear());
+        Assert.assertEquals(dateObject.getD().getMonth(), pack.getD().getMonth());
+        Assert.assertEquals(dateObject.getD().getDayOfMonth(), pack.getD().getDayOfMonth());
+
+        Assert.assertEquals(dateObject.getE().getYear(), pack.getE().getYear());
+        Assert.assertEquals(dateObject.getE().getMonth(), pack.getE().getMonth());
+        Assert.assertEquals(dateObject.getE().getDayOfMonth(), pack.getE().getDayOfMonth());
+        Assert.assertEquals(dateObject.getE().getHour(), pack.getE().getHour());
+        Assert.assertEquals(dateObject.getE().getMinute(), pack.getE().getMinute());
+        Assert.assertEquals(dateObject.getE().getSecond(), pack.getE().getSecond());
+    }
 
 
     @Test

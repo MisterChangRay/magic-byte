@@ -1,7 +1,10 @@
 package com.github.misterchangray.core.clazz;
 
 
+import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.intf.MClass;
+import com.github.misterchangray.core.intf.MReader;
+import com.github.misterchangray.core.intf.MWriter;
 
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -12,6 +15,10 @@ public class ClassMetaInfo implements MClass {
     private Class<?> clazz;
     private List<FieldMetaInfo> fields;
     private ByteOrder byteOrder;
+
+    private MWriter writer;
+    private MReader reader;
+
 
     /**
      * 类嵌套
@@ -55,6 +62,37 @@ public class ClassMetaInfo implements MClass {
      * 是否使用严格模式
      */
     private boolean strict;
+
+    private CustomConverterInfo customConverter ;
+
+
+    public MWriter getWriter() {
+        return writer;
+    }
+
+    public void setWriter(MWriter writer) {
+        this.writer = writer;
+    }
+
+    public MReader getReader() {
+        return reader;
+    }
+
+    public void setReader(MReader reader) {
+        this.reader = reader;
+    }
+
+    public CustomConverterInfo getCustomConverter() {
+        return customConverter;
+    }
+
+    public void setCustomConverter(CustomConverterInfo customConverter) {
+        this.customConverter = customConverter;
+    }
+
+    public void setRoot(ClassMetaInfo root) {
+        this.root = root;
+    }
 
     /**
      * 获取根节点

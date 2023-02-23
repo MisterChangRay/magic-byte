@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.clazz;
 
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.enums.DateFormatEnum;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MField;
 import com.github.misterchangray.core.intf.MReader;
@@ -110,6 +111,45 @@ public class FieldMetaInfo implements MField {
      */
     private int suffixBytes;
 
+    /**
+     * 字段是否提供自定义序列化方法
+     *
+     *
+     */
+    private CustomConverterInfo customConverter ;
+
+    /**
+     * 日期格式化方式
+     * 如果字段属性为日期类型时，可通过此字段控制序列化方式
+     * 默认格式化到秒
+     */
+    private DateFormatEnum dateFormatEnum;
+
+    private boolean hasCustomConverter;
+
+    public boolean isHasCustomConverter() {
+        return hasCustomConverter;
+    }
+
+    public void setHasCustomConverter(boolean hasCustomConverter) {
+        this.hasCustomConverter = hasCustomConverter;
+    }
+
+    public DateFormatEnum getDateFormatEnum() {
+        return dateFormatEnum;
+    }
+
+    public void setDateFormatEnum(DateFormatEnum dateFormatEnum) {
+        this.dateFormatEnum = dateFormatEnum;
+    }
+
+    public CustomConverterInfo getCustomConverter() {
+        return customConverter;
+    }
+
+    public void setCustomConverter(CustomConverterInfo customConverter) {
+        this.customConverter = customConverter;
+    }
 
     public int getSuffixBytes() {
         return suffixBytes;

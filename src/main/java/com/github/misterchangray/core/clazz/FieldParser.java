@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.clazz;
 
 
+import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.*;
@@ -41,7 +42,8 @@ public class FieldParser {
 
     private boolean beforeVerify(Field field) {
         MagicField magicField = AnnotationUtil.getMagicFieldAnnotation(field);
-        return Objects.nonNull(magicField);
+        MagicConverter converter = AnnotationUtil.getMagicFieldConverterAnnotation(field);
+        return Objects.nonNull(magicField) || Objects.nonNull(converter);
     }
 
 
@@ -62,7 +64,7 @@ public class FieldParser {
         }
 
         // list string array 必须配置 size or dynamicSize
-        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
+        if(!field.isHasCustomConverter() && TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
             throw new InvalidParameterException("not yet configuration size or dynamicSize of the field,;at: " + field.getFullName());
         }
 
@@ -114,6 +116,7 @@ public class FieldParser {
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
+        this.registerCustomConverter(field, fieldMetaInfo);
 
         this.initField(field, fieldMetaInfo, classMetaInfo, field.getType());
 
@@ -123,6 +126,7 @@ public class FieldParser {
         }
 
     }
+
 
     private void initField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo, Class<?> clazz) {
         fieldMetaInfo.setField(field);
@@ -153,6 +157,31 @@ public class FieldParser {
             fieldMetaInfo.setSize(0);
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
+        }
+
+        if(Objects.nonNull(fieldMetaInfo.getCustomConverter()) &&
+                !fieldMetaInfo.getCustomConverter().isFixsize()) {
+            fieldMetaInfo.setElementBytes(1);
+            fieldMetaInfo.setDynamic(true);
+            classMetaInfo.setDynamic(true);
+        }
+
+    }
+
+
+    /**
+     * 将自定义的注解注册到类型管理器中
+     * @param field
+     * @param fieldMetaInfo
+     */
+    private void registerCustomConverter(Field field, FieldMetaInfo fieldMetaInfo) {
+        MagicConverter magicClass = AnnotationUtil.getMagicFieldConverterAnnotation(field);
+        if(Objects.nonNull(magicClass)) {
+            CustomConverterInfo customConverterInfo =
+                    TypeManager.registerCustomConverter(field.getType(), magicClass.converter(), magicClass.attachParams(), magicClass.fixSize());
+            fieldMetaInfo.setHasCustomConverter(true);
+
+            fieldMetaInfo.setCustomConverter(customConverterInfo);
         }
     }
 
@@ -203,6 +232,7 @@ public class FieldParser {
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
         fieldMetaInfo.setCalcLength(magicField.calcLength());
+        fieldMetaInfo.setDateFormatEnum(magicField.dateFormatter());
 
         if(magicField.defaultVal() > 0){
             fieldMetaInfo.setDefaultVal(magicField.defaultVal());

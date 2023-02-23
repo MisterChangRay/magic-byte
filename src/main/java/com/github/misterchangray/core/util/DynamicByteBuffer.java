@@ -249,6 +249,10 @@ public class DynamicByteBuffer {
         return re;
     }
 
+    public byte[] bytes() {
+      return this.byteBuffer.array();
+    }
+
 
     public ByteBuffer buffer() {
         if(!this.isDynamic &&

@@ -15,8 +15,9 @@ public abstract class MWriter {
         this.fieldMetaInfo = _fieldMetaInfo;
     }
 
-    public abstract void writeToObject(Object target, Object val) throws IllegalAccessException;
-
+    public void writeToObject(Object target, Object val) throws IllegalAccessException {
+        this.fieldMetaInfo.getField().set(target, val);
+    }
     public abstract void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException;
 
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {};
