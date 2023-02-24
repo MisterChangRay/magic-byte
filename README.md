@@ -5,15 +5,29 @@
 [![GitHub](https://img.shields.io/github/license/misterchangray/magic-byte.svg)](./LICENSE)
 
 #### 1. 简介
-在当代物联网行业中, 因为隐私和安全问题, 更多的公司选择使用自定义的二进制协议；
-而JAVA同学在对这些协议进行解析时，会陷入序列化/反序列化的痛苦循环中；所以诞生了此项目，此项目主要解决下图中的转换问题：  
-本工具解决在自定义二进制协议中二进制和javaBean相互转换的问题;
-本项目解决了自定义二进制协议的以下痛点：
-1. 二进制协议解析, 现在一个注解即可搞定
-2. 效验计算, 
-3. 位运算难
-4. JAVA对象转换
-5. 无符号运算操作
+在当代物联网行业中，由于隐私和安全问题，很多的公司选择使用自定义的私有二进制协议。
+在C语言中，由于有结构体的加持，对象和字节数组转换起来就特别简单；但在java中，在没有原生支持的情况下，开发人员就只能够靠码力去读取并解析数据然后转译成为对象
+，流程如下图：
+ ![](https://github.com/MisterChangRay/magic-byte/blob/master/introduce.png?raw=true)
+
+在这看似简单的转译过程中其实会伴随很多人头疼的问题，例如：
+- 大小端/网络字节序的处理
+- 无符号数/有符号数的处理
+- 多字节整数转换处理
+- ASCII码与字节之间的转换处理
+- 空指针/填充数据的处理
+- 数组对象/嵌套对象的处理
+
+所以此项目项目来了，此项目将尽可能的解决上述问题，在`MagicByte`中，你可以在类的定义时便通过注解申明好这复杂的序列化流程。
+并且序列化也只需要简单的调用两个方法，用于对象转字节的`MagicByte.unpack();`和用于字节转对象的`MagicByte.pack()`。
+是不是很简单？马上试试吧！
+
+
+#### 2. 快速入门:
+1. 引入Jar包;
+2. `@MagicClass`对当前类进行全局配置
+2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套，注意：不支持继承
+3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 
 maven项目可直接导入:
 [查询最新版本](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
@@ -24,12 +38,6 @@ maven项目可直接导入:
   <version>2.1.0</version>
 </dependency>
 ```
-
-#### 2. 快速入门:
-1. 引入Jar包;
-2. `@MagicClass`对当前类进行全局配置
-2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套
-3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 
 #### 3. 代码示例
 下面的对象中, 共有 Student 和 School 两个对象
@@ -83,6 +91,9 @@ public class Student {
     // 1 byte
     @MagicField(order = 15)
     private byte age;
+    // 生日, 这里时间戳格式化为秒, 使用无符号整形, 使用4个字节, 默认6个字节
+    @MagicField(order = 18, size = 4, timestampFormat = TimestampFormatter.TO_TIMESTAMP_SECONDS)
+    private Date birthDay;
     // getter and setter ...
 }
 
