@@ -3,7 +3,6 @@ package com.github.misterchangray.core.util;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -111,6 +110,44 @@ public class ConverterUtil {
         return new String(hexChars);
     }
 
+
+    public static String prettyPrintByteArray(long number) {
+        return prettyPrintByteArray(number, null, ",");
+    }
+    /**
+     * 美化打印字节数组, 将字节数组打印为16进制字符串
+     * @param number
+     * @param radix 进制
+     * @param splitChar 分割字符
+     * @return
+     */
+    public static String prettyPrintByteArray(long number, Integer radix, String splitChar) {
+        if(Objects.isNull(radix)) {
+            radix = 16;
+        }
+        if(Objects.isNull(splitChar)) {
+            splitChar = "";
+        }
+        String s1 = BigInteger.valueOf(number).toString(radix);
+        byte[] bytes = s1.getBytes();
+
+        StringBuilder res = new StringBuilder();
+
+        for (int i = 0; i < bytes.length; ) {
+            if(bytes.length % 2 != 0 && res.length() == 0) {
+                res.append("0");
+                res.append((char)bytes[i]);
+                res.append(splitChar);
+                i += 1;
+            } else {
+                res.append((char)bytes[i]);
+                res.append((char)bytes[i + 1]);
+                res.append(splitChar);
+                i += 2;
+            }
+        }
+        return "".equals(splitChar) ? res.toString() : res.substring(0, res.length() - 1);
+    }
 
     /**
      * 对象转为具体的值

@@ -9,6 +9,26 @@ public class UtilTest {
 
 
     @Test
+    public void testPrettyPrintByteArray3() {
+        String s = ConverterUtil.prettyPrintByteArray(123123);
+        Assert.assertEquals(s, "01,e0,f3");
+    }
+
+
+    @Test
+    public void testPrettyPrintByteArray2() {
+        String s = ConverterUtil.prettyPrintByteArray(123123, 16, " ");
+        Assert.assertEquals(s, "01 e0 f3");
+    }
+
+    @Test
+    public void testPrettyPrintByteArray() {
+        String s = ConverterUtil.prettyPrintByteArray(123123, 16, null);
+        Assert.assertEquals(s, "01e0f3");
+    }
+
+
+    @Test
     public void testByteToHexString() {
         byte[] a = new byte[] {0x1, 0x2, 0x3};
         Assert.assertEquals("010203", ConverterUtil.byteToHexString(a));
