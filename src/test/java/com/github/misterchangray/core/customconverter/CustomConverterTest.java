@@ -6,7 +6,10 @@ import com.github.misterchangray.core.customconverter.entity.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -20,6 +23,27 @@ import java.util.Date;
  * 5. list 自定义序列化测试
  */
 public class CustomConverterTest {
+   static SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
+
+    @Test
+    public void testStaff6() throws ParseException {
+        String date = "19920903132216";
+        Staff6 staff6 = new Staff6();
+        staff6.setId(13);
+        staff6.setName("ray");
+        Date parse = timestampFormatter.parse(date);
+        staff6.setBirthday(parse);
+        byte[] bytes = MagicByte.unpackToByte(staff6);
+        String s = new String(Arrays.copyOfRange(bytes, 8, 8 + 14));
+        Assert.assertEquals(s, date);
+        Staff6 pack = MagicByte.pack(bytes, Staff6.class);
+
+
+        Assert.assertEquals(staff6.getId(), pack.getId());
+        Assert.assertEquals(bytes.length, pack.getLength());
+        Assert.assertEquals(staff6.getName(), pack.getName());
+        Assert.assertEquals(staff6.getBirthday().getTime() / 1000, pack.getBirthday().getTime() / 1000);
+    }
 
     /**
      * 序列化时： data数据中包含所有已序列化的数据(包括 calcLength 也已经调用并序列化)
