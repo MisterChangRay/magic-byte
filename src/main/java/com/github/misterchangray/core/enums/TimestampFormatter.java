@@ -1,8 +1,6 @@
 package com.github.misterchangray.core.enums;
 
-import java.util.Date;
-
-public enum DateFormatEnum {
+public enum TimestampFormatter {
     TO_TIMESTAMP_MILLIS(),
     TO_TIMESTAMP_MINUTES(),
     TO_TIMESTAMP_SECONDS(),
@@ -15,7 +13,7 @@ public enum DateFormatEnum {
 
     /**
      */
-    DateFormatEnum() {
+    TimestampFormatter() {
     }
 
 }

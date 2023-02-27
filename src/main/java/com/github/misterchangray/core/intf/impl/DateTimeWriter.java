@@ -1,13 +1,12 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.enums.DateFormatEnum;
+import com.github.misterchangray.core.enums.TimestampFormatter;
 import com.github.misterchangray.core.intf.MWriter;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DateUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.nio.charset.Charset;
 import java.time.*;
 import java.util.Arrays;
 import java.util.Date;
@@ -53,7 +52,7 @@ public class DateTimeWriter extends MWriter {
                 } else if (clazz.isAssignableFrom(LocalDateTime.class)) {
                     timestamp = ((LocalDateTime) val).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 }
-                timestamp = DateUtil.timestampConvert(timestamp, DateFormatEnum.TO_TIMESTAMP_MILLIS, fieldMetaInfo.getDateFormatEnum());
+                timestamp = DateUtil.timestampConvert(timestamp, TimestampFormatter.TO_TIMESTAMP_MILLIS, fieldMetaInfo.getTimestampFormatter());
             }
             data = ConverterUtil.numberToByte(timestamp, byteLen);
         }

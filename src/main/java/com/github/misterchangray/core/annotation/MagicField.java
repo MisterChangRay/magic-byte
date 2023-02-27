@@ -1,6 +1,6 @@
 package com.github.misterchangray.core.annotation;
 
-import com.github.misterchangray.core.enums.DateFormatEnum;
+import com.github.misterchangray.core.enums.TimestampFormatter;
 
 import java.lang.annotation.*;
 
@@ -79,5 +79,5 @@ public @interface MagicField {
      *
      * @return
      */
-    DateFormatEnum timestampFormat() default DateFormatEnum.TO_TIMESTAMP_MILLIS;
+    TimestampFormatter timestampFormat() default TimestampFormatter.TO_TIMESTAMP_MILLIS;
 }

@@ -21,6 +21,87 @@ import java.util.Date;
  */
 public class CustomConverterTest {
 
+    /**
+     * 序列化时： data数据中包含所有已序列化的数据(包括 calcLength 也已经调用并序列化)
+     * 反序列化时: data数据为传入数据的副本
+     * @param data
+     * @return
+     */
+    public static long checker(byte[] data) {
+        byte res = 0;
+        for (int i = 0; i < data.length - 2; i++) {
+            res = (byte) (res ^ data[i]);
+        }
+        return res;
+    }
+
+    /**
+     * 测试自定义序列化对自动填充字段长度/自动计算校验和
+     */
+    @Test
+    public void testStaff5() {
+        Staff5 staff5 = new Staff5();
+        staff5.setId(33);
+        staff5.setName("Jack");
+        ArrayList arrayList = new ArrayList();
+
+        Book3 book = new Book3();
+        book.setCode(24);
+        book.setId(23);
+        arrayList.add(book);
+        Book3 book2 = new Book3();
+        book2.setCode(25);
+        book2.setId(24);
+        arrayList.add(book2);
+        staff5.setBook(arrayList);
+
+        ArrayList arrayList2 = new ArrayList();
+
+        Book3 book3 = new Book3();
+        book3.setCode(26);
+        book3.setId(25);
+        arrayList2.add(book3);
+        staff5.setBook2(arrayList2);
+
+        byte[] bytes = MagicByte.unpackToByte(staff5, CustomConverterTest::checker);
+        Assert.assertEquals(bytes[44], 73);
+        bytes[43] = 01;
+        Staff5 pack = MagicByte.pack(bytes, Staff5.class, CustomConverterTest::checker);
+    }
+
+
+    /**
+     * 测试自定义序列化对自动填充字段长度有无影响
+     */
+    @Test
+    public void testStaff4() {
+        Staff4 staff4 = new Staff4();
+        staff4.setId(33);
+        staff4.setName("Jack");
+        ArrayList arrayList = new ArrayList();
+
+        Book3 book = new Book3();
+        book.setCode(24);
+        book.setId(23);
+        arrayList.add(book);
+        Book3 book2 = new Book3();
+        book2.setCode(25);
+        book2.setId(24);
+        arrayList.add(book2);
+        staff4.setBook(arrayList);
+
+        ArrayList arrayList2 = new ArrayList();
+
+        Book3 book3 = new Book3();
+        book3.setCode(26);
+        book3.setId(25);
+        arrayList2.add(book3);
+        staff4.setBook2(arrayList2);
+
+        byte[] bytes = MagicByte.unpackToByte(staff4);
+        Assert.assertEquals(bytes[7], 44);
+    }
+
 
     @Test
     public void testStaff3() {

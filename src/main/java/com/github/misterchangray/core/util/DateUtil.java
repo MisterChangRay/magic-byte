@@ -1,7 +1,7 @@
 package com.github.misterchangray.core.util;
 
 
-import com.github.misterchangray.core.enums.DateFormatEnum;
+import com.github.misterchangray.core.enums.TimestampFormatter;
 
 public class DateUtil {
 
@@ -14,76 +14,76 @@ public class DateUtil {
      * @return
      */
 
-    public static long timestampConvert(long timestamp, DateFormatEnum origin, DateFormatEnum to ) {
+    public static long timestampConvert(long timestamp, TimestampFormatter origin, TimestampFormatter to ) {
         switch (origin) {
             case TO_TIMESTAMP_MINUTES:
-                if(to == DateFormatEnum.TO_TIMESTAMP_HOURS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_HOURS) {
                     return timestamp / 60;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_DAYS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_DAYS) {
                     return timestamp / (24 * 60);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_SECONDS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_SECONDS) {
                     return timestamp * 60;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MILLIS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MILLIS) {
                     return timestamp * 60 * 1000;
                 }
                 break;
             case TO_TIMESTAMP_DAYS:
-                if(to == DateFormatEnum.TO_TIMESTAMP_HOURS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_HOURS) {
                     return timestamp * 24;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MINUTES) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MINUTES) {
                     return timestamp * 24 * 60;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_SECONDS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_SECONDS) {
                     return timestamp * 24 * 60 * 60;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MILLIS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MILLIS) {
                     return timestamp * 24 * 60 * 60 * 1000;
                 }
                 break;
             case TO_TIMESTAMP_HOURS:
-                if(to == DateFormatEnum.TO_TIMESTAMP_DAYS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_DAYS) {
                     return timestamp / 24;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MINUTES) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MINUTES) {
                     return timestamp * 60;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_SECONDS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_SECONDS) {
                     return timestamp * 60 * 60;
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MILLIS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MILLIS) {
                     return timestamp  * 60 * 60 * 1000;
                 }
                 break;
             case TO_TIMESTAMP_MILLIS:
-                if(to == DateFormatEnum.TO_TIMESTAMP_MINUTES) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MINUTES) {
                     return timestamp / (60 * 1000);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_HOURS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_HOURS) {
                     return timestamp / ( 60 * 60 * 1000);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_DAYS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_DAYS) {
                     return timestamp / (24 * 60 * 60 * 1000);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_SECONDS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_SECONDS) {
                     return timestamp / 1000;
                 }
 
                 break;
             case TO_TIMESTAMP_SECONDS:
-                if(to == DateFormatEnum.TO_TIMESTAMP_DAYS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_DAYS) {
                     return timestamp / (24 * 60 * 60);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_HOURS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_HOURS) {
                     return timestamp / (60 * 60);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MINUTES) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MINUTES) {
                     return timestamp / ( 60);
                 }
-                if(to == DateFormatEnum.TO_TIMESTAMP_MILLIS) {
+                if(to == TimestampFormatter.TO_TIMESTAMP_MILLIS) {
                     return timestamp * 1000;
                 }
                 break;

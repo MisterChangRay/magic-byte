@@ -248,7 +248,7 @@ public class FieldParser {
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
         fieldMetaInfo.setCalcLength(magicField.calcLength());
-        fieldMetaInfo.setDateFormatEnum(magicField.timestampFormat());
+        fieldMetaInfo.setTimestampFormatter(magicField.timestampFormat());
 
         if(magicField.defaultVal() > 0){
             fieldMetaInfo.setDefaultVal(magicField.defaultVal());

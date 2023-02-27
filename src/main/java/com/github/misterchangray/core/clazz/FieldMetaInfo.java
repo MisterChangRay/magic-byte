@@ -1,7 +1,7 @@
 package com.github.misterchangray.core.clazz;
 
 import com.github.misterchangray.core.annotation.MagicField;
-import com.github.misterchangray.core.enums.DateFormatEnum;
+import com.github.misterchangray.core.enums.TimestampFormatter;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.intf.MField;
 import com.github.misterchangray.core.intf.MReader;
@@ -124,15 +124,15 @@ public class FieldMetaInfo implements MField {
      * 如果字段属性为日期类型时，可通过此字段控制序列化方式
      * 默认格式化到秒
      */
-    private DateFormatEnum dateFormatEnum;
+    private TimestampFormatter timestampFormatter;
 
 
-    public DateFormatEnum getDateFormatEnum() {
-        return dateFormatEnum;
+    public TimestampFormatter getTimestampFormatter() {
+        return timestampFormatter;
     }
 
-    public void setDateFormatEnum(DateFormatEnum dateFormatEnum) {
-        this.dateFormatEnum = dateFormatEnum;
+    public void setTimestampFormatter(TimestampFormatter timestampFormatter) {
+        this.timestampFormatter = timestampFormatter;
     }
 
     public CustomConverterInfo getCustomConverter() {

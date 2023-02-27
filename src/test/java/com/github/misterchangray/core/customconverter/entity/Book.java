@@ -2,6 +2,7 @@ package com.github.misterchangray.core.customconverter.entity;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.enums.TimestampFormatter;
 
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 public class Book {
     @MagicField(order = 1)
     private int id;
-    @MagicField(order = 2)
+    @MagicField(order = 2, timestampFormat = TimestampFormatter.TO_TIMESTAMP_SECONDS)
     private Date createDate;
 
     public int getId() {

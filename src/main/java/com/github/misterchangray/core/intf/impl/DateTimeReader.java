@@ -1,15 +1,13 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.enums.DateFormatEnum;
+import com.github.misterchangray.core.enums.TimestampFormatter;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DateUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.io.UnsupportedEncodingException;
 import java.time.*;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -44,7 +42,7 @@ public class DateTimeReader extends MReader {
             return LocalTime.ofSecondOfDay(timestamp);
         }
 
-        timestamp = DateUtil.timestampConvert(timestamp, fieldMetaInfo.getDateFormatEnum(), DateFormatEnum.TO_TIMESTAMP_MILLIS);
+        timestamp = DateUtil.timestampConvert(timestamp, fieldMetaInfo.getTimestampFormatter(), TimestampFormatter.TO_TIMESTAMP_MILLIS);
         Date date = new Date(timestamp);
         if(clazz.isAssignableFrom(Date.class)) {
             return date;
