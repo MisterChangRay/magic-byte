@@ -193,6 +193,8 @@ public class FieldParser {
             fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
             if(magicConverter.fixSize() == -1) {
                 fieldMetaInfo.getOwnerClazz().setDynamic(true);
+            } else {
+                fieldMetaInfo.setElementBytes(magicConverter.fixSize());
             }
         }
 
