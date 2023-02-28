@@ -4,6 +4,8 @@
 [![GitHub closed issues](https://img.shields.io/github/issues-closed/misterchangray/magic-byte.svg)](https://github.com/misterchangray/magic-byte/issues?q=is%3Aissue+is%3Aclosed) 
 [![GitHub](https://img.shields.io/github/license/misterchangray/magic-byte.svg)](./LICENSE)
 
+[中文](https://github.com/MisterChangRay/magic-byte/blob/master/README.md)|[English](https://github.com/MisterChangRay/magic-byte/blob/master/README.en.md)
+
 #### 1. 简介
 在当代物联网行业中，由于隐私和安全问题，很多的公司选择使用自定义的私有二进制协议。
 在C语言中，由于有结构体的加持，对象和字节数组转换起来就特别简单；但在java中，在没有原生支持的情况下，开发人员就只能够靠码力去读取并解析数据然后转译成为对象
@@ -27,10 +29,11 @@
 1. 引入Jar包;
 2. `@MagicClass`对当前类进行全局配置
 2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套，注意：不支持继承
-3. 使用`MagicByte.pack()`或则`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
+3. 正常情况下使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
+4. 支持使用`@MagicConverter()`注解来实现自定义序列化;[点击查看自定义序列化枚举类](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
 
-maven项目可直接导入:
-[查询最新版本](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
+Maven项目可直接导入:
+[点击查看版本列表](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
 ```
 <dependency>
   <groupId>io.github.misterchangray</groupId>
@@ -62,8 +65,8 @@ public class School {
     // 0 byte, 注意, 此处无法序列化, 不支持的数据类型将会被忽略
     @MagicField(order = 9)
     private Object age;
-    // 0 byte, 注意, 此处无法序列化, 不支持的数据类型将会被忽略
-    @MagicField(order = 13)
+    // 4 byte, 注意, 此处指定为秒级时间戳, 指定使用4个字节保存， 未指定则默认6个字节
+    @MagicField(order = 13, size = 4, timestampFormat = TimestampFormatter.TO_TIMESTAMP_SECONDS)
     private Date[] birthdays;
     // 1 byte, 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
     @MagicField(order = 15)
@@ -91,7 +94,7 @@ public class Student {
     // 1 byte
     @MagicField(order = 15)
     private byte age;
-    // 生日, 这里时间戳格式化为秒, 使用无符号整形, 使用4个字节, 默认6个字节
+    // 生日, 这里为秒级时间戳, 使用无符号整形, 指定使用4个字节, 未指定则默认6个字节
     @MagicField(order = 18, size = 4, timestampFormat = TimestampFormatter.TO_TIMESTAMP_SECONDS)
     private Date birthDay;
     // getter and setter ...
@@ -142,11 +145,11 @@ public class Checker {
 	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
     - calcLength 标记字段为长度字段, 反序列化时将自动将长度填充到此字段; 可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
-    - timestampFormat 指定日期时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可配置size进行调整;如秒其实4个字节就够了
+    - timestampFormat 指定时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可配置size进行调整;如秒级时间戳其实4个字节就足够
 3. `@MagicConverter()`配置自定义序列化,更多说明参考 [自定义序列化最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
     - converter, 序列化类, 该类必须为`MConverter`的子类
     - attachParams, 附加参数;序列化时将会传入
-    - fixSize, 固定数据长度, 可以统一指定自定义数据长度;可忽略并在实际序列化后返回
+    - fixSize, 固定数据字节长度, 可以统一指定自定义数据长度;可忽略并在实际序列化后返回
     
 #### 5. 支持的数据类型及字节大小;
 | 数据类型 |数据类型 |字节大小|
