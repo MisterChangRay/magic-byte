@@ -48,6 +48,11 @@ public class FieldParser {
     private boolean beforeVerify(Field field) {
         MagicField magicField = AnnotationUtil.getMagicFieldAnnotation(field);
         MagicConverter converter = AnnotationUtil.getMagicFieldConverterAnnotation(field);
+
+        if(Objects.nonNull(converter) && Objects.isNull(magicField)) {
+            throw new MagicParseException("@MagicConverter should use with @MagicField; at:" + field.getType());
+        }
+
         return Objects.nonNull(magicField) || Objects.nonNull(converter);
     }
 
