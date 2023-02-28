@@ -6,13 +6,12 @@ import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.customconverter.customconverter.CustomBookConverter;
 
 @MagicClass
-public class Staff2 {
+public class Staff9 {
     @MagicField(order = 1)
     private int id;
-    @MagicConverter(converter = CustomBookConverter.class, attachParams = "1", fixSize = 10)
-    @MagicField(order = 2)
+    @MagicConverter(converter = CustomBookConverter.class, attachParams = "1")
     private Book book;
-    @MagicConverter(converter = CustomBookConverter.class, attachParams = "2", fixSize = 10)
+    @MagicConverter(converter = CustomBookConverter.class, attachParams = "2")
     @MagicField(order = 3)
     private Book book2;
     @MagicField(order = 4, size = 4)

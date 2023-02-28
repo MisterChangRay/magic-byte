@@ -3,8 +3,11 @@ package com.github.misterchangray.core.customconverter;
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.complex.NestingObject;
 import com.github.misterchangray.core.customconverter.entity.*;
+import com.github.misterchangray.core.exception.InvalidLengthException;
+import com.github.misterchangray.core.exception.MagicParseException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,67 @@ import java.util.Date;
 public class CustomConverterTest {
    static SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
 
+
+    /**
+     * 在类成员中使用 @MagicConverter, 但是用 @MagicField;
+     * 此时会抛出异常
+     * @throws ParseException
+     */
+    @Test
+    public void testStaff9() throws ParseException {
+        Staff9 staff9 = new Staff9();
+
+        Assert.assertThrows(MagicParseException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                byte[] bytes = MagicByte.unpackToByte(staff9);
+
+            }
+        });
+
+
+    }
+
+    @Test
+    public void testStaff8() throws ParseException {
+        Staff8 staff8 = new Staff8();
+        staff8.setId(13);
+        staff8.setLength(15);
+
+        byte[] bytes = MagicByte.unpackToByte(staff8);
+        Assert.assertEquals(bytes.length , 2);
+        Staff8 pack = MagicByte.pack(bytes, Staff8.class);
+
+        Assert.assertEquals(staff8.getId(), pack.getId());
+        Assert.assertEquals(staff8.getLength(), pack.getLength());
+    }
+
+
+    /**
+     * 测试整个类自定义序列化
+     * 使用了fixsize 属性
+     * @throws ParseException
+     */
+    @Test
+    public void testStaff7() throws ParseException {
+        Staff7 staff7 = new Staff7();
+        staff7.setId(33);
+        staff7.setLength(22);
+
+        byte[] bytes = MagicByte.unpackToByte(staff7);
+        Assert.assertEquals(bytes.length , 8);
+        Staff7 pack = MagicByte.pack(bytes, Staff7.class);
+
+        Assert.assertEquals(staff7.getId(), pack.getId());
+        Assert.assertEquals(staff7.getLength(), pack.getLength());
+    }
+
+
+    /**
+     * 测试当自定义序列化时,
+     * 是否能正常填充length 数据
+     * @throws ParseException
+     */
     @Test
     public void testStaff6() throws ParseException {
         String date = "19920903132216";
@@ -95,7 +159,9 @@ public class CustomConverterTest {
 
 
     /**
-     * 测试自定义序列化对自动填充字段长度有无影响
+     * 测试自定义序列化
+     * 测试使用自定义序列化后 自动填充长度 属性能否正常工作
+     *
      */
     @Test
     public void testStaff4() {
@@ -127,6 +193,11 @@ public class CustomConverterTest {
     }
 
 
+    /**
+     * 测试自定义序列化 list, array
+     * 是否能够正常工作
+     *
+     */
     @Test
     public void testStaff3() {
         Staff3 staff3 = new Staff3();
@@ -168,6 +239,10 @@ public class CustomConverterTest {
     }
 
 
+    /**
+     * 测试自定义序列化 fixsize 属性是否正常工作
+     *
+     */
     @Test
     public void testStaff2() {
         Staff2 staff2 = new Staff2();
@@ -194,6 +269,9 @@ public class CustomConverterTest {
     }
 
 
+    /**
+     * 测试自定义序列化是否正常工作
+     */
     @Test
     public void testStaff1() {
         Staff1 staff1 = new Staff1();

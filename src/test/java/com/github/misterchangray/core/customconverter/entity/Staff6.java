@@ -4,19 +4,12 @@ import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.clazz.MResult;
-import com.github.misterchangray.core.customconverter.CustomBook3Converter;
-import com.github.misterchangray.core.enums.TimestampFormatter;
 import com.github.misterchangray.core.intf.MConverter;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @MagicClass
 public class Staff6 {

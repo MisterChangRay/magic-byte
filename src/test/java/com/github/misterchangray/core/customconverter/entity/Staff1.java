@@ -3,7 +3,7 @@ package com.github.misterchangray.core.customconverter.entity;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
-import com.github.misterchangray.core.customconverter.CustomBookConverter;
+import com.github.misterchangray.core.customconverter.customconverter.CustomBookConverter;
 
 @MagicClass
 public class Staff1 {
