@@ -44,7 +44,7 @@ public @interface MagicField {
      * charset of String field
      * @return
      */
-    String charset() default "ASCII";
+    String charset() default "";
 
 
     /**

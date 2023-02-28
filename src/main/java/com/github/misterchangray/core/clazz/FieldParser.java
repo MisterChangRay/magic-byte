@@ -246,11 +246,16 @@ public class FieldParser {
         fieldMetaInfo.setMagicField(magicField);
         fieldMetaInfo.setOrderId(magicField.order());
         Charset charset = null;
-        try {
-            charset = Charset.forName(magicField.charset());
-        } catch (UnsupportedCharsetException ae) {
-            ExceptionUtil.throwIllegalCharset(fieldMetaInfo);
+        if("".equals(magicField.charset())) {
+            charset = GlobalConfigs.getGlobalDefaultCharset();
+        } else {
+            try {
+                charset = Charset.forName(magicField.charset());
+            } catch (UnsupportedCharsetException ae) {
+                ExceptionUtil.throwIllegalCharset(fieldMetaInfo);
+            }
         }
+
         fieldMetaInfo.setCharset(charset);
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
