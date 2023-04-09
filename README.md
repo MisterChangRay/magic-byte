@@ -30,7 +30,7 @@
 2. `@MagicClass`对当前类进行全局配置
 2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套，注意：不支持继承
 3. 正常情况下使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
-4. 支持使用`@MagicConverter()`注解来实现自定义序列化;[点击查看自定义序列化枚举类](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
+4. 支持使用`@MagicConverter()`注解来实现自定义序列化;[前往查看枚举类自定义序列化示例](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
 
 Maven项目可直接导入:
 [点击查看版本列表](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
