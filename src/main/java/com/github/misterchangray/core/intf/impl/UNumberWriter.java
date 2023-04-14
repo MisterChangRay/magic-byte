@@ -1,11 +1,13 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.warpper.UNumber;
 import com.github.misterchangray.core.intf.MWriter;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -13,8 +15,8 @@ import java.util.Objects;
  * @author: Ray.chang
  * @create: 2023-04-14 13:15
  **/
-public class BigIntegerWriter extends MWriter {
-    public BigIntegerWriter(FieldMetaInfo _fieldMetaInfo) {
+public class UNumberWriter extends MWriter {
+    public UNumberWriter(FieldMetaInfo _fieldMetaInfo) {
         super(_fieldMetaInfo);
     }
 
@@ -32,9 +34,15 @@ public class BigIntegerWriter extends MWriter {
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
         if(Objects.isNull(val)) {
-            val = BigInteger.valueOf( this.fieldMetaInfo.getDefaultVal());
+            val = UNumber.valueOf( this.fieldMetaInfo.getDefaultVal());
         }
+        byte[] data = new byte[fieldMetaInfo.getSize()];
+        Arrays.fill(data, (byte) 0);
 
-        buffer.put(ConverterUtil.bigIntegerToByte((BigInteger) val, fieldMetaInfo.getSize()));
+        byte[] res = ((UNumber) val).getAdata();
+        for (int i = data.length - 1, j=res.length - 1; i>=0 & j>=0;  i--, j--) {
+            data[i] = res[j];
+        }
+        buffer.put(data);
     }
 }

@@ -10,7 +10,7 @@ public class ConverterUtilTest {
     @Test
     public void testNumberToByte() throws InterruptedException {
         for (int i = 0; i < (Integer.MAX_VALUE - 50); i+=10) {
-            byte[] bytes = ConverterUtil.numberToByte(i, 8);
+            byte[] bytes = ConverterUtil.numberToByte(i);
             long l = ConverterUtil.byteToNumber(bytes);
             Assert.assertEquals(i, l);
         }
@@ -21,7 +21,7 @@ public class ConverterUtilTest {
         for (int i = 0; i < (Integer.MAX_VALUE - 500); i+=100) {
             BigInteger s = BigInteger.valueOf(i);
 
-            byte[] bytes = ConverterUtil.bigIntegerToByte(s, 8);
+            byte[] bytes = ConverterUtil.bigIntegerToByte(s);
             BigInteger l = ConverterUtil.byteToBigInteger(bytes);
             Assert.assertEquals(s, l);
         }

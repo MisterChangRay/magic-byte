@@ -1,5 +1,7 @@
 package com.github.misterchangray.core.enums;
 
+import com.github.misterchangray.core.clazz.warpper.*;
+
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.time.Instant;
@@ -22,7 +24,12 @@ public enum TypeEnum {
     STRING(1, String.class),
 
     DATETIME(6, Date.class, Instant.class, LocalTime.class, LocalDate.class, LocalDateTime.class),
-    BIGINTEGER(1, BigInteger.class),
+
+    UBYTE(1, UByte.class),
+    USHORT(2, UShort.class),
+    UINT(4, UInt.class),
+    ULONG(8, ULong.class),
+    UNUMBER(1, UNumber.class),
 
     ARRAY(-1, Array.class),
     LIST(-1, List.class),

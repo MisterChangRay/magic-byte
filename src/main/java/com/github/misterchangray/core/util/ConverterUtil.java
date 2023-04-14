@@ -4,6 +4,7 @@ import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ConverterUtil {
@@ -20,15 +21,19 @@ public class ConverterUtil {
      * @param p
      * @return
      */
-    public static byte[] numberToByte(long p, int length) {
-        byte[] res = new byte[length];
-        for (int i = length - 1; i >= 0 && p>=0 ; i--) {
+    public static byte[] numberToByte(long p) {
+        int len = 8;
+
+        byte[] res = new byte[len];
+        int i = len - 1;
+        for (; i >= 0 && p>0 ; i--) {
             res[i] = (byte)(p & 0xff);
-            p = p >>8 ;
+            p = p >> len ;
         }
 
-        return res;
+        return Arrays.copyOfRange(res, i+1, len);
     }
+
 
     /**
      * 数组转为正整数
@@ -46,7 +51,8 @@ public class ConverterUtil {
         return res;
     }
 
-    public static byte[] bigIntegerToByte(BigInteger p, int length) {
+    public static byte[] bigIntegerToByte(BigInteger p) {
+        int length = 30;
         byte[] res = new byte[length];
         for (int i = length - 1; i >= 0 && p.compareTo(BigInteger.ZERO) > 0 ; i--) {
             res[i] = (byte)(p.byteValue() & 0xff);

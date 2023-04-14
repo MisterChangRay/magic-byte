@@ -2,6 +2,7 @@ package com.github.misterchangray.core.common;
 
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.warpper.UNumber;
 import com.github.misterchangray.core.common.entity.custom.AllDataTypes;
 import com.github.misterchangray.core.common.entity.custom.*;
 import com.github.misterchangray.core.common.simple.*;
@@ -27,14 +28,14 @@ public class SimpleTest {
 
     @Test
     public void testBigInteger() {
-        BigIntegerObj bigIntegerObj = new BigIntegerObj();
-        bigIntegerObj.setA(BigInteger.valueOf(335));
-        bigIntegerObj.setB(BigInteger.valueOf(336));
-        byte[] tmp = MagicByte.unpackToByte(bigIntegerObj);
-        BigIntegerObj pack = MagicByte.pack(tmp, BigIntegerObj.class);
+        UNumberObj UNumberObj = new UNumberObj();
+        UNumberObj.setA(UNumber.valueOf(335));
+        UNumberObj.setB(UNumber.valueOf(336));
+        byte[] tmp = MagicByte.unpackToByte(UNumberObj);
+        UNumberObj pack = MagicByte.pack(tmp, UNumberObj.class);
 
-        Assert.assertEquals(bigIntegerObj.getA(), pack.getA());
-        Assert.assertEquals(bigIntegerObj.getB(), pack.getB());
+        Assert.assertEquals(UNumberObj.getA().get(), pack.getA().get());
+        Assert.assertEquals(UNumberObj.getB().get(), pack.getB().get());
     }
 
 

@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.warpper.UNumber;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
@@ -10,8 +11,8 @@ import com.github.misterchangray.core.util.DynamicByteBuffer;
  * @author: Ray.chang
  * @create:  2023-04-14 13:15
  **/
-public class BigIntegerReader extends MReader {
-    public BigIntegerReader(FieldMetaInfo _fieldMetaInfo) {
+public class UNumberReader extends MReader {
+    public UNumberReader(FieldMetaInfo _fieldMetaInfo) {
         super(_fieldMetaInfo);
     }
 
@@ -26,6 +27,6 @@ public class BigIntegerReader extends MReader {
         for (int i=0; i<fieldMetaInfo.getSize(); i++){
             tmp[i] = buffer.get();
         }
-        return ConverterUtil.byteToBigInteger(tmp);
+        return UNumber.valueOf(tmp);
     }
 }

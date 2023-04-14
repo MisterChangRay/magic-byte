@@ -95,8 +95,8 @@ public class TypeManager {
             case LIST:
                 res = new CollectionReader(fieldMetaInfo);
                 break;
-            case BIGINTEGER:
-                res = new BigIntegerReader(fieldMetaInfo);
+            case UNUMBER:
+                res = new UNumberReader(fieldMetaInfo);
                 break;
             case CUSTOM:
                 res = new CustomReader(fieldMetaInfo);
@@ -153,8 +153,8 @@ public class TypeManager {
             case DATETIME:
                 res = new DateTimeWriter(fieldMetaInfo);
                 break;
-            case BIGINTEGER:
-                res = new BigIntegerWriter(fieldMetaInfo);
+            case UNUMBER:
+                res = new UNumberWriter(fieldMetaInfo);
                 break;
             case CUSTOM:
                 res = new CustomWriter(fieldMetaInfo);

@@ -2,29 +2,30 @@ package com.github.misterchangray.core.common.simple;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.clazz.warpper.UNumber;
 
 import java.math.BigInteger;
 
 @MagicClass
-public class BigIntegerObj {
+public class UNumberObj {
     @MagicField(order = 1, size = 3)
-    private BigInteger a;
+    private UNumber a;
     @MagicField(order = 2, size = 2)
-    private BigInteger b;
+    private UNumber b;
 
-    public BigInteger getA() {
+    public UNumber getA() {
         return a;
     }
 
-    public void setA(BigInteger a) {
+    public void setA(UNumber a) {
         this.a = a;
     }
 
-    public BigInteger getB() {
+    public UNumber getB() {
         return b;
     }
 
-    public void setB(BigInteger b) {
+    public void setB(UNumber b) {
         this.b = b;
     }
 }

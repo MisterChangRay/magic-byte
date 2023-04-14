@@ -54,7 +54,10 @@ public class DateTimeWriter extends MWriter {
                 }
                 timestamp = DateUtil.timestampConvert(timestamp, TimestampFormatter.TO_TIMESTAMP_MILLIS, fieldMetaInfo.getTimestampFormatter());
             }
-            data = ConverterUtil.numberToByte(timestamp, byteLen);
+            byte[] res = ConverterUtil.numberToByte(timestamp);
+            for (int i = data.length - 1, j=res.length - 1; i>=0 & j>=0;  i--, j--) {
+                data[i] = res[j];
+            }
         }
 
         buffer.put(data);
