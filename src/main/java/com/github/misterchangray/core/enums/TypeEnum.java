@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.enums;
 
 import java.lang.reflect.Array;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public enum TypeEnum {
     STRING(1, String.class),
 
     DATETIME(6, Date.class, Instant.class, LocalTime.class, LocalDate.class, LocalDateTime.class),
+    BIGINTEGER(1, BigInteger.class),
 
     ARRAY(-1, Array.class),
     LIST(-1, List.class),

@@ -46,6 +46,24 @@ public class ConverterUtil {
         return res;
     }
 
+    public static byte[] bigIntegerToByte(BigInteger p, int length) {
+        byte[] res = new byte[length];
+        for (int i = length - 1; i >= 0 && p.compareTo(BigInteger.ZERO) > 0 ; i--) {
+            res[i] = (byte)(p.byteValue() & 0xff);
+            p = p.shiftRight(8);
+        }
+
+        return res;
+    }
+
+    public static BigInteger byteToBigInteger(byte[] p) {
+        BigInteger res = BigInteger.ZERO;
+        for (byte b : p) {
+            res = res.shiftLeft(8);
+            res = res.or(BigInteger.valueOf(b & 0xff));
+        }
+        return res;
+    }
     /**
      * 16进制转换为字节;这里16进制是无符号的
      * @param aint

@@ -8,6 +8,7 @@ import com.github.misterchangray.core.common.simple.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +24,18 @@ import java.util.List;
  *
  */
 public class SimpleTest {
+
+    @Test
+    public void testBigInteger() {
+        BigIntegerObj bigIntegerObj = new BigIntegerObj();
+        bigIntegerObj.setA(BigInteger.valueOf(335));
+        bigIntegerObj.setB(BigInteger.valueOf(336));
+        byte[] tmp = MagicByte.unpackToByte(bigIntegerObj);
+        BigIntegerObj pack = MagicByte.pack(tmp, BigIntegerObj.class);
+
+        Assert.assertEquals(bigIntegerObj.getA(), pack.getA());
+        Assert.assertEquals(bigIntegerObj.getB(), pack.getB());
+    }
 
 
     @Test
