@@ -50,10 +50,13 @@ public class SimpleTest {
         Assert.assertEquals(uInt.get(), Short.MAX_VALUE - 5);
 
         ULong uLong = ULong.valueOf(-333);
-        Assert.assertEquals(uLong.get(), new BigInteger("18446744073709551282"));
+        Assert.assertEquals(uLong.get(), new BigInteger("18446744073709551283"));
         uLong = ULong.valueOf(0x4fffffff);
         Assert.assertEquals(uLong.get(), BigInteger.valueOf(0x4fffffff));
-
+        uLong = ULong.valueOf(0);
+        Assert.assertEquals(uLong.get(), BigInteger.valueOf(0));
+        uLong = ULong.valueOf(23);
+        Assert.assertEquals(uLong.get(), BigInteger.valueOf(23));
     }
 
 

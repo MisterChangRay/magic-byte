@@ -5,10 +5,10 @@ import java.util.Objects;
 
 public class ULong {
     private long along;
-    private BigInteger aor = new BigInteger("ffffffffffffffff", 16);
+    private BigInteger aor = new BigInteger("FFFFFFFFFFFFFFFF", 16);
     public BigInteger get() {
         BigInteger  l = BigInteger.valueOf(along);
-        return along < 0 ? l.add(aor) : l;
+        return along < 0 ? l.and(aor) : l;
     }
 
     public void set(long i) {
