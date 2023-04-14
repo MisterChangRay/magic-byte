@@ -6,7 +6,7 @@ public class UInt {
     private int aint;
 
     public long get() {
-        return aint;
+        return aint < 0 ? aint  & 0xffffffff : aint;
     }
 
     public void set(int aint) {
@@ -15,6 +15,13 @@ public class UInt {
 
     public UInt(int aint) {
         this.aint = aint;
+    }
+
+    public UInt() {
+    }
+
+    public static UInt valueOf(int aint) {
+        return new UInt(aint);
     }
 
     @Override

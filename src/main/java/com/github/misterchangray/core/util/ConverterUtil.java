@@ -52,7 +52,7 @@ public class ConverterUtil {
     }
 
     public static byte[] bigIntegerToByte(BigInteger p) {
-        int length = 30;
+        int length = 32;
         byte[] res = new byte[length];
         for (int i = length - 1; i >= 0 && p.compareTo(BigInteger.ZERO) > 0 ; i--) {
             res[i] = (byte)(p.byteValue() & 0xff);
@@ -88,8 +88,8 @@ public class ConverterUtil {
      * @param abyte
      * @return
      */
-    public static int byteToUnsigned(byte abyte) {
-        return 0xff & abyte;
+    public static short byteToUnsigned(byte abyte) {
+        return (short) (abyte < 0 ? (0xff & abyte) : abyte);
     }
 
     /**

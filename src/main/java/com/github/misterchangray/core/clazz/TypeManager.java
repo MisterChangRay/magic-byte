@@ -95,6 +95,18 @@ public class TypeManager {
             case LIST:
                 res = new CollectionReader(fieldMetaInfo);
                 break;
+            case UBYTE:
+                res = new UByteReader(fieldMetaInfo);
+                break;
+            case USHORT:
+                res = new UShortReader(fieldMetaInfo);
+                break;
+            case UINT:
+                res = new UIntReader(fieldMetaInfo);
+                break;
+            case ULONG:
+                res = new ULongReader(fieldMetaInfo);
+                break;
             case UNUMBER:
                 res = new UNumberReader(fieldMetaInfo);
                 break;
@@ -152,6 +164,18 @@ public class TypeManager {
                 break;
             case DATETIME:
                 res = new DateTimeWriter(fieldMetaInfo);
+                break;
+            case UBYTE:
+                res = new UByteWriter(fieldMetaInfo);
+                break;
+            case USHORT:
+                res = new UShortWriter(fieldMetaInfo);
+                break;
+            case UINT:
+                res = new UIntWriter(fieldMetaInfo);
+                break;
+            case ULONG:
+                res = new ULongWriter(fieldMetaInfo);
                 break;
             case UNUMBER:
                 res = new UNumberWriter(fieldMetaInfo);

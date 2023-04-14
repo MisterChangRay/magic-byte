@@ -2,7 +2,7 @@ package com.github.misterchangray.core.common;
 
 
 import com.github.misterchangray.core.MagicByte;
-import com.github.misterchangray.core.clazz.warpper.UNumber;
+import com.github.misterchangray.core.clazz.warpper.*;
 import com.github.misterchangray.core.common.entity.custom.AllDataTypes;
 import com.github.misterchangray.core.common.entity.custom.*;
 import com.github.misterchangray.core.common.simple.*;
@@ -25,6 +25,37 @@ import java.util.List;
  *
  */
 public class SimpleTest {
+
+    @Test
+    public void testUnsigend() {
+        UByte uByte = UByte.valueOf((byte) -23);
+        Assert.assertEquals(uByte.get(), 233);
+        uByte = UByte.valueOf((byte) 88);
+        Assert.assertEquals(uByte.get(), 88);
+        uByte = UByte.valueOf((byte) 12);
+        Assert.assertEquals(uByte.get(), 12);
+
+        UShort uShort = UShort.valueOf((short) -32767);
+        Assert.assertEquals(uShort.get(), 32769);
+        uShort = UShort.valueOf((short) 32717);
+        Assert.assertEquals(uShort.get(), 32717);
+        uShort = UShort.valueOf((short) 106);
+        Assert.assertEquals(uShort.get(), 106);
+
+        UInt uInt = UInt.valueOf(0x79000000);
+        Assert.assertEquals(uInt.get(), 2030043136);
+        uInt = UInt.valueOf(0x7fffffff);
+        Assert.assertEquals(uInt.get(), 0x7fffffff);
+        uInt = UInt.valueOf(Short.MAX_VALUE - 5);
+        Assert.assertEquals(uInt.get(), Short.MAX_VALUE - 5);
+
+        ULong uLong = ULong.valueOf(-333);
+        Assert.assertEquals(uLong.get(), new BigInteger("18446744073709551282"));
+        uLong = ULong.valueOf(0x4fffffff);
+        Assert.assertEquals(uLong.get(), BigInteger.valueOf(0x4fffffff));
+
+    }
+
 
     @Test
     public void testBigInteger() {

@@ -1,21 +1,31 @@
 package com.github.misterchangray.core.clazz.warpper;
 
+import com.github.misterchangray.core.util.ConverterUtil;
+
 import java.util.Objects;
 
 public class UByte {
     private byte abyte;
 
     public short get() {
-        return abyte;
+        return abyte < 0 ?  ConverterUtil.byteToUnsigned(abyte) : abyte;
     }
 
     public void set(byte abyte) {
         this.abyte = abyte;
     }
 
+    public UByte() {
+    }
     public UByte(byte abyte) {
         this.abyte = abyte;
     }
+
+
+    public static UByte valueOf(byte abyte) {
+        return new UByte(abyte);
+    }
+
 
     @Override
     public String toString() {

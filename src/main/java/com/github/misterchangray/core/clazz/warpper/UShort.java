@@ -6,7 +6,7 @@ public class UShort {
     private short ashort;
 
     public int get() {
-        return ashort;
+        return ashort < 0 ? 0xffff & ashort : ashort;
     }
 
     public void set(short i) {
@@ -16,6 +16,15 @@ public class UShort {
     public UShort(short ashort) {
         this.ashort = ashort;
     }
+
+    public UShort() {
+
+    }
+
+    public static UShort valueOf(short ashort) {
+        return new UShort(ashort);
+    }
+
 
     @Override
     public String toString() {

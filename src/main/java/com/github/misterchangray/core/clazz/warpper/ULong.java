@@ -5,9 +5,10 @@ import java.util.Objects;
 
 public class ULong {
     private long along;
-
+    private BigInteger aor = new BigInteger("ffffffffffffffff", 16);
     public BigInteger get() {
-        return BigInteger.valueOf(along);
+        BigInteger  l = BigInteger.valueOf(along);
+        return along < 0 ? l.add(aor) : l;
     }
 
     public void set(long i) {
@@ -17,6 +18,15 @@ public class ULong {
     public ULong(long along) {
         this.along = along;
     }
+
+    public ULong() {
+
+    }
+
+    public static ULong valueOf(long along) {
+        return new ULong(along);
+    }
+
 
     @Override
     public String toString() {
