@@ -8,26 +8,25 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ConverterUtil {
-    public static BigInteger BYTE = new BigInteger("F", 16);
-    public static BigInteger WORD = new BigInteger("FF", 16);
-    public static BigInteger DWORD = new BigInteger("FFFF", 16);
-    public static BigInteger QWORD = new BigInteger("FFFFFFFF", 16);
-
 
     /**
-     * 将正整数转换为字节数组
+     * 将无符号数转为字节
+     * 负数则会先转为无符号数再转为字节
      *
-     * 只支持正整数
      * @param p
      * @return
      */
     public static byte[] numberToByte(long p) {
         int len = 8;
 
+        if(p < 0) {
+            throw new MagicByteException("invalid number,this is unsigned number! try bigIntegerToByte(BigInteger)");
+        }
+
         byte[] res = new byte[len];
         int i = len - 1;
         for (; i >= 0 && p>0 ; i--) {
-            res[i] = (byte)(p & 0xff);
+            res[i] = (byte)(p & 0xFF);
             p = p >> len ;
         }
 
@@ -43,33 +42,42 @@ public class ConverterUtil {
      * @return
      */
     public static long byteToNumber(byte[] p) {
+        if(p.length > 8){
+            throw new MagicByteException("invalid bytes, byte data too large, can't convert to long, try byteToBigInteger!");
+        }
         long res = 0;
         for (byte b : p) {
             res <<= 8;
-            res |= (b & 0xff);
+            res |= (b & 0xFF);
         }
         return res;
     }
 
     public static byte[] bigIntegerToByte(BigInteger p) {
-        int length = 32;
-        byte[] res = new byte[length];
-        for (int i = length - 1; i >= 0 && p.compareTo(BigInteger.ZERO) > 0 ; i--) {
-            res[i] = (byte)(p.byteValue() & 0xff);
-            p = p.shiftRight(8);
-        }
-
-        return res;
+        return p.toByteArray();
     }
 
-    public static BigInteger byteToBigInteger(byte[] p) {
-        BigInteger res = BigInteger.ZERO;
-        for (byte b : p) {
-            res = res.shiftLeft(8);
-            res = res.or(BigInteger.valueOf(b & 0xff));
-        }
-        return res;
+    public static BigInteger byteToBigInteger(byte[] bytes) {
+        return  byteToBigInteger(bytes, false);
     }
+
+    /**
+     *
+     * @param bytes
+     * @param unsigned true return signed
+     * @return
+     */
+    public static BigInteger byteToBigInteger(byte[] bytes, boolean unsigned) {
+        if(unsigned) {
+            byte[] adata = new byte[bytes.length + 1];
+            System.arraycopy(adata, 0, adata, 1, bytes.length);
+            return new BigInteger(adata);
+        }
+        return new BigInteger(bytes);
+
+    }
+
+
     /**
      * 16进制转换为字节;这里16进制是无符号的
      * @param aint
@@ -89,7 +97,7 @@ public class ConverterUtil {
      * @return
      */
     public static short byteToUnsigned(byte abyte) {
-        return (short) (abyte < 0 ? (0xff & abyte) : abyte);
+        return (short) (abyte < 0 ? (0xFF & abyte) : abyte);
     }
 
     /**

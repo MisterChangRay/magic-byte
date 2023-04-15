@@ -1,5 +1,7 @@
 package com.github.misterchangray.core.clazz.warpper;
 
+import com.github.misterchangray.core.util.ConverterUtil;
+
 import java.util.Objects;
 
 public class UInt {
@@ -10,7 +12,7 @@ public class UInt {
      * @return
      */
     public long get() {
-        return aint < 0 ? aint  & 0xffffffff : aint;
+        return aint < 0 ? aint  & 0xFFFFFFFF : aint;
     }
 
     /**

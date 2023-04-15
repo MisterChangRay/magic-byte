@@ -10,7 +10,7 @@ public class UShort {
      * @return
      */
     public int get() {
-        return ashort < 0 ? 0xffff & ashort : ashort;
+        return ashort < 0 ? 0xFFFF  & ashort : ashort;
     }
 
 

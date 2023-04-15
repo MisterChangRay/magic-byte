@@ -2,10 +2,12 @@ package com.github.misterchangray.core.common;
 
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.clazz.warpper.*;
-import com.github.misterchangray.core.common.entity.custom.AllDataTypes;
 import com.github.misterchangray.core.common.entity.custom.*;
 import com.github.misterchangray.core.common.simple.*;
+import com.github.misterchangray.core.common.simple.AllDataTypes;
+import com.github.misterchangray.core.exception.MagicByteException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -529,8 +531,23 @@ public class SimpleTest {
 
     }
 
+
+    /**
+     * simple test all date type
+     */
     @Test
-    public void testAllDataTypes() {
+    public void testUNumber() {
+        Assert.assertThrows(MagicByteException.class, () -> {
+            UNumber.valueOf( 0xA11345EF);
+
+        });
+    }
+
+    /**
+     * simple test all date type
+     */
+    @Test
+    public void testAllDataTypes2() {
         AllDataTypes byteObj = new AllDataTypes();
         byteObj.setB1((byte) 0xA1);
         byteObj.setB2((byte) 0XC3);
@@ -545,6 +562,15 @@ public class SimpleTest {
         byteObj.setS1((short) 0xC32);
         byteObj.setS2((short) 0xA13);
         byteObj.setSt2("ABCDEFG");
+
+        byteObj.setuByte(UByte.valueOf((byte) 0xA1));
+        byteObj.setuShort(UShort.valueOf((short) 0xA1B));
+        byteObj.setuInt(UInt.valueOf((byte) 0xBEA23F));
+        byteObj.setuLong(ULong.valueOf((long) 0xA1EFAC));
+        byteObj.setuNumber(UNumber.valueOf( BigInteger.valueOf( 0xA11345EF)));
+
+        Assert.assertEquals(UNumber.valueOf(BigInteger.valueOf( -33)).get(), BigInteger.valueOf( 223));
+        Assert.assertEquals(UNumber.valueOf(BigInteger.valueOf( -25466)).get(),  BigInteger.valueOf(40070));
 
 
         byte[] bytes = MagicByte.unpackToByte(byteObj);
@@ -562,6 +588,13 @@ public class SimpleTest {
         Assert.assertEquals(pack.getS1(), byteObj.getS1());
         Assert.assertEquals(pack.getS2(), byteObj.getS2());
         Assert.assertEquals(pack.getSt2(), byteObj.getSt2());
+
+        Assert.assertEquals(pack.getuByte(), byteObj.getuByte());
+        Assert.assertEquals(pack.getuShort(), byteObj.getuShort());
+        Assert.assertEquals(pack.getuInt(), byteObj.getuInt());
+        Assert.assertEquals(pack.getuLong(), byteObj.getuLong());
+        Assert.assertEquals(pack.getuNumber(), byteObj.getuNumber());
+
 
     }
 }

@@ -2,6 +2,7 @@ package com.github.misterchangray.core.common.simple;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.clazz.warpper.*;
 
 @MagicClass()
 public class AllDataTypes {
@@ -49,7 +50,56 @@ public class AllDataTypes {
     @MagicField(order = 17, size = 10)
     private String st2;
 
+    @MagicField(order = 18)
+    private UByte uByte;
+    @MagicField(order = 19)
+    private UShort uShort;
+    @MagicField(order = 21)
+    private UInt uInt;
+    @MagicField(order = 23)
+    private ULong uLong;
+    @MagicField(order = 25, size = 10)
+    private UNumber uNumber;
 
+    public UByte getuByte() {
+        return uByte;
+    }
+
+    public void setuByte(UByte uByte) {
+        this.uByte = uByte;
+    }
+
+    public UShort getuShort() {
+        return uShort;
+    }
+
+    public void setuShort(UShort uShort) {
+        this.uShort = uShort;
+    }
+
+    public UInt getuInt() {
+        return uInt;
+    }
+
+    public void setuInt(UInt uInt) {
+        this.uInt = uInt;
+    }
+
+    public ULong getuLong() {
+        return uLong;
+    }
+
+    public void setuLong(ULong uLong) {
+        this.uLong = uLong;
+    }
+
+    public UNumber getuNumber() {
+        return uNumber;
+    }
+
+    public void setuNumber(UNumber uNumber) {
+        this.uNumber = uNumber;
+    }
 
     public byte getB1() {
         return b1;
