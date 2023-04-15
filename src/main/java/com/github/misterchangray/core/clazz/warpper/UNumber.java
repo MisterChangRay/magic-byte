@@ -9,10 +9,6 @@ import java.util.Arrays;
 public class UNumber {
     private byte[] adata;
 
-    public byte[] getAdata() {
-        return adata;
-    }
-
     public void set(byte[] abytes) {
         this.adata = abytes;
     }
@@ -35,8 +31,21 @@ public class UNumber {
         return uNumber;
     }
 
+    /**
+     *  get of unsigned
+     * @return
+     */
     public BigInteger get() {
         return ConverterUtil.byteToBigInteger(adata);
+    }
+
+
+    /**
+     * get of signed
+     * @return
+     */
+    public byte[] raw() {
+        return  adata;
     }
 
 

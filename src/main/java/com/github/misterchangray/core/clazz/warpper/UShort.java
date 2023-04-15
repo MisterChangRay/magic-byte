@@ -5,8 +5,21 @@ import java.util.Objects;
 public class UShort {
     private short ashort;
 
+    /**
+     * get of unsigned
+     * @return
+     */
     public int get() {
         return ashort < 0 ? 0xffff & ashort : ashort;
+    }
+
+
+    /**
+     * get of signed
+     * @return
+     */
+    public short raw() {
+        return  ashort;
     }
 
     public void set(short i) {

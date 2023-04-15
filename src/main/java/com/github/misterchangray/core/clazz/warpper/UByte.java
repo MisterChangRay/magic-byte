@@ -4,11 +4,29 @@ import com.github.misterchangray.core.util.ConverterUtil;
 
 import java.util.Objects;
 
+/**
+ * 对java中的byte进行包装
+ *
+ * 提供便捷的无符号数封装及访问
+ *
+ */
 public class UByte {
     private byte abyte;
 
+    /**
+     * get of unsigned byte
+     * @return
+     */
     public short get() {
         return abyte < 0 ?  ConverterUtil.byteToUnsigned(abyte) : abyte;
+    }
+
+    /**
+     * get of signed byte
+     * @return
+     */
+    public byte raw() {
+        return abyte;
     }
 
     public void set(byte abyte) {

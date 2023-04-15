@@ -6,9 +6,23 @@ import java.util.Objects;
 public class ULong {
     private long along;
     private BigInteger aor = new BigInteger("FFFFFFFFFFFFFFFF", 16);
+
+    /**
+     *  get of unsigned
+     * @return
+     */
     public BigInteger get() {
         BigInteger  l = BigInteger.valueOf(along);
         return along < 0 ? l.and(aor) : l;
+    }
+
+
+    /**
+     * get of signed
+     * @return
+     */
+    public long raw() {
+        return along;
     }
 
     public void set(long i) {

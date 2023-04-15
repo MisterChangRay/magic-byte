@@ -1,11 +1,10 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.clazz.warpper.UNumber;
+import com.github.misterchangray.core.clazz.warpper.UInt;
 import com.github.misterchangray.core.intf.MWriter;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -31,16 +30,12 @@ public class UIntWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
-        if(Objects.isNull(val)) {
-            val = UNumber.valueOf( this.fieldMetaInfo.getDefaultVal());
-        }
-        byte[] data = new byte[fieldMetaInfo.getSize()];
-        Arrays.fill(data, (byte) 0);
+        int data = (int) this.fieldMetaInfo.getDefaultVal();
 
-        byte[] res = ((UNumber) val).getAdata();
-        for (int i = data.length - 1, j=res.length - 1; i>=0 & j>=0;  i--, j--) {
-            data[i] = res[j];
+        if(Objects.nonNull(val)) {
+            data = ((UInt) val).raw();
         }
-        buffer.put(data);
+
+        buffer.putInt(data);
     }
 }

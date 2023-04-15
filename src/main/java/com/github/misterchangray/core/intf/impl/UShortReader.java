@@ -1,7 +1,7 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
-import com.github.misterchangray.core.clazz.warpper.UNumber;
+import com.github.misterchangray.core.clazz.warpper.UShort;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
@@ -22,10 +22,6 @@ public class UShortReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
-        byte[] tmp = new byte[this.fieldMetaInfo.getSize()];
-        for (int i=0; i<fieldMetaInfo.getSize(); i++){
-            tmp[i] = buffer.get();
-        }
-        return UNumber.valueOf(tmp);
+        return UShort.valueOf(buffer.getShort());
     }
 }

@@ -3,10 +3,8 @@ package com.github.misterchangray.core.intf.impl;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.warpper.UNumber;
 import com.github.misterchangray.core.intf.MWriter;
-import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -39,7 +37,7 @@ public class UNumberWriter extends MWriter {
         byte[] data = new byte[fieldMetaInfo.getSize()];
         Arrays.fill(data, (byte) 0);
 
-        byte[] res = ((UNumber) val).getAdata();
+        byte[] res = ((UNumber) val).raw();
         for (int i = data.length - 1, j=res.length - 1; i>=0 & j>=0;  i--, j--) {
             data[i] = res[j];
         }

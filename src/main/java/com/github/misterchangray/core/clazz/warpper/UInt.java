@@ -5,8 +5,20 @@ import java.util.Objects;
 public class UInt {
     private int aint;
 
+    /**
+     *  get of unsigned
+     * @return
+     */
     public long get() {
         return aint < 0 ? aint  & 0xffffffff : aint;
+    }
+
+    /**
+     * get of signed
+     * @return
+     */
+    public int raw() {
+        return  aint;
     }
 
     public void set(int aint) {
