@@ -2,6 +2,7 @@ package com.github.misterchangray.core.common.dynamic;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.clazz.warpper.ULong;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class DynamicStudent {
     @MagicField(order = 2, size = 10)
     private String name;
     @MagicField(order = 3)
-    private long phone;
+    private ULong phone;
 
     @MagicField(order = 8)
     private Byte bookLen;
@@ -36,7 +37,7 @@ public class DynamicStudent {
             for (int i1 = 0; i1 < student.getBookids().length; i1++) {
                 student.getBookids()[i1] = 1000 + i1;
             }
-            student.setPhone(1000 + i);
+            student.setPhone(ULong.valueOf(1000 + i));
             student.setEmailLen((byte) ((count - i - 1) * 2));
             student.setEmail("misterchangray@hotmail.com");
             students.add(student);
@@ -61,11 +62,11 @@ public class DynamicStudent {
         this.name = name;
     }
 
-    public long getPhone() {
+    public ULong getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(ULong phone) {
         this.phone = phone;
     }
 
