@@ -32,6 +32,7 @@ public class SimpleTest {
     public void testUnsigend() {
         UByte uByte = UByte.valueOf((byte) -23);
         Assert.assertEquals(uByte.get(), 233);
+        Assert.assertEquals(uByte.raw(), -23);
         uByte = UByte.valueOf((byte) 88);
         Assert.assertEquals(uByte.get(), 88);
         uByte = UByte.valueOf((byte) 12);
@@ -39,6 +40,7 @@ public class SimpleTest {
 
         UShort uShort = UShort.valueOf((short) -32767);
         Assert.assertEquals(uShort.get(), 32769);
+        Assert.assertEquals(uShort.raw(), -32767);
         uShort = UShort.valueOf((short) 32717);
         Assert.assertEquals(uShort.get(), 32717);
         uShort = UShort.valueOf((short) 106);
@@ -46,8 +48,9 @@ public class SimpleTest {
 
         UInt uInt = UInt.valueOf(0x79000000);
         Assert.assertEquals(uInt.get(), 2030043136);
-        uInt = UInt.valueOf(0x7fffffff);
-        Assert.assertEquals(uInt.get(), 0x7fffffff);
+        uInt = UInt.valueOf(-0x3ffff);
+        Assert.assertEquals(uInt.raw(), -0x3ffff);
+        Assert.assertEquals(uInt.get(), 4294705153L);
         uInt = UInt.valueOf(Short.MAX_VALUE - 5);
         Assert.assertEquals(uInt.get(), Short.MAX_VALUE - 5);
 

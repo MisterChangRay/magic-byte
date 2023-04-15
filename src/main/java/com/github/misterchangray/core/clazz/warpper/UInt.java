@@ -12,7 +12,7 @@ public class UInt {
      * @return
      */
     public long get() {
-        return aint < 0 ? aint  & 0xFFFFFFFF : aint;
+        return aint < 0 ? aint  & 0xFFFFFFFFL : aint;
     }
 
     /**
