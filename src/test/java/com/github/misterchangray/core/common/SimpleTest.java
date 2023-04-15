@@ -529,5 +529,39 @@ public class SimpleTest {
 
     }
 
+    @Test
+    public void testAllDataTypes() {
+        AllDataTypes byteObj = new AllDataTypes();
+        byteObj.setB1((byte) 0xA1);
+        byteObj.setB2((byte) 0XC3);
+        byteObj.setBo1(true);
+        byteObj.setBo2(true);
+        byteObj.setC1('Y');
+        byteObj.setC2('N');
+        byteObj.setI2(0xDFF);
+        byteObj.setI1(0xEFD);
+        byteObj.setL1(0xEFFAC);
+        byteObj.setL2((long) 0xEFFCE);
+        byteObj.setS1((short) 0xC32);
+        byteObj.setS2((short) 0xA13);
+        byteObj.setSt2("ABCDEFG");
 
+
+        byte[] bytes = MagicByte.unpackToByte(byteObj);
+        AllDataTypes pack = MagicByte.pack(bytes, AllDataTypes.class);
+        Assert.assertEquals(pack.getB1(), byteObj.getB1());
+        Assert.assertEquals(pack.getB2(), byteObj.getB2());
+        Assert.assertEquals(pack.getBo2(), byteObj.getBo2());
+        Assert.assertEquals(pack.isBo1(), byteObj.isBo1());
+        Assert.assertEquals(pack.getC1(), byteObj.getC1());
+        Assert.assertEquals(pack.getC2(), byteObj.getC2());
+        Assert.assertEquals(pack.getI1(), byteObj.getI1());
+        Assert.assertEquals(pack.getI2(), byteObj.getI2());
+        Assert.assertEquals(pack.getL1(), byteObj.getL1());
+        Assert.assertEquals(pack.getL2(), byteObj.getL2());
+        Assert.assertEquals(pack.getS1(), byteObj.getS1());
+        Assert.assertEquals(pack.getS2(), byteObj.getS2());
+        Assert.assertEquals(pack.getSt2(), byteObj.getSt2());
+
+    }
 }
