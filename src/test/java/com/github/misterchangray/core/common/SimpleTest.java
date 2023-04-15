@@ -27,6 +27,36 @@ import java.util.List;
  *
  */
 public class SimpleTest {
+    @Test
+    public void testUnsigendArray() {
+        ArrayOfUndnetNumber dataObj = new ArrayOfUndnetNumber();
+        UByte[] uBytes = {UByte.valueOf((byte) 3), UByte.valueOf((byte) 5)};
+        dataObj.setChildIdss(uBytes);
+        UInt[] uInts = {UInt.valueOf(13), UInt.valueOf(15)};
+        dataObj.setIds(uInts);
+        UShort[] uShorts = {UShort.valueOf((short) 113), UShort.valueOf((short) 115)};
+        dataObj.setParentIds(uShorts);
+        ArrayList<ULong> ullong = new ArrayList();
+        ullong.add(ULong.valueOf( 13567389L));
+        ullong.add(ULong.valueOf( 13738569L));
+        dataObj.setPhons(ullong);
+
+        byte[] bytes = MagicByte.unpackToByte(dataObj);
+        ArrayOfUndnetNumber pack = MagicByte.pack(bytes, ArrayOfUndnetNumber.class);
+        for (int i = 0; i < uBytes.length; i++) {
+            Assert.assertEquals(uBytes[i], pack.getChildIdss()[i]);
+        }
+        for (int i = 0; i < uInts.length; i++) {
+            Assert.assertEquals(uInts[i], pack.getIds()[i]);
+        }
+        for (int i = 0; i < uShorts.length; i++) {
+            Assert.assertEquals(uShorts[i], pack.getParentIds()[i]);
+        }
+
+        for (int i = 0; i < ullong.size(); i++) {
+            Assert.assertEquals(ullong.get(i), pack.getPhons().get(i));
+        }
+    }
 
     @Test
     public void testUnsigend() {
