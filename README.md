@@ -30,7 +30,7 @@
 2. `@MagicClass`对当前类进行全局配置
 2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套，注意：不支持继承
 3. 正常情况下使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
-4. 支持使用`@MagicConverter()`注解来实现自定义序列化;[点击查看自定义序列化枚举类](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
+4. 支持使用`@MagicConverter()`注解来实现自定义序列化;[前往查看枚举类自定义序列化示例](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
 
 Maven项目可直接导入:
 [点击查看版本列表](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
@@ -65,7 +65,7 @@ public class School {
     // 0 byte, 注意, 此处无法序列化, 不支持的数据类型将会被忽略
     @MagicField(order = 9)
     private Object age;
-    // 4 byte, 注意, 此处指定为秒级时间戳, 指定使用4个字节保存， 未指定则默认6个字节
+    // 4 byte, 注意, 此处指定为秒级时间戳, 同时指定使用4个字节保存， 未指定则默认6个字节
     @MagicField(order = 13, size = 4, timestampFormat = TimestampFormatter.TO_TIMESTAMP_SECONDS)
     private Date[] birthdays;
     // 1 byte, 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
@@ -138,18 +138,18 @@ public class Checker {
 	- byteOrder 配置序列化大小端
 	- strict 严格模式, 默认false, 严格模式将会抛出更多的异常
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
-	- order 定义序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始依次递增)</b>
+	- order 定义对象属性的序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始递增,建议跳跃配置如:1,3,5...)</b>
 	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
 	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
 	- dynamicSize 标记字段为动态长度, 整个数据结构只能标记一次且仅能标记`String&List&Array`类型字段
 	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
     - calcLength 标记字段为长度字段, 反序列化时将自动将长度填充到此字段; 可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
-    - timestampFormat 指定时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可配置size进行调整;如秒级时间戳其实4个字节就足够
+    - timestampFormat 指定时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可使用size进行调整;如秒级时间戳4个字节就足够储存传输
 3. `@MagicConverter()`配置自定义序列化,更多说明参考 [自定义序列化最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
     - converter, 序列化类, 该类必须为`MConverter`的子类
     - attachParams, 附加参数;序列化时将会传入
-    - fixSize, 固定数据字节长度, 可以统一指定自定义数据长度;可忽略并在实际序列化后返回
+    - fixSize, 固定数据字节长度, 可以统一指定自定义数据的长度,也可忽略然后在序列化时返回实际数据长度
     
 #### 5. 支持的数据类型及字节大小;
 | 数据类型 |数据类型 |字节大小|
@@ -164,7 +164,7 @@ public class Checker {
 
 #### 6. 注意事项
 1. 本工具仅用于对象和数据的转换, 报文的效验需在转换前进行; 一般来说有报文头效验和效验和效验
-2. <b>已投入使用的字段请不要修改`order`属性(重要),会影响已有业务;新增字段请递增使用下一个`order`值</b>
+2. <b>因为`order`属性为对象序列化顺序,所以已投入使用的字段请不要随意修改`order`属性(重要)</b>,这样可能会影响已有业务;新增字段请递增使用新的`order`值
 3. 大端小端使用`@MagicClass`进行配置
 4. 基本数据类型使用下表默认字节长度, `String/List/Array` 需要使用`size`属性指定成员长度或字符串字节长度
 5. 请使用基础类型定义报文结构,目前仅支持以下数据类型:
@@ -188,7 +188,7 @@ public class Checker {
 4. 不建议类中大量声明字符串
 5. 条件允许建议使用`protobuf`作为序列化框架
 7. 二进制协议建议单包大小在1KB以内
-8. `order`属性建议跳跃配置(如1,3,5,7), <b>且对于已经投入使用的一定不要修改; 新增字段时必须使用新的(递增后)order值; 重要的事强调3次</b>
+8. `order`属性建议跳跃配置(如1,3,5,7), <b>且对于已经投入使用的一定不要修改; 新增字段时必须使用递增后的order新值; 重要的事强调3次</b>
 
 #### 8. 最后
 本人目前也是做物联网相关领域的(共享充电宝), 开始的时候也是走了不少弯路,这个项目算是在这工作了1年多的工作总结;
