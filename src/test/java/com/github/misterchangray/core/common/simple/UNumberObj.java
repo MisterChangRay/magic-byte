@@ -12,6 +12,16 @@ public class UNumberObj {
     private UNumber a;
     @MagicField(order = 2, size = 2)
     private UNumber b;
+    @MagicField(order = 3, size = 1)
+    private UNumber c;
+
+    public UNumber getC() {
+        return c;
+    }
+
+    public void setC(UNumber c) {
+        this.c = c;
+    }
 
     public UNumber getA() {
         return a;

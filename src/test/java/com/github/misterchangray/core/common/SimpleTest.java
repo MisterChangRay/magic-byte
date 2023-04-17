@@ -99,12 +99,23 @@ public class SimpleTest {
     public void testBigInteger() {
         UNumberObj UNumberObj = new UNumberObj();
         UNumberObj.setA(UNumber.valueOf(335));
-        UNumberObj.setB(UNumber.valueOf(336));
+        UNumberObj.setB(UNumber.valueOf(-34));
+        UNumberObj.setC(UNumber.valueOf(338));
         byte[] tmp = MagicByte.unpackToByte(UNumberObj);
         UNumberObj pack = MagicByte.pack(tmp, UNumberObj.class);
 
+
+        Assert.assertEquals(pack.getA().raw().length , 3);
+        Assert.assertEquals(pack.getB().raw().length , 2);
+        Assert.assertEquals(pack.getC().raw().length , 1);
+
         Assert.assertEquals(UNumberObj.getA().get(), pack.getA().get());
         Assert.assertEquals(UNumberObj.getB().get(), pack.getB().get());
+
+        Assert.assertEquals(UNumberObj.getB().get(), BigInteger.valueOf(222));
+        Assert.assertNotEquals(UNumberObj.getC().get(), pack.getC().get());
+        Assert.assertEquals(pack.getC().get(), BigInteger.valueOf(82));
+
     }
 
 
