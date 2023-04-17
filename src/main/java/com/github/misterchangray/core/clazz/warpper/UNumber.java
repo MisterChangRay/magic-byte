@@ -16,12 +16,8 @@ public class UNumber {
     }
 
     public static UNumber valueOf(long anumber) {
-        if(anumber < 0) {
-            throw new MagicByteException("invalid anumber, this is unsigned number! try valueOf(BigInteger)");
-        }
-
         UNumber uNumber = new UNumber();
-        uNumber.adata = ConverterUtil.numberToByte(anumber);
+        uNumber.adata = ConverterUtil.bigIntegerToByte(BigInteger.valueOf(anumber));
         return uNumber;
     }
 
@@ -45,6 +41,10 @@ public class UNumber {
         byte[] bytes = new byte[adata.length + 1];
         System.arraycopy(adata, 0, bytes, 1, adata.length);
         return new BigInteger(bytes);
+    }
+
+    public long asLong() {
+        return new BigInteger(adata).longValue();
     }
 
 

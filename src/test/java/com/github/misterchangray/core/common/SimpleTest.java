@@ -570,10 +570,11 @@ public class SimpleTest {
      */
     @Test
     public void testUNumber() {
-        Assert.assertThrows(MagicByteException.class, () -> {
-            UNumber.valueOf( 0xA11345EF);
+        UNumber uNumber = UNumber.valueOf(0xA11345EF);
+        Assert.assertEquals(uNumber.asLong(), -1592572433);
 
-        });
+        uNumber = UNumber.valueOf(0xA11345EFL);
+        Assert.assertEquals(uNumber.asLong(), 0xA11345EFL);
     }
 
     /**
