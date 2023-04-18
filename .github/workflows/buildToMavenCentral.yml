@@ -26,3 +26,4 @@ jobs:
             gpg_passphrase: ${{ secrets.GPG_PASSWORD }}   # 自己设置的 GPG 密码
             nexus_username: ${{ secrets.OSSRH_USER }}     # sonatype 用户名（不是邮箱）
             nexus_password: ${{ secrets.OSSRH_PASSWORD }} # sonatype 登录密码
+            maven_profiles: release
