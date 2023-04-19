@@ -31,6 +31,10 @@ public class ULong {
         return this;
     }
 
+    public BigInteger getAlong() {
+        return along;
+    }
+
 
     public ULong(BigInteger along) {
         if(along.compareTo(BigInteger.ZERO) < 0) {

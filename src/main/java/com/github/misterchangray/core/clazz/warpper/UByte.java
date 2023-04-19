@@ -14,6 +14,8 @@ import java.util.Objects;
 public class UByte {
     private short abyte;
 
+
+
     /**
      * get of unsigned byte
      * @return
@@ -79,4 +81,9 @@ public class UByte {
     public int hashCode() {
         return Objects.hash(abyte);
     }
+
+    public short getAbyte() {
+        return abyte;
+    }
+
 }

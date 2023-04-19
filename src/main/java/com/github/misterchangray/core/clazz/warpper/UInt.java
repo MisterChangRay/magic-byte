@@ -70,4 +70,9 @@ public class UInt {
     public int hashCode() {
         return Objects.hash(aint);
     }
+
+    public long getAint() {
+        return aint;
+    }
+
 }

@@ -42,6 +42,11 @@ public class UShort {
     public UShort() {
     }
 
+    public int getAshort() {
+        return ashort;
+    }
+
+
     public static UShort build() {
         return new UShort();
     }

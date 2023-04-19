@@ -86,4 +86,9 @@ public class UNumber {
     public int hashCode() {
         return Arrays.hashCode(adata);
     }
+
+    public BigInteger getAdata() {
+        return get();
+    }
+
 }
