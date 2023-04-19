@@ -59,7 +59,7 @@ public class SimpleTest {
         Assert.assertNotEquals(unsignedObj.getuNumber(), pack.getuNumber());
         Assert.assertNotEquals(unsignedObj.getuNumber().raw(), pack.getuNumber().raw());
         Assert.assertNotEquals(unsignedObj.getuNumber().toString(), pack.getuNumber().toString());
-        Assert.assertEquals(unsignedObj.getuNumber().raw().length, 6);
+        Assert.assertEquals(unsignedObj.getuNumber().raw().length, 5);
         Assert.assertEquals(pack.getuNumber().raw().length, 4);
 
 
@@ -92,7 +92,7 @@ public class SimpleTest {
         Assert.assertEquals(unsignedObj.getuLong().unsigned(), pack.getuLong().unsigned());
         Assert.assertEquals(unsignedObj.getuLong().toString(), pack.getuLong().toString());
 
-        Assert.assertEquals(unsignedObj.getuNumber().raw().length, 2);
+        Assert.assertEquals(unsignedObj.getuNumber().raw().length, 1);
         Assert.assertEquals(pack.getuNumber().raw().length, 4);
         Assert.assertEquals(unsignedObj.getuNumber(), pack.getuNumber());
         Assert.assertEquals(unsignedObj.getuNumber().unsigned(), pack.getuNumber().unsigned());
@@ -170,7 +170,7 @@ public class SimpleTest {
     public void testBigInteger() {
         UNumberObj UNumberObj = new UNumberObj();
         UNumberObj.setA(UNumber.valueOf(335));
-        UNumberObj.setB(UNumber.valueOf(-34));
+        UNumberObj.setB(UNumber.build().signed(BigInteger.valueOf(-34)));
         UNumberObj.setC(UNumber.valueOf(338));
         byte[] tmp = MagicByte.unpackToByte(UNumberObj);
         UNumberObj pack = MagicByte.pack(tmp, UNumberObj.class);
@@ -652,11 +652,46 @@ public class SimpleTest {
      */
     @Test
     public void testUNumber() {
-        UNumber uNumber = UNumber.valueOf(0xA11345EF);
-        Assert.assertEquals(uNumber.asLong(), -1592572433);
+        UNumber uNumber = UNumber.valueOf(0xA3F4);
+        Assert.assertEquals(uNumber.asSignedByte(), -12);
+        Assert.assertEquals(uNumber.asSignedShort(), -23564);
+        Assert.assertEquals(uNumber.asSignedInt(), 41972);
+        Assert.assertEquals(uNumber.asSignedLong(), 41972);
+        Assert.assertEquals(uNumber.unsigned(), BigInteger.valueOf(0xA3F4));
+
+
+        uNumber = UNumber.valueOf(0xA3F412A1L);
+        Assert.assertEquals(uNumber.asSignedByte(), -95);
+        Assert.assertEquals(uNumber.asSignedShort(), 4769);
+        Assert.assertEquals(uNumber.asSignedInt(), -1544285535);
+        Assert.assertEquals(uNumber.asSignedLong(), 0xA3F412A1L);
+        Assert.assertEquals(uNumber.unsigned(), BigInteger.valueOf(2750681761l));
+
+
+        uNumber = UNumber.valueOf(0xA3);
+        Assert.assertEquals(uNumber.asSignedByte(), -93);
+        Assert.assertEquals(uNumber.asSignedShort(), 0XA3);
+        Assert.assertEquals(uNumber.asSignedInt(), 0XA3);
+        Assert.assertEquals(uNumber.asSignedLong(), 0XA3);
+        Assert.assertEquals(uNumber.unsigned(), BigInteger.valueOf(0xA3));
+
+
+
+        uNumber = UNumber.valueOf(new BigInteger("A1B2C3D4E5E6", 16));
+        Assert.assertEquals(uNumber.asSignedByte(), -26);
+        Assert.assertEquals(uNumber.asSignedShort(), -6682);
+        Assert.assertEquals(uNumber.asSignedInt(), -1009457690);
+        Assert.assertEquals(uNumber.asSignedLong(), 177789161760230L);
+        Assert.assertEquals(uNumber.unsigned(), BigInteger.valueOf(177789161760230L));
+
+
+
 
         uNumber = UNumber.valueOf(0xA11345EFL);
-        Assert.assertEquals(uNumber.asLong(), 0xA11345EFL);
+        Assert.assertEquals(uNumber.asSignedLong(), 0xA11345EFL);
+
+        uNumber = UNumber.valueOf(0xA11345EFL);
+        Assert.assertEquals(uNumber.asSignedLong(), 0xA11345EFL);
     }
 
     /**
@@ -683,10 +718,10 @@ public class SimpleTest {
         byteObj.setuShort(UShort.valueOf((short) 0xA1B));
         byteObj.setuInt(UInt.valueOf((byte) 0xBEA23F));
         byteObj.setuLong(ULong.valueOf((long) 0xA1EFAC));
-        byteObj.setuNumber(UNumber.valueOf( BigInteger.valueOf( 0xA11345EF)));
+        byteObj.setuNumber(UNumber.valueOf( BigInteger.valueOf( 0xA11345EFL)));
 
-        Assert.assertEquals(UNumber.valueOf(BigInteger.valueOf( -33)).unsigned(), BigInteger.valueOf( 223));
-        Assert.assertEquals(UNumber.valueOf(BigInteger.valueOf( -25466)).unsigned(),  BigInteger.valueOf(40070));
+        Assert.assertEquals(UNumber.build().signed(BigInteger.valueOf( -33)).unsigned(), BigInteger.valueOf( 223));
+        Assert.assertEquals(UNumber.build().signed(BigInteger.valueOf( -25466)).unsigned(),  BigInteger.valueOf(40070));
 
 
         byte[] bytes = MagicByte.unpackToByte(byteObj);

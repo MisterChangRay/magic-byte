@@ -16,14 +16,12 @@ public class UNumber {
     }
 
     public static UNumber valueOf(long anumber) {
-        UNumber uNumber = new UNumber();
-        uNumber.adata = ConverterUtil.bigIntegerToByte(BigInteger.valueOf(anumber));
-        return uNumber;
+        return  valueOf(BigInteger.valueOf(anumber));
     }
 
     public static UNumber valueOf(BigInteger anumber) {
         UNumber uNumber = new UNumber();
-        uNumber.adata = ConverterUtil.bigIntegerToByte(anumber);
+        uNumber.setAdata(anumber);
         return uNumber;
     }
 
@@ -38,14 +36,69 @@ public class UNumber {
      * @return
      */
     public BigInteger unsigned() {
-        byte[] bytes = new byte[adata.length + 1];
-        System.arraycopy(adata, 0, bytes, 1, adata.length);
-        return new BigInteger(bytes);
+        return ConverterUtil.byteToBigInteger(adata);
     }
 
-    public long asLong() {
-        return new BigInteger(adata).longValue();
+    public UNumber signed(BigInteger signedNumber) {
+        if(signedNumber.compareTo(BigInteger.ZERO) < 0) {
+            byte[] adata = signedNumber.toByteArray();
+            byte[] bytes = new byte[adata.length + 1];
+            System.arraycopy(adata, 0, bytes, 1, adata.length);
+            signedNumber = new BigInteger(bytes);
+        }
+        this.adata = ConverterUtil.bigIntegerToByte(signedNumber);
+
+        return this;
     }
+
+
+    public byte asSignedByte() {
+        return adata[adata.length - 1] ;
+    }
+
+    public short asSignedShort() {
+        long res = 0;
+
+        for (int i = 0, start=Math.max(0, adata.length - 2);
+             i < adata.length  ; i ++) {
+            if(start > i ) {
+                continue;
+            }
+
+            res <<= 8;
+            res |= (0xff & adata[i]);
+        }
+        return (short) res;
+    }
+
+    public int asSignedInt() {
+        long res = 0;
+        for (int i = 0, start=Math.max(0, adata.length - 4);
+             i < adata.length  ; i ++) {
+            if(start > i ) {
+                continue;
+            }
+
+            res <<= 8;
+            res |= (0xff & adata[i]);
+        }
+        return (int) res;
+    }
+
+    public long asSignedLong() {
+        long res = 0;
+        for (int i = 0, start=Math.max(0, adata.length - 8);
+             i < adata.length  ; i ++) {
+            if(start > i ) {
+                continue;
+            }
+
+            res <<= 8;
+            res |= (0xff & adata[i]);
+        }
+        return  res;
+    }
+
 
 
     /**
@@ -97,6 +150,6 @@ public class UNumber {
             throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
         }
 
-        this.adata = ConverterUtil.bigIntegerToByte(anumber);;
+        this.adata = ConverterUtil.bigIntegerToByte(anumber);
     }
 }

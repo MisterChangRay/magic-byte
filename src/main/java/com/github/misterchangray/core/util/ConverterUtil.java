@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ConverterUtil {
+    private static BigInteger FF = BigInteger.valueOf(0xFF);
 
     /**
      * 将无符号数转为字节
@@ -54,28 +55,31 @@ public class ConverterUtil {
     }
 
     public static byte[] bigIntegerToByte(BigInteger p) {
-        return p.toByteArray();
+        if(p.compareTo(BigInteger.ZERO) < 0) {
+            throw new MagicByteException("invalid number,this is unsigned number!");
+        }
+
+        int len = 32;
+        byte[] res = new byte[len];
+        int i = len - 1;
+        for (; i >= 0 && p.compareTo(BigInteger.ZERO) > 0 ; i--) {
+            res[i] = p.and(FF).byteValue();
+            p = p.shiftRight(8) ;
+        }
+
+        return Arrays.copyOfRange(res, i+1, len);
     }
 
     public static BigInteger byteToBigInteger(byte[] bytes) {
-        return  byteToBigInteger(bytes, false);
-    }
-
-    /**
-     *
-     * @param bytes
-     * @param unsigned true return signed
-     * @return
-     */
-    public static BigInteger byteToBigInteger(byte[] bytes, boolean unsigned) {
-        if(unsigned) {
-            byte[] adata = new byte[bytes.length + 1];
-            System.arraycopy(adata, 0, adata, 1, bytes.length);
-            return new BigInteger(adata);
+        BigInteger res = BigInteger.valueOf(0);
+        for (byte b : bytes) {
+            res = res.shiftLeft(8);
+            res = res.or(BigInteger.valueOf(b & 0xff));
         }
-        return new BigInteger(bytes);
-
+        return res;
     }
+
+
 
 
     /**
