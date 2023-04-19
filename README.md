@@ -169,8 +169,9 @@ public class Checker {
 4. 基本数据类型使用下表默认字节长度, `String/List/Array` 需要使用`size`属性指定成员长度或字符串字节长度
 5. 请使用基础类型定义报文结构,目前仅支持以下数据类型:
 	1. 四类八种基础类型(byte/char/short/int/long/float/double/boolean)
-	2. 支持 String, 但必须申明 Size
-	3. 支持 List & Array, 可以使用泛型; 仅支持一维数组且不能使用`List<String>`或`String[]`
+	2. 无符号包装类型(UByte/UShort/Uint/ULong/UNumber) [关于无符号数类型](https://github.com/MisterChangRay/magic-byte/wiki/%E5%85%B3%E4%BA%8E%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B)
+	3. 支持 String, 但必须申明 Size
+	4. 支持 List & Array, 可以使用泛型; 仅支持一维数组且不能使用`List<String>`或`String[]`
 6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 将序列化集合前5个元素
 7. 字符串默认使用ASCII编码
 8. 不支持一维以上的List或者Array
