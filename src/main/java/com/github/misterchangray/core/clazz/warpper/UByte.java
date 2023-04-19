@@ -86,4 +86,7 @@ public class UByte {
         return abyte;
     }
 
+    public void setAbyte(short abyte) {
+        this.abyte = abyte;
+    }
 }

@@ -46,6 +46,9 @@ public class UShort {
         return ashort;
     }
 
+    public void setAshort(int ashort) {
+        this.ashort = ashort;
+    }
 
     public static UShort build() {
         return new UShort();

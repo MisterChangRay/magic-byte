@@ -91,4 +91,7 @@ public class UNumber {
         return get();
     }
 
+    public void setAdata(BigInteger anumber) {
+        this.adata = ConverterUtil.bigIntegerToByte(anumber);;
+    }
 }

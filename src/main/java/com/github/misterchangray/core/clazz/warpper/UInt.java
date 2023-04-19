@@ -75,4 +75,7 @@ public class UInt {
         return aint;
     }
 
+    public void setAint(long aint) {
+        this.aint = aint;
+    }
 }

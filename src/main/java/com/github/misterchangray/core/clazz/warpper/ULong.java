@@ -35,6 +35,9 @@ public class ULong {
         return along;
     }
 
+    public void setAlong(BigInteger along) {
+        this.along = along;
+    }
 
     public ULong(BigInteger along) {
         if(along.compareTo(BigInteger.ZERO) < 0) {
