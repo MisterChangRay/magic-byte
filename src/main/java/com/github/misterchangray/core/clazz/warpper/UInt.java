@@ -12,7 +12,7 @@ public class UInt {
      *  get of unsigned
      * @return
      */
-    public long get() {
+    public long unsigned() {
         return aint;
     }
 
@@ -20,25 +20,21 @@ public class UInt {
      * get of signed
      * @return
      */
-    public int raw() {
+    public int signed() {
         return  (int)aint;
     }
 
-    public UInt raw(int aint) {
+    public UInt signed(int aint) {
         this.aint = aint < 0 ? aint  & 0xFFFFFFFFL : aint;
         return  this;
     }
 
-    public void set(long aint) {
-        this.aint = aint;
+    public void set(long aUnsignedInt) {
+        this.setAint(aUnsignedInt);
     }
 
-    public UInt(long aint) {
-        if(aint < 0) {
-            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
-        }
-
-        this.aint = aint;
+    public UInt(long aUnsignedInt) {
+        this.set(aUnsignedInt);
     }
 
     public static UInt build() {
@@ -49,8 +45,8 @@ public class UInt {
 
     }
 
-    public static UInt valueOf(long aint) {
-        return new UInt(aint);
+    public static UInt valueOf(long aUnsignedInt) {
+        return new UInt(aUnsignedInt);
     }
 
     @Override
@@ -75,7 +71,12 @@ public class UInt {
         return aint;
     }
 
-    public void setAint(long aint) {
-        this.aint = aint;
+    public void setAint(long aUnsignedInt) {
+        if(aUnsignedInt < 0) {
+            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
+        }
+
+
+        this.aint = aUnsignedInt;
     }
 }

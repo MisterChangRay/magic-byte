@@ -22,6 +22,6 @@ public class UIntReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
-        return UInt.build().raw(buffer.getInt());
+        return UInt.build().signed(buffer.getInt());
     }
 }

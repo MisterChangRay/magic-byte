@@ -33,7 +33,7 @@ public class UByteWriter extends MWriter {
         byte data = (byte) this.fieldMetaInfo.getDefaultVal();
 
         if(Objects.nonNull(val)) {
-            data = ((UByte) val).raw();
+            data = ((UByte) val).signed();
         }
 
         buffer.put(data);

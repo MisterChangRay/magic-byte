@@ -22,6 +22,6 @@ public class ULongReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
-        return  ULong.build().raw(buffer.getLong());
+        return  ULong.build().signed(buffer.getLong());
     }
 }

@@ -33,7 +33,7 @@ public class UIntWriter extends MWriter {
         int data = (int) this.fieldMetaInfo.getDefaultVal();
 
         if(Objects.nonNull(val)) {
-            data = ((UInt) val).raw();
+            data = ((UInt) val).signed();
         }
 
         buffer.putInt(data);

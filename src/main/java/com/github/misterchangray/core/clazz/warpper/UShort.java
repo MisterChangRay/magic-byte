@@ -11,11 +11,11 @@ public class UShort {
      * get of unsigned
      * @return
      */
-    public int get() {
+    public int unsigned() {
         return ashort;
     }
 
-    public UShort raw(short ashort) {
+    public UShort signed(short ashort) {
         this.ashort =  ashort < 0 ? 0xFFFF  & ashort : ashort;;
         return this;
     }
@@ -24,19 +24,16 @@ public class UShort {
      * get of signed
      * @return
      */
-    public short raw() {
+    public short signed() {
         return  (short) ashort;
     }
 
-    public void set(int i) {
-        this.ashort = i;
+    public void set(int aUnsignedShort) {
+       this.setAshort(aUnsignedShort);
     }
 
-    public UShort(int ashort) {
-        if(ashort < 0) {
-            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
-        }
-        this.ashort = ashort;
+    public UShort(int aUnsignedShort) {
+        this.set(aUnsignedShort);
     }
 
     public UShort() {
@@ -46,16 +43,20 @@ public class UShort {
         return ashort;
     }
 
-    public void setAshort(int ashort) {
-        this.ashort = ashort;
+    public void setAshort(int aUnsignedShort) {
+        if(aUnsignedShort < 0) {
+            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
+        }
+
+        this.ashort = aUnsignedShort;
     }
 
     public static UShort build() {
         return new UShort();
     }
 
-    public static UShort valueOf(int ashort) {
-        return new UShort(ashort);
+    public static UShort valueOf(int aUnsignedShort) {
+        return new UShort(aUnsignedShort);
     }
 
     @Override

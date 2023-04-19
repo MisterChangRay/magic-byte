@@ -22,6 +22,6 @@ public class UByteReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
-        return UByte.build().raw(buffer.get());
+        return UByte.build().signed(buffer.get());
     }
 }

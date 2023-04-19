@@ -13,7 +13,7 @@ public class ULong {
      *  get of unsigned
      * @return
      */
-    public BigInteger get() {
+    public BigInteger unsigned() {
         return  along;
     }
 
@@ -21,11 +21,11 @@ public class ULong {
      * get of signed
      * @return
      */
-    public long raw() {
+    public long signed() {
         return along.longValue();
     }
 
-    public ULong raw(long along) {
+    public ULong signed(long along) {
         BigInteger l = BigInteger.valueOf(along);
         this.along = along < 0 ? l.and(aor) : l;
         return this;
@@ -35,16 +35,20 @@ public class ULong {
         return along;
     }
 
-    public void setAlong(BigInteger along) {
-        this.along = along;
+    public void set(long aUnsignedLong) {
+        setAlong(BigInteger.valueOf(aUnsignedLong));
     }
 
-    public ULong(BigInteger along) {
-        if(along.compareTo(BigInteger.ZERO) < 0) {
+    public void setAlong(BigInteger aUnsignedLong) {
+        if(aUnsignedLong .compareTo(BigInteger.ZERO)  < 0) {
             throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
         }
 
-        this.along = along;
+        this.along = aUnsignedLong;
+    }
+
+    public ULong(BigInteger aUnsignedLong) {
+        this.setAlong(aUnsignedLong);
     }
 
     public ULong() {
@@ -60,14 +64,14 @@ public class ULong {
     }
 
 
-    public static ULong valueOf(BigInteger along) {
-        return new ULong(along);
+    public static ULong valueOf(BigInteger aUnsignedLong) {
+        return new ULong(aUnsignedLong);
     }
 
 
     @Override
     public String toString() {
-        return "ULong{val=" + get() + '}';
+        return "ULong{val=" + unsigned() + '}';
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.clazz.warpper;
 
+import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.util.ConverterUtil;
 
 import java.math.BigInteger;
@@ -36,7 +37,7 @@ public class UNumber {
      *  get of unsigned
      * @return
      */
-    public BigInteger get() {
+    public BigInteger unsigned() {
         byte[] bytes = new byte[adata.length + 1];
         System.arraycopy(adata, 0, bytes, 1, adata.length);
         return new BigInteger(bytes);
@@ -48,7 +49,7 @@ public class UNumber {
 
 
     /**
-     * get of signed
+     * get of unsigned
      * @return
      */
     public byte[] raw() {
@@ -62,7 +63,7 @@ public class UNumber {
 
     @Override
     public String toString() {
-        return "UNumber{val=" + get() + '}';
+        return "UNumber{val=" + unsigned() + '}';
     }
 
     @Override
@@ -88,10 +89,14 @@ public class UNumber {
     }
 
     public BigInteger getAdata() {
-        return get();
+        return unsigned();
     }
 
     public void setAdata(BigInteger anumber) {
+        if(anumber .compareTo(BigInteger.ZERO)  < 0) {
+            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
+        }
+
         this.adata = ConverterUtil.bigIntegerToByte(anumber);;
     }
 }

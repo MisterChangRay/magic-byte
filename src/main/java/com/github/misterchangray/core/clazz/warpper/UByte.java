@@ -20,7 +20,7 @@ public class UByte {
      * get of unsigned byte
      * @return
      */
-    public short get() {
+    public short unsigned() {
         return abyte;
     }
 
@@ -28,17 +28,17 @@ public class UByte {
      * get of signed byte
      * @return
      */
-    public byte raw() {
+    public byte signed() {
         return (byte)abyte;
     }
 
-    public UByte raw(byte abyte) {
+    public UByte signed(byte abyte) {
         this.abyte = abyte < 0 ?  ConverterUtil.byteToUnsigned(abyte) : abyte;
         return this;
     }
 
-    public void set(short abyte) {
-        this.abyte = abyte;
+    public void set(short aUnsignedByte) {
+        this.setAbyte(aUnsignedByte);
     }
 
     public static UByte build() {
@@ -50,17 +50,13 @@ public class UByte {
     }
 
 
-    public UByte(short abyte) {
-        if(abyte < 0) {
-            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
-        }
-
-        this.abyte = abyte;
+    public UByte(short aUnsignedByte) {
+        this.set(aUnsignedByte);
     }
 
 
-    public static UByte valueOf(short abyte) {
-        return new UByte(abyte);
+    public static UByte valueOf(short aUnsignedByte) {
+        return new UByte(aUnsignedByte);
     }
 
 
@@ -86,7 +82,11 @@ public class UByte {
         return abyte;
     }
 
-    public void setAbyte(short abyte) {
-        this.abyte = abyte;
+    public void setAbyte(short aUnsignedByte) {
+        if(aUnsignedByte < 0) {
+            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
+        }
+
+        this.abyte = aUnsignedByte;
     }
 }

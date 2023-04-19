@@ -33,7 +33,7 @@ public class UShortWriter extends MWriter {
         short data = (short) this.fieldMetaInfo.getDefaultVal();
 
         if(Objects.nonNull(val)) {
-            data = ((UShort) val).raw();
+            data = ((UShort) val).signed();
         }
         buffer.putShort(data);
     }

@@ -33,7 +33,7 @@ public class ULongWriter extends MWriter {
         long data = (long) this.fieldMetaInfo.getDefaultVal();
 
         if(Objects.nonNull(val)) {
-            data = ((ULong) val).raw();
+            data = ((ULong) val).signed();
         }
         buffer.putLong(data);
     }
