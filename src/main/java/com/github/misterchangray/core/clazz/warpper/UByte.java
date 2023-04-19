@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.clazz.warpper;
 
+import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.util.ConverterUtil;
 
 import java.util.Objects;
@@ -11,14 +12,14 @@ import java.util.Objects;
  *
  */
 public class UByte {
-    private byte abyte;
+    private short abyte;
 
     /**
      * get of unsigned byte
      * @return
      */
     public short get() {
-        return abyte < 0 ?  ConverterUtil.byteToUnsigned(abyte) : abyte;
+        return abyte;
     }
 
     /**
@@ -26,28 +27,44 @@ public class UByte {
      * @return
      */
     public byte raw() {
-        return abyte;
+        return (byte)abyte;
     }
 
-    public void set(byte abyte) {
+    public UByte raw(byte abyte) {
+        this.abyte = abyte < 0 ?  ConverterUtil.byteToUnsigned(abyte) : abyte;
+        return this;
+    }
+
+    public void set(short abyte) {
         this.abyte = abyte;
     }
 
-    public UByte() {
+    public static UByte build() {
+        return new UByte();
     }
-    public UByte(byte abyte) {
+
+    public UByte () {
+
+    }
+
+
+    public UByte(short abyte) {
+        if(abyte < 0) {
+            throw  new MagicByteException("invalid unsigned number! should be greater than zero !");
+        }
+
         this.abyte = abyte;
     }
 
 
-    public static UByte valueOf(byte abyte) {
+    public static UByte valueOf(short abyte) {
         return new UByte(abyte);
     }
 
 
     @Override
     public String toString() {
-        return "UByte{val=" + get() + '}';
+        return "UByte{val=" + abyte + '}';
     }
 
     @Override

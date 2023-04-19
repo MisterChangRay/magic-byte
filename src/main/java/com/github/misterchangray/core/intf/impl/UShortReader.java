@@ -22,6 +22,6 @@ public class UShortReader extends MReader {
 
     @Override
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
-        return UShort.valueOf(buffer.getShort());
+        return UShort.build().raw(buffer.getShort());
     }
 }

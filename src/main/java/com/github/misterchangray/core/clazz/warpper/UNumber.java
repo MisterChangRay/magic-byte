@@ -1,6 +1,5 @@
 package com.github.misterchangray.core.clazz.warpper;
 
-import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.util.ConverterUtil;
 
 import java.math.BigInteger;
@@ -56,6 +55,10 @@ public class UNumber {
         return  adata;
     }
 
+
+    public static UNumber build() {
+        return new UNumber();
+    }
 
     @Override
     public String toString() {
