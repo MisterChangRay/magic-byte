@@ -130,8 +130,9 @@ public class ClassParser {
 
             totalBytes += fieldBytes;
         }
-
-        classMetaInfo.setElementBytes(totalBytes);
+        if(totalBytes > classMetaInfo.getElementBytes()) {
+            classMetaInfo.setElementBytes(totalBytes);
+        }
         classMetaInfo.getRoot().getFlatFields().addAll(classMetaInfo.getFields());
 
     }

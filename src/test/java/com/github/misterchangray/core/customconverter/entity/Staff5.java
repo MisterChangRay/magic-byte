@@ -13,14 +13,14 @@ public class Staff5 {
     private int id;
     @MagicField(order = 2, calcLength = true)
     private int length;
-    @MagicConverter(converter = CustomBook3Converter.class, attachParams = "1")
+    @MagicConverter(converter = CustomBook3Converter.class, attachParams = "2")
     @MagicField(order = 5, size = 2)
     private List<Book3> book;
-    @MagicConverter(converter = CustomBook3Converter.class, attachParams = "2")
-    @MagicField(order = 7, size = 2)
+    @MagicConverter(converter = CustomBook3Converter.class, attachParams = "4")
+    @MagicField(order = 7, size = 4)
     private List<Book3> book2;
 
-    @MagicField(order = 14, size = 4)
+    @MagicField(order = 14, size = 4, charset = "ASCII")
     private String name;
     @MagicField(order = 18, calcCheckCode = true)
     private byte checkCode;

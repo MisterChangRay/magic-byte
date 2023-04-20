@@ -5,7 +5,7 @@ import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.customconverter.customconverter.CustomStaff7Converter;
 
-@MagicConverter(converter = CustomStaff7Converter.class, fixSize = 8)
+@MagicConverter(converter = CustomStaff7Converter.class, fixSize = 10)
 @MagicClass
 public class Staff7 {
     @MagicField(order = 1)

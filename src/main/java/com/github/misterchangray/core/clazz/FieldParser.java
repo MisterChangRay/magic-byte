@@ -191,7 +191,10 @@ public class FieldParser {
 
         Class clazz = field.getType();
         if(TypeManager.isCollection(TypeManager.getType(clazz))) {
-            clazz = TypeManager.getGenericsFieldType(fieldMetaInfo);
+            fieldMetaInfo.getGenericsField().setType(TypeEnum.CUSTOM);
+            fieldMetaInfo.getGenericsField().setWriter(TypeManager.newWriter(fieldMetaInfo.getGenericsField()));
+            fieldMetaInfo.getGenericsField().setReader(TypeManager.newReader(fieldMetaInfo.getGenericsField()));
+
         } else {
             fieldMetaInfo.setType(TypeEnum.CUSTOM);
             fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
@@ -216,6 +219,9 @@ public class FieldParser {
                 new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize());
 
         fieldMetaInfo.setCustomConverter(magicConverterInfo);
+        if(TypeManager.isCollection(TypeManager.getType(clazz))) {
+            fieldMetaInfo.getGenericsField().setCustomConverter(magicConverterInfo);
+        }
     }
 
 
