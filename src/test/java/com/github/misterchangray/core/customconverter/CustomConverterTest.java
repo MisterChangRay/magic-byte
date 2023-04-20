@@ -28,6 +28,71 @@ import java.util.Date;
 public class CustomConverterTest {
    static SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
 
+    /**
+     * 测试fixsize 在成员上使用
+     *
+     * @throws ParseException
+     */
+    @Test
+    public void testStaff13() throws ParseException {
+        Staff13 staff13 = new Staff13();
+        staff13.setId(13);
+        staff13.setName("ray13");
+
+        byte[] bytes = MagicByte.unpackToByte(staff13);
+        Staff13 pack = MagicByte.pack(bytes, Staff13.class);
+
+        Assert.assertEquals(pack.getId() , 13);
+        Assert.assertEquals(pack.getName() , "ray13");
+        Book2 b2 = (Book2) pack.getBook();
+        Assert.assertEquals(b2.getId() , 26);
+
+    }
+
+    /**
+     * 测试类成员属性使用Object,并使用自定义转换器返回任意对象
+     *
+     * @throws ParseException
+     */
+    @Test
+    public void testStaff11() throws ParseException {
+        Staff11 staff11 = new Staff11();
+        staff11.setId(11);
+        staff11.setName("ray11");
+
+        byte[] bytes = MagicByte.unpackToByte(staff11);
+        Staff11 pack = MagicByte.pack(bytes, Staff11.class);
+        Assert.assertEquals(pack.getId() , 11);
+        Assert.assertEquals(pack.getName() , "ray11");
+        Book2 b2 = (Book2) pack.getBook();
+        Assert.assertEquals(b2.getId() , 26);
+
+    }
+
+
+    /**
+     * 测试对象属性中使用自定义转换器
+     * 并且该对象未做任何声明
+     *
+     * @throws ParseException
+     */
+    @Test
+    public void testStaff10() throws ParseException {
+        Staff10 staff10 = new Staff10();
+        staff10.setId(10);
+        staff10.setName("r10");
+        byte[] bytes = MagicByte.unpackToByte(staff10);
+        Staff10 pack = MagicByte.pack(bytes, Staff10.class);
+
+        Assert.assertEquals(pack.getId() , 10);
+        Assert.assertEquals(pack.getName() , "r10");
+        Book2 b2 = (Book2) pack.getBook();
+        Assert.assertEquals(b2.getId() , 25);
+
+
+
+    }
+
 
     /**
      * 在类成员中使用 @MagicConverter, 但是用 @MagicField;
@@ -49,6 +114,10 @@ public class CustomConverterTest {
 
     }
 
+    /**
+     * 测试直接对类使用自定义转换器
+     * @throws ParseException
+     */
     @Test
     public void testStaff8() throws ParseException {
         Staff8 staff8 = new Staff8();
@@ -66,7 +135,9 @@ public class CustomConverterTest {
 
     /**
      * 测试整个类自定义序列化
-     * 使用了fixsize 属性
+     * 并且使用了 fixsize 属性
+     *
+     * 整个类固定 8 个字节, 配置时固定为10个字节
      * @throws ParseException
      */
     @Test
@@ -76,7 +147,7 @@ public class CustomConverterTest {
         staff7.setLength(22);
 
         byte[] bytes = MagicByte.unpackToByte(staff7);
-        Assert.assertEquals(bytes.length , 8);
+        Assert.assertEquals(bytes.length , 10);
         Staff7 pack = MagicByte.pack(bytes, Staff7.class);
 
         Assert.assertEquals(staff7.getId(), pack.getId());
@@ -138,23 +209,32 @@ public class CustomConverterTest {
         book.setId(23);
         arrayList.add(book);
         Book3 book2 = new Book3();
-        book2.setCode(25);
-        book2.setId(24);
+        book2.setCode(26);
+        book2.setId(25);
         arrayList.add(book2);
         staff5.setBook(arrayList);
 
         ArrayList arrayList2 = new ArrayList();
 
         Book3 book3 = new Book3();
-        book3.setCode(26);
-        book3.setId(25);
+        book3.setCode(28);
+        book3.setId(27);
         arrayList2.add(book3);
         staff5.setBook2(arrayList2);
 
         byte[] bytes = MagicByte.unpackToByte(staff5, CustomConverterTest::checker);
-        Assert.assertEquals(bytes[44], 73);
-        bytes[43] = 01;
         Staff5 pack = MagicByte.pack(bytes, Staff5.class, CustomConverterTest::checker);
+
+        long checker = CustomConverterTest.checker(bytes);
+        Assert.assertEquals(bytes[bytes.length - 1], (byte)checker);
+
+        Assert.assertEquals(staff5.getId(), pack.getId());
+        Assert.assertEquals(staff5.getName(), pack.getName());
+        Assert.assertEquals(staff5.getBook().size(), pack.getBook().size());
+        Assert.assertEquals(staff5.getBook2().size(), 1);
+        Assert.assertEquals(pack.getBook2().size(), 4);
+
+        Assert.assertEquals(pack.getBook2().get(0).getId(), staff5.getBook2().get(0).getId());
     }
 
 
@@ -190,6 +270,14 @@ public class CustomConverterTest {
 
         byte[] bytes = MagicByte.unpackToByte(staff4);
         Assert.assertEquals(bytes[7], 44);
+        Staff4 pack = MagicByte.pack(bytes, Staff4.class);
+
+        Assert.assertEquals(staff4.getName(), pack.getName());
+        Assert.assertEquals(staff4.getId(), pack.getId());
+        Assert.assertEquals(44, pack.getLength());
+        Assert.assertEquals(staff4.getBook().size(), pack.getBook().size());
+        Assert.assertNotEquals(staff4.getBook2().size(), pack.getBook2().size());
+
     }
 
 
