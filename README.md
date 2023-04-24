@@ -110,8 +110,8 @@ public class Hello {
         // you can set other propertis
         // object to bytes
         // 也可以单独传入计算函数
-        byte[] bytes = Magic.unpack(school, Checker::customChecker); 
-        School school2 = Magic.pack(bytes, School.class); // bytes to object
+        byte[] bytes = MagicByte.unpack(school, Checker::customChecker); 
+        School school2 = MagicByte.pack(bytes, School.class); // bytes to object
         System.out.println(school.getAge() == school2.getAge()); // out put true
     
     }

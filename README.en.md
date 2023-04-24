@@ -95,8 +95,8 @@ public class Hello {
         // you can set other propertis
         // object to bytes
         // you also set checker when you call unpack method
-        byte[] bytes = Magic.unpack(school, Checker::customChecker); 
-        School school2 = Magic.pack(bytes, School.class); // bytes to object
+        byte[] bytes = MagicByte.unpack(school, Checker::customChecker); 
+        School school2 = MagicByte.pack(bytes, School.class); // bytes to object
         System.out.println(school.getAge() == school2.getAge()); // out put true
     
     }
