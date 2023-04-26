@@ -43,6 +43,8 @@ Maven项目可直接导入:
 ```
 
 #### 3. 代码示例
+以下为简单的框架功能展示，实际项目中数据实体类定义建议参考 [数据实体定义的最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BD%93%E5%AE%9A%E4%B9%89%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
+
 下面的对象中, 共有 Student 和 School 两个对象
 ```java
 // declare class must use public
@@ -130,7 +132,7 @@ public class Checker {
 }
 
 ```
-以上为简单的框架功能展示，实际项目中数据实体类定义建议参考 [数据实体定义的最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BD%93%E5%AE%9A%E4%B9%89%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
+
 
 #### 4. 注解和属性说明
 工具存在三个注解:
