@@ -8,6 +8,7 @@ import com.github.misterchangray.core.autochecker.pojo.OfficeWithUnsigend;
 import com.github.misterchangray.core.autochecker.pojo.Staff;
 import com.github.misterchangray.core.autochecker.pojo_error.OfficeWith2CalcLength;
 import com.github.misterchangray.core.autochecker.pojo_error.OfficeWith2CheckCode;
+import com.github.misterchangray.core.clazz.warpper.UByte;
 import com.github.misterchangray.core.clazz.warpper.UInt;
 import com.github.misterchangray.core.clazz.warpper.UShort;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
@@ -29,9 +30,11 @@ public class TestAutoCalc {
     public void testCalcLengthAndCheckCodeWithUnsigend() throws InterruptedException {
         OfficeWithUnsigend office = new OfficeWithUnsigend();
         office.setHead(11);
-        office.setAddr("chen11u");
+        office.setNameLen(UByte.valueOf((short) 4));
         office.setName("xiu22an");
+        office.setAddr("chen11u");
 
+        office.setStafLen(UInt.valueOf(2));
         office.setStaffs(new ArrayList<>());
         for (int i = 1; i < 4; i++) {
             Staff staff = new Staff();
@@ -47,10 +50,11 @@ public class TestAutoCalc {
 
         Assert.assertEquals(office.getHead(), office2.getHead());
         Assert.assertEquals(office.getAddr(), office2.getAddr());
-        Assert.assertEquals(office.getName(), office2.getName());
+        Assert.assertEquals(office.getNameLen(), office2.getNameLen());
+        Assert.assertEquals(office2.getName(), office.getName().substring(0, office.getNameLen().intValue()));
 
-        Assert.assertEquals(office.getStaffs().size(), office2.getStaffs().size());
-        for (int i = 0; i < office.getStaffs().size(); i++) {
+        Assert.assertEquals(office.getStafLen().intValue(), office2.getStaffs().size());
+        for (int i = 0; i < office2.getStaffs().size(); i++) {
             Staff staff1 = office.getStaffs().get(i);
             Staff staff2 = office2.getStaffs().get(i);
 
@@ -60,7 +64,7 @@ public class TestAutoCalc {
         }
 
         Assert.assertNotNull(office2.getLength());
-        Assert.assertEquals(office2.getLength().intValue(), 96);
+        Assert.assertEquals(office2.getLength().intValue(), 73);
 
         Assert.assertNotNull(office2.getCheckCode());
         Assert.assertEquals(office2.getCheckCode(), UShort.valueOf(0x3341));

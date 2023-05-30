@@ -8,17 +8,22 @@ import com.github.misterchangray.core.clazz.warpper.UShort;
 
 import java.util.List;
 
+// OfficeWithUnsigend(34) bytes + staff(22byte)
 @MagicClass
 public class OfficeWithUnsigend {
     @MagicField(order = 1)
     private int head;
     @MagicField(order = 3, calcLength = true)
     private UInt length;
-    @MagicField(order = 5, size = 10)
+    @MagicField(order = 4)
+    private UByte nameLen;
+    @MagicField(order = 5, dynamicSizeOf = 4)
     private String name;
     @MagicField(order = 7, size = 10)
     private String addr;
-    @MagicField(order = 9, size = 5, dynamicSize = true)
+    @MagicField(order = 8)
+    private UInt stafLen;
+    @MagicField(order = 9, dynamicSizeOf = 8)
     private List<Staff> staffs;
     @MagicField(order = 13, calcCheckCode = true)
     private UShort checkCode;
@@ -31,12 +36,28 @@ public class OfficeWithUnsigend {
         this.head = head;
     }
 
+    public UByte getNameLen() {
+        return nameLen;
+    }
+
+    public void setNameLen(UByte nameLen) {
+        this.nameLen = nameLen;
+    }
+
     public UInt getLength() {
         return length;
     }
 
     public void setLength(UInt length) {
         this.length = length;
+    }
+
+    public UInt getStafLen() {
+        return stafLen;
+    }
+
+    public void setStafLen(UInt stafLen) {
+        this.stafLen = stafLen;
     }
 
     public UShort getCheckCode() {

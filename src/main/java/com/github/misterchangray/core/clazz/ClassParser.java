@@ -154,7 +154,10 @@ public class ClassParser {
 
             if(dynamicRef.getType() != TypeEnum.BYTE &&
                     dynamicRef.getType() != TypeEnum.SHORT &&
-                    dynamicRef.getType() != TypeEnum.INT) {
+                    dynamicRef.getType() != TypeEnum.INT &&
+                    dynamicRef.getType() != TypeEnum.UBYTE &&
+                    dynamicRef.getType() != TypeEnum.USHORT &&
+                    dynamicRef.getType() != TypeEnum.UINT) {
                 throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
             }
 
