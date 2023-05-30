@@ -1,5 +1,7 @@
 package com.github.misterchangray.core;
 
+import com.github.misterchangray.core.clazz.ClassManager;
+import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.GlobalConfigs;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
@@ -20,6 +22,15 @@ public class MagicByte {
         GlobalConfigs.setGlobalDefaultCharset(charset);
     }
 
+    /**
+     * 返回结构体总字节数
+     * 注意：如果结构体有动态大小，那么返回值为最小字节数
+     * @return
+     */
+    public static int structBytes(Class<?> magicClazz) {
+        ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(magicClazz);
+        return classMetaInfo.getElementBytes();
+    }
 
     /**
      *

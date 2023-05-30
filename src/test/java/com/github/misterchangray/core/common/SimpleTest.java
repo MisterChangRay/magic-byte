@@ -330,6 +330,9 @@ public class SimpleTest {
 
         allDataTypes.setSt2("string");
 
+        int structBytes = MagicByte.structBytes(AllDataTypes.class);
+        Assert.assertEquals(structBytes, 95);
+
         byte[] tmp = MagicByte.unpackToByte(allDataTypes);
         AllDataTypes pack = MagicByte.pack(tmp, AllDataTypes.class);
 
