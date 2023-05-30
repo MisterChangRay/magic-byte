@@ -35,6 +35,6 @@ public class UShortWriter extends MWriter {
         if(Objects.nonNull(val)) {
             data = ((UShort) val).signed();
         }
-        buffer.putShort(data);
+        buffer.putShort(writeOffset, data);
     }
 }

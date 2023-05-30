@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.util;
 
+import com.github.misterchangray.core.clazz.warpper.*;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 
@@ -191,46 +192,26 @@ public class ConverterUtil {
      * @param o
      * @return
      */
-    public static long toNumber(TypeEnum typeEnum, Object o) {
+    public static long toNumber(TypeEnum typeEnum, Number o) {
         if(Objects.isNull(o)) return 0;
-
         switch (typeEnum) {
             case BYTE:
-                return (byte) o;
+                return o.byteValue();
             case SHORT:
-                return (short) o;
+                return o.shortValue();
             case INT:
-                return (int) o;
+                return o.intValue();
             case LONG:
-                return (long) o;
+            case UBYTE:
+            case USHORT:
+            case UINT:
+            case ULONG:
+            case UNUMBER:
+                return o.longValue();
         }
         return 0;
     }
 
-
-
-
-    /**
-     * 对象转为具体的值
-     * @param typeEnum
-     * @param o
-     * @return
-     */
-    public static long toNumber(TypeEnum typeEnum, long o) {
-        if(Objects.isNull(o)) return 0;
-
-        switch (typeEnum) {
-            case BYTE:
-                return (byte) o;
-            case SHORT:
-                return (short) o;
-            case INT:
-                return (int) o;
-            case LONG:
-                return (long) o;
-        }
-        return 0;
-    }
 
     /**
      * 对象转为具体的值
@@ -238,18 +219,26 @@ public class ConverterUtil {
      * @param val
      * @return
      */
-    public static Object toTargetObject(TypeEnum typeEnum, long val) {
+    public static Object toTargetObject(TypeEnum typeEnum, Number val) {
         if(Objects.isNull(val)) return 0;
 
         switch (typeEnum) {
             case BYTE:
-                return (byte) val;
+                return  val.byteValue();
             case SHORT:
-                return (short) val;
+                return  val.shortValue();
             case INT:
-                return (int) val;
+                return  val.intValue();
             case LONG:
-                return (long) val;
+                return  val.longValue();
+            case UBYTE:
+                return UByte.valueOf((short) val.longValue());
+            case USHORT:
+                return UShort.valueOf((int) val.longValue());
+            case UINT:
+                return UInt.valueOf(val.longValue());
+            case ULONG:
+                return ULong.valueOf(BigInteger.valueOf(val.longValue()));
         }
         return 0;
     }

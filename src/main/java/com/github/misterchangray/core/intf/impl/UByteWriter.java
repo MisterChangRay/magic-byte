@@ -36,6 +36,6 @@ public class UByteWriter extends MWriter {
             data = ((UByte) val).signed();
         }
 
-        buffer.put(data);
+        buffer.put(writeOffset, data);
     }
 }

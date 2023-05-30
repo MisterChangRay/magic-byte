@@ -32,7 +32,7 @@ public class CollectionReader extends MReader {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
-            count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
+            count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), (Number) o);
         }
 
         if(this.fieldMetaInfo.isDynamicSize()) {

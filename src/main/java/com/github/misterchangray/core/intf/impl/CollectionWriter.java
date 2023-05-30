@@ -30,7 +30,7 @@ public class CollectionWriter extends MWriter {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
-            count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), o);
+            count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), (Number) o);
         }
 
         if(Objects.nonNull(val) && TypeEnum.ARRAY == this.fieldMetaInfo.getType()) {

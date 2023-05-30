@@ -36,6 +36,6 @@ public class UIntWriter extends MWriter {
             data = ((UInt) val).signed();
         }
 
-        buffer.putInt(data);
+        buffer.putInt(writeOffset, data);
     }
 }

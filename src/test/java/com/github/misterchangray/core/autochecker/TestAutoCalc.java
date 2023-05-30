@@ -4,9 +4,12 @@ import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.TestFunctional;
 import com.github.misterchangray.core.autochecker.pojo.Office;
 import com.github.misterchangray.core.autochecker.pojo.OfficeStrict;
+import com.github.misterchangray.core.autochecker.pojo.OfficeWithUnsigend;
 import com.github.misterchangray.core.autochecker.pojo.Staff;
 import com.github.misterchangray.core.autochecker.pojo_error.OfficeWith2CalcLength;
 import com.github.misterchangray.core.autochecker.pojo_error.OfficeWith2CheckCode;
+import com.github.misterchangray.core.clazz.warpper.UInt;
+import com.github.misterchangray.core.clazz.warpper.UShort;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.InvalidParameterException;
@@ -22,6 +25,47 @@ import java.util.ArrayList;
  * calcLength & calcCheckCode
  */
 public class TestAutoCalc {
+    @Test
+    public void testCalcLengthAndCheckCodeWithUnsigend() throws InterruptedException {
+        OfficeWithUnsigend office = new OfficeWithUnsigend();
+        office.setHead(11);
+        office.setAddr("chen11u");
+        office.setName("xiu22an");
+
+        office.setStaffs(new ArrayList<>());
+        for (int i = 1; i < 4; i++) {
+            Staff staff = new Staff();
+            staff.setAge(32 + i);
+            staff.setName("staff" + i);
+            staff.setPhone(18180380200L + i);
+            office.getStaffs().add(staff);
+        }
+
+        MagicByte.configMagicChecker(TestFunctional::checker);
+        ByteBuffer unpack = MagicByte.unpack(office);
+        OfficeWithUnsigend office2 = MagicByte.pack(unpack.array(), OfficeWithUnsigend.class);
+
+        Assert.assertEquals(office.getHead(), office2.getHead());
+        Assert.assertEquals(office.getAddr(), office2.getAddr());
+        Assert.assertEquals(office.getName(), office2.getName());
+
+        Assert.assertEquals(office.getStaffs().size(), office2.getStaffs().size());
+        for (int i = 0; i < office.getStaffs().size(); i++) {
+            Staff staff1 = office.getStaffs().get(i);
+            Staff staff2 = office2.getStaffs().get(i);
+
+            Assert.assertEquals(staff1.getAge(), staff2.getAge());
+            Assert.assertEquals(staff1.getName(), staff2.getName());
+            Assert.assertEquals(staff1.getPhone(), staff2.getPhone());
+        }
+
+        Assert.assertNotNull(office2.getLength());
+        Assert.assertEquals(office2.getLength().intValue(), 96);
+
+        Assert.assertNotNull(office2.getCheckCode());
+        Assert.assertEquals(office2.getCheckCode(), UShort.valueOf(0x3341));
+
+    }
 
     @Test
     public void testOfficeWith2CalcCheckCode() throws InterruptedException {
@@ -118,7 +162,9 @@ public class TestAutoCalc {
         }
 
         Assert.assertNotNull(office2.getCheckCode());
+        Assert.assertEquals(office2.getCheckCode(), 65);
         Assert.assertNotNull(office2.getLength());
+        Assert.assertEquals(office2.getLength(), 95);
     }
 
 

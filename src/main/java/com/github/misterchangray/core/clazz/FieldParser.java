@@ -106,7 +106,11 @@ public class FieldParser {
             if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
                     fieldMetaInfo.getType() != TypeEnum.SHORT &&
                     fieldMetaInfo.getType() != TypeEnum.INT &&
-                    fieldMetaInfo.getType() != TypeEnum.LONG) {
+                    fieldMetaInfo.getType() != TypeEnum.LONG &&
+                    fieldMetaInfo.getType() != TypeEnum.UBYTE &&
+                    fieldMetaInfo.getType() != TypeEnum.USHORT &&
+                    fieldMetaInfo.getType() != TypeEnum.UINT &&
+                    fieldMetaInfo.getType() != TypeEnum.ULONG) {
                 throw new InvalidParameterException("calcCheckCode field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
             }
         }
@@ -117,7 +121,10 @@ public class FieldParser {
         if(fieldMetaInfo.isCalcLength()) {
             if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
                     fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.INT) {
+                    fieldMetaInfo.getType() != TypeEnum.INT &&
+                    fieldMetaInfo.getType() != TypeEnum.UBYTE &&
+                    fieldMetaInfo.getType() != TypeEnum.USHORT &&
+                    fieldMetaInfo.getType() != TypeEnum.UINT) {
                 throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
             }
         }

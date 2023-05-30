@@ -35,6 +35,6 @@ public class ULongWriter extends MWriter {
         if(Objects.nonNull(val)) {
             data = ((ULong) val).signed();
         }
-        buffer.putLong(data);
+        buffer.putLong(writeOffset, data);
     }
 }

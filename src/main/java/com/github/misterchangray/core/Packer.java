@@ -85,7 +85,7 @@ public class Packer {
         }
 
 
-        long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), val);
+        long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), (Number) val);
         long expect = data.capacity();
         if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
             byte[] array = data.array();
@@ -103,7 +103,7 @@ public class Packer {
         }
 
         byte[] array = data.array();
-        long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), val);
+        long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), (Number) val);
         long expect = ConverterUtil.toNumber(fieldMetaInfo.getType(), checker.calcCheckCode(array));
         if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
             throw new InvalidCheckCodeException("the checkCode isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
