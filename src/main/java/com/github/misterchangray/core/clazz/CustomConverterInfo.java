@@ -11,6 +11,9 @@ public class CustomConverterInfo {
     private String attachParams;
 
 
+    /**
+     * 自定义序列化转换器
+     */
     private MConverter converter;
 
 

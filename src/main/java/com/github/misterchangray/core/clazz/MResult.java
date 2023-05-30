@@ -1,7 +1,17 @@
 package com.github.misterchangray.core.clazz;
 
+/**
+ * 自定义序列号返回实体类
+ * @param <T>
+ */
 public class MResult<T> {
+    /**
+     * 读取/写入总字节数
+     */
     private Integer bytes;
+    /**
+     * 读取返回的实体类
+     */
     private T data;
 
     public Integer getBytes() {
