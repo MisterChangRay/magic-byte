@@ -11,7 +11,7 @@ import java.util.Objects;
  * 提供便捷的无符号数封装及访问
  *
  */
-public class UByte {
+public class UByte extends Number{
     private short abyte;
 
 
@@ -47,6 +47,26 @@ public class UByte {
 
     public UByte () {
 
+    }
+
+    @Override
+    public int intValue() {
+        return abyte;
+    }
+
+    @Override
+    public long longValue() {
+        return abyte;
+    }
+
+    @Override
+    public float floatValue() {
+        return abyte;
+    }
+
+    @Override
+    public double doubleValue() {
+        return abyte;
     }
 
 

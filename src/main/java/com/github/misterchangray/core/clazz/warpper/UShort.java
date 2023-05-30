@@ -4,7 +4,7 @@ import com.github.misterchangray.core.exception.MagicByteException;
 
 import java.util.Objects;
 
-public class UShort {
+public class UShort  extends Number{
     private int ashort;
 
     /**
@@ -37,6 +37,26 @@ public class UShort {
     }
 
     public UShort() {
+    }
+
+    @Override
+    public int intValue() {
+        return ashort;
+    }
+
+    @Override
+    public long longValue() {
+        return ashort;
+    }
+
+    @Override
+    public float floatValue() {
+        return ashort;
+    }
+
+    @Override
+    public double doubleValue() {
+        return ashort;
     }
 
     public int getAshort() {

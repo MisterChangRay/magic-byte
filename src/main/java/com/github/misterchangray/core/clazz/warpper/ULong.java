@@ -5,7 +5,7 @@ import com.github.misterchangray.core.exception.MagicByteException;
 import java.math.BigInteger;
 import java.util.Objects;
 
-public class ULong {
+public class ULong  extends Number{
     private BigInteger along;
     private BigInteger aor =  new BigInteger("FFFFFFFFFFFFFFFF", 16);
 
@@ -54,6 +54,27 @@ public class ULong {
     public ULong() {
 
     }
+
+    @Override
+    public int intValue() {
+        return along.intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return along.longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return along.floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
+        return along.doubleValue();
+    }
+
     public static ULong build() {
         return new ULong();
     }

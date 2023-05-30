@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 
 
-public class UNumber {
+public class UNumber  extends Number{
     private byte[] adata;
 
     public void set(byte[] abytes) {
@@ -151,5 +151,25 @@ public class UNumber {
         }
 
         this.adata = ConverterUtil.bigIntegerToByte(anumber);
+    }
+
+    @Override
+    public int intValue() {
+        return unsigned().intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return unsigned().longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return unsigned().floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
+        return unsigned().doubleValue();
     }
 }

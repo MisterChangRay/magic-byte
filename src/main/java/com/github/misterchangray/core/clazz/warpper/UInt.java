@@ -5,7 +5,7 @@ import com.github.misterchangray.core.util.ConverterUtil;
 
 import java.util.Objects;
 
-public class UInt {
+public class UInt  extends Number{
     private long aint;
 
     /**
@@ -43,6 +43,26 @@ public class UInt {
 
     public UInt() {
 
+    }
+
+    @Override
+    public int intValue() {
+        return (int) aint;
+    }
+
+    @Override
+    public long longValue() {
+        return aint;
+    }
+
+    @Override
+    public float floatValue() {
+        return aint;
+    }
+
+    @Override
+    public double doubleValue() {
+        return aint;
     }
 
     public static UInt valueOf(long aUnsignedInt) {

@@ -26,6 +26,56 @@ import java.util.List;
  */
 public class SimpleTest {
     @Test
+    public void testUnsignedType() {
+        UByte uByte = UByte.valueOf((short) 0xF3);
+        Assert.assertEquals(uByte.signed(), -13);
+        Assert.assertEquals(uByte.byteValue(), -13);
+        Assert.assertEquals(uByte.intValue(), 0xF3);
+        Assert.assertEquals(uByte.intValue(), uByte.shortValue());
+        Assert.assertEquals(uByte.intValue(), uByte.longValue());
+
+
+        uByte = UByte.valueOf((short) 0x53);
+        Assert.assertEquals(uByte.signed(), 83);
+        Assert.assertEquals(uByte.byteValue(), 83);
+        Assert.assertEquals(uByte.intValue(), 0x53);
+        Assert.assertEquals(uByte.intValue(), uByte.shortValue());
+        Assert.assertEquals(uByte.intValue(), uByte.longValue());
+
+        UShort uShort = UShort.valueOf(0xFFE8);
+        Assert.assertEquals(uShort.signed(), -24);
+        Assert.assertEquals(uShort.byteValue(), -24);
+        Assert.assertEquals(uShort.shortValue(), -24);
+        Assert.assertEquals(uShort.intValue(), 0xFFE8);
+        Assert.assertEquals(uShort.intValue(), uShort.longValue());
+
+
+        uShort = UShort.valueOf(0xFE8);
+        Assert.assertEquals(uShort.signed(), 0xFE8);
+        Assert.assertEquals(uShort.byteValue(), -24);
+        Assert.assertEquals(uShort.shortValue(), 0xFE8);
+        Assert.assertEquals(uShort.intValue(), 0xFE8);
+        Assert.assertEquals(uShort.intValue(), uShort.longValue());
+
+
+
+
+        UInt uInt = UInt.valueOf(0xFEEFEFD8L);
+        Assert.assertEquals(uInt.signed(), -17829928);
+        Assert.assertEquals(uInt.byteValue(), -40);
+        Assert.assertEquals(uInt.shortValue(), -4136);
+        Assert.assertEquals(uInt.intValue(), -17829928);
+        Assert.assertEquals(uInt.longValue(), 0xFEEFEFD8L);
+
+        uInt = UInt.valueOf(0xFEEFEL);
+        Assert.assertEquals(uInt.signed(), 0xFEEFEL);
+        Assert.assertEquals(uInt.byteValue(), -2);
+        Assert.assertEquals(uInt.shortValue(), -4354);
+        Assert.assertEquals(uInt.intValue(), 0xFEEFEL);
+        Assert.assertEquals(uInt.longValue(), 0xFEEFEL);
+    }
+
+    @Test
     public void testUnsignedObj() {
         UnsignedObj unsignedObj = new UnsignedObj();
         unsignedObj.setuByte(UByte.valueOf((short) 0XAF));
