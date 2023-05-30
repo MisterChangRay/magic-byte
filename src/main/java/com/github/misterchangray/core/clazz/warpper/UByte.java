@@ -79,6 +79,10 @@ public class UByte extends Number{
         return new UByte(aUnsignedByte);
     }
 
+    public static UByte valueOf(int aUnsignedByte) {
+        return new UByte((short) aUnsignedByte);
+    }
+
 
     @Override
     public String toString() {
