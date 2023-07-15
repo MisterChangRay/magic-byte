@@ -125,7 +125,15 @@ public class FieldMetaInfo implements MField {
      * 默认格式化到秒
      */
     private TimestampFormatter timestampFormatter;
+    private String formatPattern;
 
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public void setFormatPattern(String formatPattern) {
+        this.formatPattern = formatPattern;
+    }
 
     public TimestampFormatter getTimestampFormatter() {
         return timestampFormatter;

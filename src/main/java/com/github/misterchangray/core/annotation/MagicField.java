@@ -80,4 +80,10 @@ public @interface MagicField {
      * @return
      */
     TimestampFormatter timestampFormat() default TimestampFormatter.TO_TIMESTAMP_MILLIS;
+
+    /**
+     * 日期格式化模式
+     * @return
+     */
+    String formatPattern() default "yyyyMMddHHmmss";
 }

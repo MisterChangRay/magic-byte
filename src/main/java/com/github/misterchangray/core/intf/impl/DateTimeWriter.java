@@ -7,6 +7,7 @@ import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DateUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
+import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,7 +55,18 @@ public class DateTimeWriter extends MWriter {
                 }
                 timestamp = DateUtil.timestampConvert(timestamp, TimestampFormatter.TO_TIMESTAMP_MILLIS, fieldMetaInfo.getTimestampFormatter());
             }
-            byte[] res = ConverterUtil.numberToByte(timestamp);
+            byte[] res = new byte[0];
+            if(this.fieldMetaInfo.getTimestampFormatter() == TimestampFormatter.TO_TIMESTAMP_STRING ){
+                if(clazz.isAssignableFrom(LocalTime.class)){
+                    res =  DateUtil.localTimeToTxt(timestamp, this.fieldMetaInfo.getFormatPattern()).getBytes(StandardCharsets.UTF_8);
+                } else {
+                    res = DateUtil.dateToString(new Date(timestamp), this.fieldMetaInfo.getFormatPattern()).getBytes(StandardCharsets.UTF_8);
+
+                }
+            } else {
+                res = ConverterUtil.numberToByte(timestamp);
+
+            }
             for (int i = data.length - 1, j=res.length - 1; i>=0 & j>=0;  i--, j--) {
                 data[i] = res[j];
             }

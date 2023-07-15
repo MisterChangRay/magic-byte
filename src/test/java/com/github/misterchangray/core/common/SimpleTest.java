@@ -10,13 +10,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.nio.ByteBuffer;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -25,6 +27,52 @@ import java.util.List;
  *
  */
 public class SimpleTest {
+
+    @Test
+    public void testDateToString() {
+        DateToStringObject raw = new DateToStringObject();
+        raw.setA(new Date());
+        // Fri Jul 14 2023 15:59:03 GMT+0800 (中国标准时间)
+        raw.setB(Instant.ofEpochMilli(1689321543380L));
+        raw.setC(LocalTime.of(18, 38, 47));
+        raw.setD(LocalDate.of(2022, 01, 3));
+        raw.setE(LocalDateTime.of(2021, 03, 21, 12, 23, 54));
+
+        byte[] bytes = MagicByte.unpackToByte(raw);
+        String date = new String(bytes);
+        Assert.assertEquals(date, "2023071520230714-15:59:0318:38:4720220103 00 0020210321@12@23@54");
+        DateToStringObject pa = MagicByte.pack(bytes, DateToStringObject.class);
+
+        Assert.assertEquals(raw.getA().getYear(), pa.getA().getYear());
+        Assert.assertEquals(raw.getA().getMonth(), pa.getA().getMonth());
+        Assert.assertEquals(raw.getA().getDay(), pa.getA().getDay());
+
+
+        Assert.assertEquals(raw.getB().atZone(ZoneId.systemDefault()).get(ChronoField.YEAR), pa.getB().atZone(ZoneId.systemDefault()).get(ChronoField.YEAR));
+        Assert.assertEquals(raw.getB().atZone(ZoneId.systemDefault()).get(ChronoField.MONTH_OF_YEAR), pa.getB().atZone(ZoneId.systemDefault()).get(ChronoField.MONTH_OF_YEAR));
+        Assert.assertEquals(raw.getB().atZone(ZoneId.systemDefault()).get(ChronoField.DAY_OF_MONTH), pa.getB().atZone(ZoneId.systemDefault()).get(ChronoField.DAY_OF_MONTH));
+        Assert.assertEquals(raw.getB().atZone(ZoneId.systemDefault()).get(ChronoField.HOUR_OF_DAY), pa.getB().atZone(ZoneId.systemDefault()).get(ChronoField.HOUR_OF_DAY));
+        Assert.assertEquals(raw.getB().atZone(ZoneId.systemDefault()).get(ChronoField.MINUTE_OF_HOUR), pa.getB().atZone(ZoneId.systemDefault()).get(ChronoField.MINUTE_OF_HOUR));
+        Assert.assertEquals(raw.getB().atZone(ZoneId.systemDefault()).get(ChronoField.SECOND_OF_MINUTE), pa.getB().atZone(ZoneId.systemDefault()).get(ChronoField.SECOND_OF_MINUTE));
+
+        Assert.assertEquals(raw.getC().getHour(), pa.getC().getHour());
+        Assert.assertEquals(raw.getC().getMinute(), pa.getC().getMinute());
+        Assert.assertEquals(raw.getC().getSecond(), pa.getC().getSecond());
+
+        Assert.assertEquals(raw.getD().getYear(), pa.getD().getYear());
+        Assert.assertEquals(raw.getD().getMonth(), pa.getD().getMonth());
+        Assert.assertEquals(raw.getD().getDayOfMonth(), pa.getD().getDayOfMonth());
+
+        Assert.assertEquals(raw.getE().getYear(), pa.getE().getYear());
+        Assert.assertEquals(raw.getE().getMonth(), pa.getE().getMonth());
+        Assert.assertEquals(raw.getE().getDayOfMonth(), pa.getE().getDayOfMonth());
+        Assert.assertEquals(raw.getE().getHour(), pa.getE().getHour());
+        Assert.assertEquals(raw.getE().getMinute(), pa.getE().getMinute());
+        Assert.assertEquals(raw.getE().getSecond(), pa.getE().getSecond());
+
+
+
+    }
     @Test
     public void testUnsignedType() {
         UByte uByte = UByte.valueOf((short) 0xF3);

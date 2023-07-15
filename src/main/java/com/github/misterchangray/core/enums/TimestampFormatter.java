@@ -6,6 +6,8 @@ public enum TimestampFormatter {
     TO_TIMESTAMP_SECONDS(),
     TO_TIMESTAMP_HOURS(),
     TO_TIMESTAMP_DAYS(),
+
+    TO_TIMESTAMP_STRING()
     ;
 
 

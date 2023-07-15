@@ -274,6 +274,7 @@ public class FieldParser {
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
         fieldMetaInfo.setCalcLength(magicField.calcLength());
         fieldMetaInfo.setTimestampFormatter(magicField.timestampFormat());
+        fieldMetaInfo.setFormatPattern(magicField.formatPattern());
 
         if(magicField.defaultVal() > 0){
             fieldMetaInfo.setDefaultVal(magicField.defaultVal());
