@@ -3,22 +3,20 @@ package com.github.misterchangray.core.common;
 
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.warpper.*;
-import com.github.misterchangray.core.common.entity.custom.*;
+import com.github.misterchangray.core.common.entity.custom.CustomDefaultValue;
+import com.github.misterchangray.core.common.entity.custom.DefaultValue;
+import com.github.misterchangray.core.common.entity.custom.DynamicString;
+import com.github.misterchangray.core.common.entity.custom.StringWithUTF8;
 import com.github.misterchangray.core.common.simple.*;
-import com.github.misterchangray.core.common.simple.AllDataTypes;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -31,7 +29,8 @@ public class SimpleTest {
     @Test
     public void testDateToString() {
         DateToStringObject raw = new DateToStringObject();
-        raw.setA(new Date());
+        //Tue Jul 18 2023 09:12:18 GMT+0800 (中国标准时间)
+        raw.setA(new Date(1689642738840L));
         // Fri Jul 14 2023 15:59:03 GMT+0800 (中国标准时间)
         raw.setB(Instant.ofEpochMilli(1689321543380L));
         raw.setC(LocalTime.of(18, 38, 47));
@@ -40,7 +39,7 @@ public class SimpleTest {
 
         byte[] bytes = MagicByte.unpackToByte(raw);
         String date = new String(bytes);
-        Assert.assertEquals(date, "2023071520230714-15:59:0318:38:4720220103 00 0020210321@12@23@54");
+        Assert.assertEquals(date, "2023071820230714-15:59:0318:38:4720220103 00 0020210321@12@23@54");
         DateToStringObject pa = MagicByte.pack(bytes, DateToStringObject.class);
 
         Assert.assertEquals(raw.getA().getYear(), pa.getA().getYear());
