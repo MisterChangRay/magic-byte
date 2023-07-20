@@ -20,7 +20,7 @@ public class CustomSexEnumSerialize implements MConverter<SexEnum> {
      * @return 返回总共读取的字节数和封装好的对象
      */
     @Override
-    public MResult<SexEnum> pack(int nextReadIndex, byte[] fullBytes, String attachParams) {
+    public MResult<SexEnum> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
         byte index = fullBytes[4];
 
         // 注意，如果没有在注解中申明`fixSize`, 这里必须要返回读取的字节数
@@ -37,7 +37,7 @@ public class CustomSexEnumSerialize implements MConverter<SexEnum> {
      * @return
      */
     @Override
-    public byte[] unpack(SexEnum sexEnum, String attachParams) {
+    public byte[] unpack(SexEnum sexEnum, String[] attachParams) {
         for (int i = 0; i < sexEnums.length; i++) {
             if(sexEnum == sexEnums[i]) {
                 return new byte[]{(byte)i};

@@ -10,29 +10,29 @@ import java.util.Date;
 
 public class CustomBookConverter implements MConverter<Book> {
     @Override
-    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String attachParams) {
-        if(attachParams.equals("1")) {
+    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
+        if(attachParams[0].equals("1")) {
             Book book = new Book();
             book.setCreateDate(new Date());
             book.setId(23);
             return MResult.build(0, book);
 
-        }  else if(attachParams.equals("2")) {
+        }  else if(attachParams[0].equals("2")) {
             Book book2 = new Book();
             book2.setCreateDate(new Date());
             book2.setId(24);
             return MResult.build(0,book2);
-        }else if(attachParams.equals("3")) {
+        }else if(attachParams[0].equals("3")) {
             Book2 book2 = new Book2();
             book2.setCreateDate(new Date());
             book2.setId(25);
             return MResult.build(0,book2);
-        }else if(attachParams.equals("4")) {
+        }else if(attachParams[0].equals("4")) {
             Book2 book2 = new Book2();
             book2.setCreateDate(new Date());
             book2.setId(26);
             return MResult.build(0,book2);
-        } else if(attachParams.equals("14")) {
+        } else if(attachParams[0].equals("14")) {
             Book2 book2 = new Book2();
             book2.setCreateDate(new Date());
             book2.setId(26);
@@ -42,8 +42,8 @@ public class CustomBookConverter implements MConverter<Book> {
     }
 
     @Override
-    public byte[] unpack(Book object, String attachParams) {
-        if(attachParams.equals("14")) {
+    public byte[] unpack(Book object, String[] attachParams) {
+        if(attachParams[0].equals("14")) {
 
             return new byte[] {
                     0, 0, 0 ,1,

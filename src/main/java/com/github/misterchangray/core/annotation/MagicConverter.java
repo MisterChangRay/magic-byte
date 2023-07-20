@@ -16,7 +16,7 @@ public @interface MagicConverter {
      * 附加参数
      * @return
      */
-    String attachParams() default "";
+    String[] attachParams() default "";
 
     /**
      * 转换器

@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.time.*;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
@@ -25,7 +26,32 @@ import java.util.List;
  *
  */
 public class SimpleTest {
+    @Test
+    public void testEmun() {
+        EnumType enumType = new EnumType();
+        enumType.setA(UNumber.valueOf(1));
+        enumType.setB(Book.化学);
+        enumType.setC(UNumber.valueOf(4));
 
+        ByteBuffer unpack = MagicByte.unpack(enumType);
+        EnumType pack = MagicByte.pack(unpack.array(), EnumType.class);
+        Assert.assertEquals(enumType.getA(), pack.getA());
+        Assert.assertEquals(enumType.getB(), pack.getB());
+        Assert.assertEquals(enumType.getC(), pack.getC());
+
+
+         enumType = new EnumType();
+        enumType.setA(UNumber.valueOf(3));
+        enumType.setB(Book.物理);
+        enumType.setC(UNumber.valueOf(94));
+
+        unpack = MagicByte.unpack(enumType);
+        pack = MagicByte.pack(unpack.array(), EnumType.class);
+        Assert.assertEquals(enumType.getA(), pack.getA());
+        Assert.assertEquals(enumType.getB(), pack.getB());
+        Assert.assertEquals(enumType.getC(), pack.getC());
+
+    }
     @Test
     public void testDateToString() {
         DateToStringObject raw = new DateToStringObject();

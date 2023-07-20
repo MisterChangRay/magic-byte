@@ -9,7 +9,7 @@ import com.github.misterchangray.core.customconverter.customconverter.CustomBook
 public class Staff13 {
     @MagicField(order = 1)
     private int id;
-    @MagicConverter(converter = CustomBookConverter.class, fixSize = 10, attachParams = "14")
+    @MagicConverter(converter = CustomBookConverter.class, fixSize = 10, attachParams = {"14"})
     @MagicField(order = 3)
     private Object book;
     @MagicField(order = 4, size = 10)

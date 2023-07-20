@@ -59,7 +59,7 @@ public class Staff6 {
         SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
 
         @Override
-        public MResult<Date> pack(int nextReadIndex, byte[] fullBytes, String attachParams) {
+        public MResult<Date> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
             byte[] tmp = Arrays.copyOfRange(fullBytes, nextReadIndex, nextReadIndex + 14);
             String s = new String(tmp);
             MResult build = null;
@@ -72,7 +72,7 @@ public class Staff6 {
         }
 
         @Override
-        public byte[] unpack(Date object, String attachParams) {
+        public byte[] unpack(Date object, String[] attachParams) {
             String format = timestampFormatter.format(object);
             return format.getBytes();
         }

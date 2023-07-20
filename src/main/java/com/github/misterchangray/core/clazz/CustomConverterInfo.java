@@ -8,7 +8,7 @@ public class CustomConverterInfo {
      * 附加参数
      * @return
      */
-    private String attachParams;
+    private String[] attachParams;
 
 
     /**
@@ -46,15 +46,15 @@ public class CustomConverterInfo {
         this.fixSize = fixSize;
     }
 
-    public String getAttachParams() {
+    public String[] getAttachParams() {
         return attachParams;
     }
 
-    public void setAttachParams(String attachParams) {
+    public void setAttachParams(String[] attachParams) {
         this.attachParams = attachParams;
     }
 
-    public CustomConverterInfo(String attachParams, MConverter converter, int fixSize) {
+    public CustomConverterInfo(String[] attachParams, MConverter converter, int fixSize) {
         this.attachParams = attachParams;
         this.converter = converter;
         this.fixSize = fixSize;

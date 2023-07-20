@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class CustomBook3Converter implements MConverter<Book3> {
     @Override
-    public MResult<Book3> pack(int nextReadIndex, byte[] fullBytes, String attachParams) {
+    public MResult<Book3> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(fullBytes.length);
         byteBuffer.put(fullBytes);
         byteBuffer.position(nextReadIndex);
@@ -27,7 +27,7 @@ public class CustomBook3Converter implements MConverter<Book3> {
     }
 
     @Override
-    public byte[] unpack(Book3 book3, String attachParams) {
+    public byte[] unpack(Book3 book3, String[] attachParams) {
         if(Objects.isNull(book3)) {
             return new byte[8];
         }

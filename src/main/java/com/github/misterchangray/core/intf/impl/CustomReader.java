@@ -36,7 +36,7 @@ public class CustomReader extends MReader {
         CustomConverterInfo converterInfo = this.fieldMetaInfo.getCustomConverter();
         MConverter converter = converterInfo.getConverter();
 
-        MResult pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams());
+        MResult pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams(), this.fieldMetaInfo.getClazz());
 
         if((Objects.isNull(pack) || Objects.isNull(pack.getBytes())) && !converterInfo.isFixsize()) {
             throw new InvalidLengthException("you should return actually read bytes length when you not set fixSize property, at: " + converter.getClass().getTypeName());

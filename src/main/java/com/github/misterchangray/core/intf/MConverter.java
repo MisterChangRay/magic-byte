@@ -18,9 +18,10 @@ public interface MConverter<T> {
      * @param nextReadIndex 起始位置，即在此之前的都已读取
      * @param fullBytes 完整字节数据
      * @param attachParams 附加参数
+     * @param clz 打包对象所属类
      * @return
      */
-    default MResult<T> pack(int nextReadIndex, byte[] fullBytes, String attachParams) {
+    default MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
         return MResult.build(0, null);
     }
 
@@ -33,7 +34,7 @@ public interface MConverter<T> {
      * @return
      * @throws IllegalAccessException
      */
-    default byte[] unpack(T object, String attachParams) {
+    default byte[] unpack(T object, String[] attachParams) {
         return null;
     };
 }
