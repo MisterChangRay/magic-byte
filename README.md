@@ -38,7 +38,7 @@ Maven项目可直接导入:
 <dependency>
   <groupId>io.github.misterchangray</groupId>
   <artifactId>magic-byte</artifactId>
-  <version>2.3.4</version>
+  <version>2.3.5</version>
 </dependency>
 ```
 
@@ -147,7 +147,8 @@ public class Checker {
 	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
     - calcLength 标记字段为长度字段, 反序列化时将自动将数据总长度填充到此字段;  可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
-    - timestampFormat 指定时间戳格式,可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可使用size进行调整;如秒级时间戳4个字节就足够储存传输
+    - timestampFormat 可指定时间格式,时间戳或者文本,时间戳可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可使用size进行调整;如秒级时间戳4个字节就足够储存传输
+    - formatPattern 日期字段使用,如指定序列化为字符串,这里配置序列化格式。默认为:yyyyMMddHHmmss
 3. `@MagicConverter()`配置自定义序列化,更多说明参考 [自定义序列化最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
     - converter, 序列化类, 该类必须为`MConverter`的子类
     - attachParams, 附加参数;序列化时将会传入
@@ -182,6 +183,7 @@ public class Checker {
 11. 不支持类继承的序列化和反序列化;支持类的嵌套组合使用
 12. 序列化null值,如果是包装数据类型,则使用原始类型默认值;如`Short a = null;` 序列化为 `0`; 其他数据类型将会直接填充,如数组，对象等。
 13. 更多问题请前往WIKI页面查看 >> [WIKI_HOME](https://github.com/MisterChangRay/magic-byte/wiki)
+14. 内置枚举类序列化转换器`SimpleEnumConverter`,原理是根据枚举定义顺序进行序列化/反序列化.故使用后请不要更改定义顺序。
 
 #### 7. 开发建议
 
