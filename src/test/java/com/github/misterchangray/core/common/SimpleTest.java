@@ -18,6 +18,7 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 
 /**
@@ -54,6 +55,8 @@ public class SimpleTest {
     }
     @Test
     public void testDateToString() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+
         DateToStringObject raw = new DateToStringObject();
         //Tue Jul 18 2023 09:12:18 GMT+0800 (中国标准时间)
         raw.setA(new Date(1689642738840L));
