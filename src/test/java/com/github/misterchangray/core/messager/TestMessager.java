@@ -13,6 +13,7 @@ import org.junit.Test;
 public class TestMessager {
     @Test
     public void testStudent() {
+        // 注册消息命令,此消息类型写死到类中
         MagicByte.registerCMD(Student.class);
         Student student = new Student();
         student.setAge(13);
@@ -21,6 +22,7 @@ public class TestMessager {
         byte[] bytes = MagicByte.unpackToByte(student);
         MagicMessage s1 = MagicByte.pack(bytes);
 
+        // 可以通过 cmd() 函数获取当前消息类型, 前提是必须要实现接口方法
         Assert.assertEquals(s1.cmd(), 33);
         Student s = (Student) s1;
 
@@ -33,6 +35,7 @@ public class TestMessager {
 
     @Test
     public void testTeacher() {
+        // 注册消息,由于使用了公共头,所以注册时需要指定消息类型
         MagicByte.registerCMD(34, Teacher.class);
         Head head = new Head();
         head.setLen(UInt.valueOf(17));
@@ -44,6 +47,7 @@ public class TestMessager {
         byte[] bytes = MagicByte.unpackToByte(teacher);
         MagicMessage s1 = MagicByte.pack(bytes);
 
+        // 可以通过 cmd() 函数获取当前消息类型, 前提是必须要实现接口方法
         Assert.assertEquals(s1.cmd(), 34);
         Teacher s  = (Teacher)s1;
         Assert.assertEquals(s.getHead().getLen(), teacher.getHead().getLen());
