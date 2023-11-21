@@ -72,6 +72,9 @@ public class MessageManager {
                         throw new InvalidParameterException("can't access cmd value for register operation, please define cmd value ! ; at: " + classMetaInfo.getFullName());
                     }
                 }
+                if(cache.containsKey(cmd_.intValue())) {
+                    throw new InvalidParameterException("registered failed, duplicated cmd defined ! ; at: " + classMetaInfo.getFullName());
+                }
                 cache.put(cmd_.intValue(), message);
                 tmpCmdLen = (byte)field.getElementBytes();
                 break;
