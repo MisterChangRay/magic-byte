@@ -16,6 +16,12 @@ public @interface MagicField {
     int order();
 
     /**
+     * 命令代码; 此代码配合消息委托使用
+     * @return
+     */
+    boolean cmdField() default false;
+
+    /**
      * 仅 string 和 list 需要显式指定字节大小
      *
      * 基本类型使用以下列表中的占用字节大小;

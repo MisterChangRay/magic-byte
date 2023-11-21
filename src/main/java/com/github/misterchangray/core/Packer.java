@@ -3,15 +3,16 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.MessageManager;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.exception.MagicParseException;
+import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 import java.util.Objects;
@@ -28,6 +29,14 @@ public class Packer {
 
 
     public  <T> T packObject(DynamicByteBuffer data, Class<?> clazz, MagicChecker checker) throws MagicByteException {
+        if(Objects.isNull(clazz) && MessageManager.hasMessage()) {
+            Class message = MessageManager.getMessage(data);
+            if(Objects.isNull(message)) {
+                return null;
+            }
+            clazz = message;
+        }
+
         ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(clazz);
         if(Objects.isNull(classMetaInfo)) {
             return null;

@@ -100,7 +100,7 @@ public class FieldMetaInfo implements MField {
     /**
      * 自动裁剪
      * 当整个数据只有一个可变数据项时可使用。因为其他数据项长度固定。所以可以反推出可变数据长度
-     * 不建议使用此配置, 序列化很影响性能。
+     * 不建议使用此配置, 优先考虑使用 dynamicSizeOf。
      * @return
      */
     private boolean dynamicSize;
@@ -111,6 +111,12 @@ public class FieldMetaInfo implements MField {
      * 此字段值为当前字段后续所有字段的总字节数
      */
     private int suffixBytes;
+
+    /**
+     * 如果当前字段有值则代表
+     * 1. 当前字段为命令控制字段
+     */
+    private boolean cmdField;
 
     /**
      * 字段是否提供自定义序列化方法
@@ -126,6 +132,15 @@ public class FieldMetaInfo implements MField {
      */
     private TimestampFormatter timestampFormatter;
     private String formatPattern;
+
+
+    public boolean isCmdField() {
+        return cmdField;
+    }
+
+    public void setCmdField(boolean cmdField) {
+        this.cmdField = cmdField;
+    }
 
     public String getFormatPattern() {
         return formatPattern;

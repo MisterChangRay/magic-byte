@@ -3,7 +3,9 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.GlobalConfigs;
+import com.github.misterchangray.core.clazz.MessageManager;
 import com.github.misterchangray.core.exception.MagicByteException;
+import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.nio.ByteBuffer;
@@ -58,8 +60,7 @@ public class MagicByte {
      * @return
      */
     public static <T> T pack(byte[] data, Class<?> clazz, MagicChecker checker) throws MagicByteException {
-        if(null == data || null == clazz) return null;
-        if(0 == data.length) return null;
+        if(null == data || 0 == data.length) return null;
 
         DynamicByteBuffer res = DynamicByteBuffer.allocate(data.length);
         res.put(data);
@@ -121,6 +122,37 @@ public class MagicByte {
         return res.buffer();
     }
 
+    /**
+     * 尝试使用命令委托进行解析,解析失败则返回null
+     * @param data
+     * @return
+     * @param <T>
+     * @throws MagicByteException
+     */
+    public static <T extends MagicMessage> T pack(byte[] data) throws MagicByteException {
+        if(!MessageManager.hasMessage()) {
+            return null;
+        }
+        return pack(data, null, magicChecker);
+    }
+
+
+    /**
+     * 注册消息
+     * @param msgClazz 消息类,必须实现 MagicMessage 接口
+     */
+    public static void registerCMD(Class<? extends  MagicMessage> msgClazz) {
+        MessageManager.register(msgClazz);
+    }
+
+    /**
+     * 注册指定命令的消息
+     * @param cmd  命令值
+     * @param msgClazz 消息类,必须实现 MagicMessage 接口
+     */
+    public static void registerCMD(int cmd, Class<? extends  MagicMessage> msgClazz) {
+        MessageManager.register(cmd, msgClazz);
+    }
 
     public static void configMagicChecker(MagicChecker checker) {
         magicChecker = checker;
