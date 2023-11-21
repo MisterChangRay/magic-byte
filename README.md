@@ -54,7 +54,7 @@ public class School {
     // 10 byte, 普通数据类型
     @MagicField(order = 1, size = 10)
     private String name;
-    // 2 byte, 长度字段, 数据序列化时将自动填充实际值
+    // 2 byte, 长度字段, 数据序列化时将自动填充实际数据长度
     @MagicField(order = 3, calcLength = true)
     private short length;
     // 支持组合模式, 这里嵌入了 Student 对象
@@ -73,7 +73,7 @@ public class School {
     // 1 byte, 普通数据类型, 通过order配置序列化顺序, 序列号顺序和定义顺序无关
     @MagicField(order = 15)
     private byte age;
-    // 1 byte, 校验和字段, 序列化时将会自动填充
+    // 1 byte, 校验和字段, 序列化时如提供计算函数则将会自动填充
     @MagicField(order = 17)
     private byte checkCode;
 
