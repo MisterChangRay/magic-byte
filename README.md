@@ -142,7 +142,7 @@ public class Checker {
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
 	- order 定义对象属性的序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始递增,建议跳跃配置如:1,3,5...)</b>
 	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
-    - cmdField 标记此字段用于区分消息类型, 此配置结合消息注册使用. 默认false
+    - cmdField 标记此字段为消息类型, 此配置结合消息注册使用. 默认false
 	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
 	- dynamicSize 标记字段为动态长度, 整个数据结构只能标记一次且仅能标记`String&List&Array`类型字段
 	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
