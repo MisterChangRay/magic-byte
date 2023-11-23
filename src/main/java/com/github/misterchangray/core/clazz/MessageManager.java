@@ -61,10 +61,10 @@ public class MessageManager {
 
         int tmpOffset = 0;
         byte tmpCmdLen = 0;
-        List<FieldMetaInfo> cmdFields = new ArrayList<>();
+        boolean hasFoundCmdFields = false;
         for (FieldMetaInfo field : classMetaInfo.getFlatFields()) {
             if(field.isCmdField()) {
-                cmdFields.add(field);
+                hasFoundCmdFields = true;
                 Integer cmd_ = cmd;
                 if(Objects.isNull(cmd)) {
                     try {
@@ -84,12 +84,10 @@ public class MessageManager {
             tmpOffset += field.getElementBytes() * field.getSize();
 
         }
-        if(cmdFields.size() == 0) {
+        if(false == hasFoundCmdFields) {
             throw new InvalidParameterException("could not found cmd field defined on class; at: " + classMetaInfo.getFullName());
         }
-        if(cmdFields.size() > 1) {
-            throw new InvalidParameterException("cmd only use once in the class; at: " + classMetaInfo.getFullName());
-        }
+
         if(cmdOffset.intValue()  > -1 && !cmdOffset.equals(tmpOffset)) {
             throw new InvalidParameterException("all Of registered message should have same offset! ; at: " + classMetaInfo.getFullName());
         }
