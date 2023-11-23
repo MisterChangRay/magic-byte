@@ -6,6 +6,7 @@ import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.messager.po.Head;
 import com.github.misterchangray.core.messager.po2.CmdFieldduplicateDefinedObj;
+import com.github.misterchangray.core.messager.po2.DiffentCmdFieldObj;
 import com.github.misterchangray.core.messager.po2.NoCmdFieldObj;
 import com.github.misterchangray.core.messager.po.Student;
 import com.github.misterchangray.core.messager.po.Teacher;
@@ -76,6 +77,36 @@ public class TestMessager {
     public void testCmdFiledChecker2() {
         Assert.assertThrows(InvalidParameterException.class, () -> {
             MagicByte.registerCMD(CmdFieldduplicateDefinedObj.class);
+        });
+
+    }
+
+    /**
+     * 测试注册注册消息时使用不同长度的字节数来申明cmd属性
+     * 此时注册消息时将会抛出异常
+     * 同一个应用内的所有消息以下应该保持一致：
+     * 1. 消息类型字段偏移量
+     * 2. 消息类型字段的字节数
+     */
+    @Test
+    public void testCmdFiledChecker3() {
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            MagicByte.registerCMD(34, Teacher.class);
+            MagicByte.registerCMD(DiffentCmdFieldObj.class);
+        });
+
+    }
+
+    /**
+     * 注册相同消息将会抛出异常
+     */
+    @Test
+    public void testCmdFiledChecker4() {
+        MagicByte.registerCMD(34, Teacher.class);
+        MagicByte.registerCMD(34, Teacher.class);
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            MagicByte.registerCMD(34, Teacher.class);
+            MagicByte.registerCMD(34, Teacher.class);
         });
 
     }
