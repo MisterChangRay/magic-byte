@@ -70,7 +70,7 @@ public class TestMessager {
 
     }
     /**
-     * 测试重复申明cmd属性
+     * 测试重复申明cmd属性,即一个类中将一个以上的属性申明为cmd属性
      * 注册消息时将会抛出异常
      */
     @Test
@@ -98,7 +98,7 @@ public class TestMessager {
     }
 
     /**
-     * 注册相同消息将会抛出异常
+     * 注册相同消息将会抛出异常，即重复注册相同的消息id
      */
     @Test
     public void testCmdFiledChecker4() {
