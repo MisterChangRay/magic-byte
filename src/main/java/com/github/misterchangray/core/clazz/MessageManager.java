@@ -75,7 +75,7 @@ public class MessageManager {
                     }
                 }
                 if(cache.containsKey(cmd_.intValue())) {
-                    throw new InvalidParameterException("registered failed, duplicated cmd defined ! ; at: " + classMetaInfo.getFullName());
+                    throw new InvalidParameterException("registered failed, duplicated cmd defined! ; at: " + classMetaInfo.getFullName());
                 }
                 cache.put(cmd_.intValue(), message);
                 tmpCmdLen = (byte)field.getElementBytes();
