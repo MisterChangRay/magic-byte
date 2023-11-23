@@ -5,6 +5,7 @@ import com.github.misterchangray.core.clazz.warpper.UInt;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.messager.po.Head;
+import com.github.misterchangray.core.messager.po2.CmdFieldduplicateDefinedObj;
 import com.github.misterchangray.core.messager.po2.NoCmdFieldObj;
 import com.github.misterchangray.core.messager.po.Student;
 import com.github.misterchangray.core.messager.po.Teacher;
@@ -67,5 +68,15 @@ public class TestMessager {
         });
 
     }
+    /**
+     * 测试重复申明cmd属性
+     * 注册消息时将会抛出异常
+     */
+    @Test
+    public void testCmdFiledChecker2() {
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            MagicByte.registerCMD(CmdFieldduplicateDefinedObj.class);
+        });
 
+    }
 }
