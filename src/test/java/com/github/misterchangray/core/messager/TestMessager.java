@@ -41,6 +41,7 @@ public class TestMessager {
         // 注册消息,由于使用了公共头,所以注册时需要指定消息类型
         MagicByte.registerCMD(34, Teacher.class);
         Head head = new Head();
+        head.setCmd((byte) 34);
         head.setLen(UInt.valueOf(17));
         Teacher teacher = new Teacher();
         teacher.setHead(head);
