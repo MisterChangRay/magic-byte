@@ -36,8 +36,7 @@ public class ClassManager {
                 dynamicFields =  new ArrayList<>(),  // all dynamicSizeOf > 0 fields
                 dynamicSizeFields =  new ArrayList<>(), // all dynamicSize = true fields
                 calcLengthFields =  new ArrayList<>(), // all calcLength = true fields
-                calcCheckCodeFields =  new ArrayList<>(), //  all checkCode = true fields
-                cmdFields =  new ArrayList<>() //  all cmd = true fields
+                calcCheckCodeFields =  new ArrayList<>() //  all checkCode = true fields
                         ;
         int suffixBytes = 0;
 
@@ -46,9 +45,6 @@ public class ClassManager {
                 suffixBytes += fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
             }
 
-            if(fieldMetaInfo.isCmdField()) {
-                cmdFields.add(fieldMetaInfo);
-            }
             if(fieldMetaInfo.isDynamic()) {
                 dynamicFields.add(fieldMetaInfo);
             }
@@ -75,10 +71,6 @@ public class ClassManager {
 
         if(calcLengthFields.size() > 1) {
             throw new InvalidParameterException("calcLength only use once in the class; at: " + classMetaInfo.getFullName());
-        }
-
-        if(calcLengthFields.size() > 1) {
-            throw new InvalidParameterException("cmd only use once in the class; at: " + classMetaInfo.getFullName());
         }
 
         if(dynamicFields.size() > 0 && dynamicSizeFields.size() > 0) {
