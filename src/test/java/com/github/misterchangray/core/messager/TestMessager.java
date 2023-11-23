@@ -102,8 +102,6 @@ public class TestMessager {
      */
     @Test
     public void testCmdFiledChecker4() {
-        MagicByte.registerCMD(34, Teacher.class);
-        MagicByte.registerCMD(34, Teacher.class);
         Assert.assertThrows(InvalidParameterException.class, () -> {
             MagicByte.registerCMD(34, Teacher.class);
             MagicByte.registerCMD(34, Teacher.class);
