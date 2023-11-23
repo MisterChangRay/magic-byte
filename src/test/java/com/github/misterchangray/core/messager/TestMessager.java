@@ -2,9 +2,10 @@ package com.github.misterchangray.core.messager;
 
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.warpper.UInt;
-import com.github.misterchangray.core.example.HeartbeatCmd;
+import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.messager.po.Head;
+import com.github.misterchangray.core.messager.po2.NoCmdFieldObj;
 import com.github.misterchangray.core.messager.po.Student;
 import com.github.misterchangray.core.messager.po.Teacher;
 import org.junit.Assert;
@@ -54,6 +55,17 @@ public class TestMessager {
         Assert.assertEquals(s.getHead().getCmd(),teacher.getHead().getCmd());
         Assert.assertEquals(s.getAge(),teacher.getAge());
         Assert.assertEquals(s.getName(),teacher.getName());
+    }
+
+    /**
+     * 测试没有申明cmd属性注册消息时将会抛出异常
+     */
+    @Test
+    public void testCmdFiledChecker() {
+        Assert.assertThrows(InvalidParameterException.class, () -> {
+            MagicByte.registerCMD(NoCmdFieldObj.class);
+        });
+
     }
 
 }
