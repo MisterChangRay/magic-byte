@@ -172,7 +172,12 @@ public class ClassParser {
     private void copyConfiguration(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         MagicClass magicClass = AnnotationUtil.getMagicClassAnnotation(clazz);
         if(Objects.nonNull(magicClass)) {
-            classMetaInfo.setByteOrder(magicClass.byteOrder().getBytes());
+            // 如果注解里端序用的 AUTO 就用全局默认的，否则用注解里设置的
+            if (magicClass.byteOrder() == com.github.misterchangray.core.enums.ByteOrder.AUTO) {
+                classMetaInfo.setByteOrder(GlobalConfigs.getGlobalDefaultByteOrder().getBytes());
+            } else {
+                classMetaInfo.setByteOrder(magicClass.byteOrder().getBytes());
+            }
             classMetaInfo.setStrict(magicClass.strict());
         }
     }

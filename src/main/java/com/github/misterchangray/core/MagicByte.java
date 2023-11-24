@@ -4,6 +4,7 @@ import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.GlobalConfigs;
 import com.github.misterchangray.core.clazz.MessageManager;
+import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
@@ -22,6 +23,16 @@ public class MagicByte {
      */
     public static void configDefaultCharset(Charset charset) {
         GlobalConfigs.setGlobalDefaultCharset(charset);
+    }
+
+    /**
+     * 设置全局默认端序
+     * <p>注：如果传入的类型是 AUTO 则自动转为 BIG_ENDIAN</p>
+     *
+     * @param order 端序
+     */
+    public static void configDefaultByteOrder(ByteOrder order) {
+        GlobalConfigs.setGlobalDefaultByteOrder(order);
     }
 
     /**
