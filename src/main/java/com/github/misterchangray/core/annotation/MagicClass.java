@@ -15,7 +15,7 @@ public @interface MagicClass {
      * 大小端
      * @return
      */
-    ByteOrder byteOrder() default ByteOrder.BIG_ENDIAN;
+    ByteOrder byteOrder() default ByteOrder.AUTO;
 
     /**
      * 严格模式

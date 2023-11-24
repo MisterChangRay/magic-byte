@@ -2,8 +2,20 @@ package com.github.misterchangray.core.enums;
 
 
 public enum ByteOrder {
+    /**
+     * 大端序
+     */
     BIG_ENDIAN(java.nio.ByteOrder.BIG_ENDIAN),
+
+    /**
+     * 小端序
+     */
     LITTLE_ENDIAN(java.nio.ByteOrder.LITTLE_ENDIAN),
+
+    /**
+     * 自动模式，应用全局默认端序
+     */
+    AUTO(null)
     ;
 
     private java.nio.ByteOrder bytes;
