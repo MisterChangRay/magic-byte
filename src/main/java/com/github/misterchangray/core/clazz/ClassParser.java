@@ -17,6 +17,8 @@ import java.util.Comparator;
 import java.util.Objects;
 
 /**
+ *
+ * 类解析,解析注解及配置
  * @description:
  * @author: Ray.chang
  * @create: 2021-12-17 15:18

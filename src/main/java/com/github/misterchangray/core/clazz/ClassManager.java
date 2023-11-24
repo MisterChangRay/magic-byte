@@ -5,6 +5,8 @@ import com.github.misterchangray.core.exception.InvalidParameterException;
 import java.util.*;
 
 /**
+ *
+ * 类注册管理器，这里负责数据模板注册管理
  * @description: class manager
  * @author: Ray.chang
  * @create: 2021-12-17 15:11

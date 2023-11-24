@@ -10,9 +10,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
+ * 消息注册管理器
+ *
+ * 所有的注册消息由此类进行储存
  * @description: class manager
  * @author: Ray.chang
- * @create: 2021-12-17 15:11
+ * @create: 2023-11-24 15:11
  **/
 public class MessageManager {
     /**
@@ -31,6 +34,12 @@ public class MessageManager {
     public static boolean hasMessage() {
         return cmdOffset != -1;
     }
+
+    /**
+     * 获取消息实体
+     * @param data
+     * @return
+     */
     public static Class<? extends MagicMessage> getMessage(DynamicByteBuffer data) {
         if(cmdOffset < 0 || cmdOffset >= data.capacity()) {
             return null;
@@ -45,16 +54,16 @@ public class MessageManager {
 
     /**
      * 注册消息
-     * @param message
+     * @param message  消息实体
      */
     public static void register(Class<? extends MagicMessage> message) {
         register(null, message);
     }
 
     /**
-     * 注册指定消息
-     * @param cmd
-     * @param message
+     * 注册指定类型消息
+     * @param cmd 消息类型
+     * @param message 消息实体
      */
     public static void register(Integer cmd, Class<? extends MagicMessage> message) {
         ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(message);
