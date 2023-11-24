@@ -25,7 +25,7 @@ public class GlobalConfigs {
      * 设置全局默认端序
      * <p>注：如果传入的类型是 AUTO 则自动转为 BIG_ENDIAN</p>
      *
-     * @param globalDefaultByteOrder
+     * @param globalDefaultByteOrder 端序
      */
     public static void setGlobalDefaultByteOrder(ByteOrder globalDefaultByteOrder) {
         if (globalDefaultByteOrder == ByteOrder.AUTO) {
