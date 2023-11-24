@@ -29,8 +29,9 @@
 1. 引入Jar包;
 2. `@MagicClass`对当前类进行全局配置
 2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套，注意：不支持继承
-3. 正常情况下使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
-4. 支持使用`@MagicConverter()`注解来实现自定义序列化;[前往查看枚举类自定义序列化示例](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
+3. 使用`MagicByte.registerCMD`注册消息到magicByte
+4. 现在可以使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
+5. 支持使用`@MagicConverter()`注解来实现自定义序列化;[前往查看枚举类自定义序列化示例](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
 
 Maven项目可直接导入:
 [点击查看版本列表](https://mvnrepository.com/artifact/io.github.misterchangray/magic-byte)
@@ -141,7 +142,7 @@ public class Checker {
 	- strict 严格模式, 默认false, 严格模式将会抛出更多的异常
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
 	- order 定义对象属性的序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始递增,建议跳跃配置如:1,3,5...)</b>
-	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员长度
+	- size 属性大小, 仅String和List需要设置, String 代表字节长度, List和Array代表成员个数
     - cmdField 标记此字段为消息类型, 此配置结合消息注册使用. 默认false
 	- charset 字符集设置, 仅`String`设置有效; 默认ASCII
 	- dynamicSize 标记字段为动态长度, 整个数据结构只能标记一次且仅能标记`String&List&Array`类型字段
