@@ -59,7 +59,7 @@ public class Staff6 {
         SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
 
         @Override
-        public MResult<Date> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
+        public MResult<Date> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj) {
             byte[] tmp = Arrays.copyOfRange(fullBytes, nextReadIndex, nextReadIndex + 14);
             String s = new String(tmp);
             MResult build = null;

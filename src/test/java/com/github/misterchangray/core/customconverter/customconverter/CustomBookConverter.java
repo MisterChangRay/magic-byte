@@ -3,6 +3,7 @@ package com.github.misterchangray.core.customconverter.customconverter;
 import com.github.misterchangray.core.clazz.MResult;
 import com.github.misterchangray.core.customconverter.entity.Book;
 import com.github.misterchangray.core.customconverter.entity.Book2;
+import com.github.misterchangray.core.customconverter.entity.Staff1;
 import com.github.misterchangray.core.intf.MConverter;
 
 import java.math.BigInteger;
@@ -10,7 +11,7 @@ import java.util.Date;
 
 public class CustomBookConverter implements MConverter<Book> {
     @Override
-    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
+    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj) {
         if(attachParams[0].equals("1")) {
             Book book = new Book();
             book.setCreateDate(new Date());

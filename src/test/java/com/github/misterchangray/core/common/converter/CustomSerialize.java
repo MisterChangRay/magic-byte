@@ -7,7 +7,7 @@ import com.github.misterchangray.core.intf.MConverter;
 public class CustomSerialize implements MConverter<CustomObj> {
 
     @Override
-    public MResult<CustomObj> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
+    public MResult<CustomObj> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object tmp) {
         CustomObj customObj = new CustomObj();
         customObj.setA(fullBytes[0]);
         customObj.setB((char)fullBytes[1]);
