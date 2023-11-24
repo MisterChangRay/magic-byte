@@ -19,9 +19,10 @@ public interface MConverter<T> {
      * @param fullBytes 完整字节数据
      * @param attachParams 附加参数
      * @param clz 打包对象所属类
+     * @param obj 处理的对象
      * @return
      */
-    default MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz) {
+    default MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj) {
         return MResult.build(0, null);
     }
 
