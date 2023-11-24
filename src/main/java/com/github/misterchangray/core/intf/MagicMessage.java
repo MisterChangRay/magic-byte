@@ -11,6 +11,8 @@ public interface MagicMessage {
      * 获取消息的类型值
      * @return 返回对应消息的类型
      */
-    default int cmd() {return -1;};
+    default int cmd() {
+        throw new RuntimeException("this method has not yet implements!");
+    };
 
 }
