@@ -12,6 +12,7 @@ import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
+import com.github.misterchangray.core.util.OGNLUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
@@ -42,12 +43,12 @@ public class Packer {
             return null;
         }
 
-        return doPackObject(data, classMetaInfo, checker);
+        return doPackObject(data, classMetaInfo, checker, null);
     }
 
 
 
-    public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker) throws MagicByteException {
+    public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker, Object root) throws MagicByteException {
         data.order(classMetaInfo.getByteOrder());
         T object = null;
 
@@ -59,7 +60,7 @@ public class Packer {
 
             object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-                encodeField(object, fieldMetaInfo, data, checker);
+                encodeField(object, fieldMetaInfo, data, checker, root);
             }
         } catch (MagicParseException ae) {
             if(classMetaInfo.isStrict()) throw ae;
@@ -76,12 +77,15 @@ public class Packer {
     }
 
 
-    private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, MagicChecker checker) throws IllegalAccessException{
+    private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, MagicChecker checker, Object root) throws IllegalAccessException{
         if(fieldMetaInfo.getElementBytes() <= 0 && Objects.isNull(fieldMetaInfo.getCustomConverter())) return;
 
 
         Object val = null;
         val = fieldMetaInfo.getReader().readFormBuffer(data, object);
+        if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
+            val = OGNLUtil.eval(root, 1, fieldMetaInfo.getOgnl());
+        }
 
         verifyLength(fieldMetaInfo, data, val);
         verifyCheckCode(fieldMetaInfo, data, val, checker);
