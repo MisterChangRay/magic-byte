@@ -134,6 +134,19 @@ public class FieldMetaInfo implements MField {
     private String formatPattern;
 
 
+    /**
+     * ognl表达式
+     */
+    private String ognl;
+
+    public String getOgnl() {
+        return ognl;
+    }
+
+    public void setOgnl(String ognl) {
+        this.ognl = ognl;
+    }
+
     public boolean isCmdField() {
         return cmdField;
     }

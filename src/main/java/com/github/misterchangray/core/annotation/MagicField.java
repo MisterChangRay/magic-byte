@@ -92,4 +92,10 @@ public @interface MagicField {
      * @return
      */
     String formatPattern() default "yyyyMMddHHmmss";
+
+    /**
+     * ognl表达式
+     * @return
+     */
+    String ognl() default "";
 }
