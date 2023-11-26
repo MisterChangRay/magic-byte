@@ -59,6 +59,9 @@ public class Packer {
             }
 
             object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
+            if(Objects.isNull(root)) {
+                root = object;
+            }
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
                 encodeField(object, fieldMetaInfo, data, checker, root);
             }
@@ -83,13 +86,17 @@ public class Packer {
 
         Object val = null;
         val = fieldMetaInfo.getReader().readFormBuffer(data, object);
-        if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
-            val = OGNLUtil.eval(root, 1, fieldMetaInfo.getOgnl());
-        }
+
 
         verifyLength(fieldMetaInfo, data, val);
         verifyCheckCode(fieldMetaInfo, data, val, checker);
         fieldMetaInfo.getWriter().writeToObject(object, val);
+
+        if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
+            val = OGNLUtil.eval(object, root, 1, fieldMetaInfo.getOgnl());
+            fieldMetaInfo.getWriter().writeToObject(object, val);
+        }
+
     }
 
     private void verifyLength(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val) {

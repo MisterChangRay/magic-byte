@@ -38,7 +38,7 @@ public class UnPacker {
             res = DynamicByteBuffer.allocate(classMetaInfo.getElementBytes()).order(classMetaInfo.getByteOrder());
         }
 
-        this.unpackObject(res, object, classMetaInfo);
+        this.unpackObject(res, object, classMetaInfo, object);
 
         try {
             res.delayCalc(checker);
@@ -49,7 +49,7 @@ public class UnPacker {
         return res;
     }
 
-    public  <T> DynamicByteBuffer unpackObject(DynamicByteBuffer res, T object, ClassMetaInfo classMetaInfo) {
+    public  <T> DynamicByteBuffer unpackObject(DynamicByteBuffer res, T object, ClassMetaInfo classMetaInfo, Object root) {
         if(Objects.isNull(classMetaInfo)) return null;
         try {
             if(Objects.nonNull(classMetaInfo.getCustomConverter())) {
@@ -58,7 +58,7 @@ public class UnPacker {
             }
 
             for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-                decodeField(fieldMetaInfo, object,  res);
+                decodeField(fieldMetaInfo, object,  res, root);
             }
 
         } catch (MagicParseException ae) {
@@ -81,14 +81,14 @@ public class UnPacker {
      * @param res
      * @return
      */
-    private  void decodeField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res) throws IllegalAccessException {
+    private  void decodeField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res, Object root) throws IllegalAccessException {
         if(fieldMetaInfo.isCalcLength()) res.setLengthFieldWrapper(fieldMetaInfo);
         if(fieldMetaInfo.isCalcCheckCode()) res.setCheckCodeFieldWrapper(fieldMetaInfo);
 
         Object val = fieldMetaInfo.getReader().readFormObject(object);
 
         if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
-            val = OGNLUtil.eval(object, 2, fieldMetaInfo.getOgnl());
+            val = OGNLUtil.eval(object, root, 2, fieldMetaInfo.getOgnl());
         }
         fieldMetaInfo.getWriter().writeToBuffer(res, val, object);
     }

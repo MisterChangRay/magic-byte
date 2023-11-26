@@ -7,6 +7,11 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 
 public class OGNLUtil {
+    static OgnlContext context = (OgnlContext) Ognl.createDefaultContext(null,
+            new DefaultMemberAccess(true),
+            new DefaultClassResolver(),
+            new DefaultTypeConverter());
+
 
 
     /**
@@ -16,15 +21,12 @@ public class OGNLUtil {
      * @param script
      * @return
      */
-    public static Object eval(Object self, int op, String script) {
-        OgnlContext context = (OgnlContext) Ognl.createDefaultContext(self,
-                new DefaultMemberAccess(true),
-                new DefaultClassResolver(),
-                new DefaultTypeConverter());
+    public static Object eval(Object self, Object root, int op, String script) {
 
-
+        context.clear();
         context.setRoot(self);
         context.put("op", op);
+        context.put("base", root);
 
 
         Object expression = null;
