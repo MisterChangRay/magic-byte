@@ -6,9 +6,11 @@ import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicParseException;
 
+import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @description:
@@ -341,9 +343,10 @@ public class DynamicByteBuffer {
 
             Object data = null;
             if(!fieldMetaInfo.isCollection()) {
+                val = Arrays.copyOfRange(val, 0, fieldMetaInfo.getElementBytes());
                 data = ConverterUtil.toTargetObject(fieldMetaInfo.getType(), ConverterUtil.byteToNumber(val));
             } else {
-                data = val;
+                data = ConverterUtil.toTargetObject(fieldMetaInfo.getType(), fieldMetaInfo.getGenericsField().getType(), val);;
             }
             fieldMetaInfo.getWriter().writeToBuffer(this, data, null, this.checkCodeFieldWrapper.getStartOffset());
 
