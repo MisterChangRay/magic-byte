@@ -4,8 +4,11 @@ import com.github.misterchangray.core.clazz.warpper.*;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 
+import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class ConverterUtil {
@@ -241,5 +244,28 @@ public class ConverterUtil {
                 return ULong.valueOf(BigInteger.valueOf(val.longValue()));
         }
         return 0;
+    }
+
+    public static Object toTargetObject(TypeEnum type, TypeEnum dataType, byte[] val) {
+        List res = new ArrayList<>();
+
+        for (byte b : val) {
+            switch (dataType) {
+                case BYTE:
+                    res.add(b);
+                    break;
+                case UBYTE:
+                    res.add(UByte.valueOf(b));
+                    break;
+            }
+        }
+
+        return type.is(TypeEnum.ARRAY) ? res.toArray() : res;
+    }
+
+    public static byte[] toTargetObject(TypeEnum type, TypeEnum dataType, Object val) {
+        
+
+        return new byte[0];
     }
 }
