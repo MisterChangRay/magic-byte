@@ -13,14 +13,16 @@ public class TestFunctional {
      * @param data
      * @return
      */
-    public static long checker(byte[] data) {
+    public static byte[] checker(byte[] data) {
         System.out.println("chcker");
-        return 0x3341;
+        // 0x3341
+        return new byte[]{(byte)0x33, (byte)0x41};
     }
 
-    public static long checker2(byte[] data) {
+    public static byte[] checker2(byte[] data) {
         System.out.println("chcker2");
-        return 0x11;
+        // 0x11
+        return new byte[]{(byte)0x11};
     }
 
     @Test

@@ -186,10 +186,10 @@ public class CustomConverterTest {
      * @param data
      * @return
      */
-    public static long checker(byte[] data) {
-        byte res = 0;
+    public static byte[] checker(byte[] data) {
+        byte[] res = new byte[1];
         for (int i = 0; i < data.length - 2; i++) {
-            res = (byte) (res ^ data[i]);
+            res[0] = (byte) (res[0] ^ data[i]);
         }
         return res;
     }
@@ -225,8 +225,8 @@ public class CustomConverterTest {
         byte[] bytes = MagicByte.unpackToByte(staff5, CustomConverterTest::checker);
         Staff5 pack = MagicByte.pack(bytes, Staff5.class, CustomConverterTest::checker);
 
-        long checker = CustomConverterTest.checker(bytes);
-        Assert.assertEquals(bytes[bytes.length - 1], (byte)checker);
+        byte[] checker = CustomConverterTest.checker(bytes);
+        Assert.assertEquals(bytes[bytes.length - 1], checker[0]);
 
         Assert.assertEquals(staff5.getId(), pack.getId());
         Assert.assertEquals(staff5.getName(), pack.getName());
