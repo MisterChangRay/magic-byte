@@ -17,6 +17,7 @@ import com.github.misterchangray.core.util.OGNLUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 public class Packer {
@@ -87,11 +88,10 @@ public class Packer {
 
         Object val = null;
         val = fieldMetaInfo.getReader().readFormBuffer(data, object);
-
-
-        verifyLength(fieldMetaInfo, data, val);
-        verifyCheckCode(fieldMetaInfo, data, val, checker);
         fieldMetaInfo.getWriter().writeToObject(object, val);
+
+        verifyLength(fieldMetaInfo, data, val, root);
+        verifyCheckCode(fieldMetaInfo, data, val, checker, root);
 
         if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
             val = OGNLUtil.eval(object, root, 1, fieldMetaInfo.getOgnl());
@@ -100,7 +100,7 @@ public class Packer {
 
     }
 
-    private void verifyLength(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val) {
+    private void verifyLength(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, Object root) {
         if(!fieldMetaInfo.isCalcLength()) {
             return;
         }
@@ -108,13 +108,14 @@ public class Packer {
 
         long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), (Number) val);
         long expect = data.capacity();
-        if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
+        if(actually != expect) {
             byte[] array = data.array();
-            throw new InvalidLengthException("the length isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
+            throw new InvalidLengthException(root,
+                    "the length isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
         }
     }
 
-    private void verifyCheckCode(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, MagicChecker checker) {
+    private void verifyCheckCode(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, MagicChecker checker, Object root) {
         if(checker == null) {
             return;
         }
@@ -125,18 +126,26 @@ public class Packer {
 
         boolean checkerPass = true;
         byte[] array = data.array();
-        if(val instanceof Number) {
-            long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), (Number) val);
-            long expect = ConverterUtil.byteToNumber(checker.calcCheckCode(array));
-            checkerPass = actually == expect;
-        } else {
-            byte[] actually = (byte[]) val;
-            byte[] expect = checker.calcCheckCode(array);
-            checkerPass = Arrays.equals(actually, expect);
+        byte[] expect = checker.calcCheckCode(array);
+        if(Objects.isNull(expect) || expect.length == 0) {
+            throw new InvalidCheckCodeException(root,
+                    "calcCheckCode return null! data:" + Base64.getEncoder().encodeToString(array));
         }
 
-        if(!checkerPass && fieldMetaInfo.getOwnerClazz().isStrict()) {
-            throw new InvalidCheckCodeException("the checkCode isn't match, data:" + Base64.getEncoder().encodeToString(array));
+        int bytes = fieldMetaInfo.getSize() * fieldMetaInfo.getElementBytes();
+        if(expect.length > bytes) {
+            expect = Arrays.copyOfRange(expect,0, bytes);
+        }
+        for (int i = data.position() - 1, j = expect.length - 1; j > -1; i--, j--) {
+            if(array[i] != expect[j]) {
+                checkerPass = false;
+                break;
+            }
+        }
+
+        if(!checkerPass) {
+            throw new InvalidCheckCodeException(root,
+                    "the checkCode isn't match, data:" + Base64.getEncoder().encodeToString(array));
         }
     }
 
