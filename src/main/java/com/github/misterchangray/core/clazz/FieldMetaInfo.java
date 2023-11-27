@@ -386,7 +386,7 @@ public class FieldMetaInfo implements MField {
 
     private boolean isByteCollection() {
         boolean isCollection = this.isCollection();
-        boolean isByte = this.type == TypeEnum.BYTE || this.type == TypeEnum.UBYTE;
+        boolean isByte = this.type.is(TypeEnum.BYTE ,TypeEnum.UBYTE);
         return isCollection && isByte;
     }
 
