@@ -3,7 +3,6 @@ package com.github.misterchangray.core.enums;
 import com.github.misterchangray.core.clazz.warpper.*;
 
 import java.lang.reflect.Array;
-import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,6 +61,20 @@ public enum TypeEnum {
 
     public List<Class<?>> getTypes() {
         return types;
+    }
+
+    /**
+     * checker type
+     * @param args
+     * @return
+     */
+    public boolean is(TypeEnum... args) {
+        for (TypeEnum typeEnum : args) {
+            if(this == typeEnum){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

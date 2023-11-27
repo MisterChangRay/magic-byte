@@ -3,6 +3,7 @@ package com.github.misterchangray.core.clazz;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.enums.TimestampFormatter;
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.intf.MField;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.intf.MWriter;
@@ -363,5 +364,38 @@ public class FieldMetaInfo implements MField {
 
     public boolean isCollection() {
         return this.type == TypeEnum.ARRAY || this.type == TypeEnum.LIST;
+    }
+
+
+    public void verifyCalcCheckCode() {
+        if(this.isCalcCheckCode()) {
+            boolean aValidType = this.type.is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.LONG,
+                    TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.ULONG,
+                    TypeEnum.ARRAY, TypeEnum.LIST);
+
+            if(aValidType && this.isCollection()) {
+                aValidType = this.isByteCollection();
+            }
+            if(!aValidType) {
+                throw new InvalidParameterException("calcCheckCode field the type must be primitive and only be (byte, short, int, long) or byte[]; at: " + this.getFullName());
+            }
+        }
+
+    }
+
+
+    private boolean isByteCollection() {
+        boolean isCollection = this.isCollection();
+        boolean isByte = this.type == TypeEnum.BYTE || this.type == TypeEnum.UBYTE;
+        return isCollection && isByte;
+    }
+
+    public void verifyCalcLength() {
+        if(this.isCalcLength()) {
+            boolean aValidType = this.type.is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT);
+            if( !aValidType) {
+                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + this.getFullName());
+            }
+        }
     }
 }

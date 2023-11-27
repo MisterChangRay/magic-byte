@@ -94,41 +94,13 @@ public class FieldParser {
         }
 
         // calcLength only use byte, short, int
-        verifyCalcLength(field);
+        field.verifyCalcLength();
 
         // checkCode only use byte, short, int ,long
-        verifyCalcCheckCode(field);
+        field.verifyCalcCheckCode();
     }
 
 
-    private void verifyCalcCheckCode(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcCheckCode()) {
-            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
-                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.INT &&
-                    fieldMetaInfo.getType() != TypeEnum.LONG &&
-                    fieldMetaInfo.getType() != TypeEnum.UBYTE &&
-                    fieldMetaInfo.getType() != TypeEnum.USHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.UINT &&
-                    fieldMetaInfo.getType() != TypeEnum.ULONG) {
-                throw new InvalidParameterException("calcCheckCode field the type must be primitive and only be byte, short, int, long; at: " + fieldMetaInfo.getFullName());
-            }
-        }
-
-    }
-
-    private void verifyCalcLength(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcLength()) {
-            if(fieldMetaInfo.getType() != TypeEnum.BYTE &&
-                    fieldMetaInfo.getType() != TypeEnum.SHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.INT &&
-                    fieldMetaInfo.getType() != TypeEnum.UBYTE &&
-                    fieldMetaInfo.getType() != TypeEnum.USHORT &&
-                    fieldMetaInfo.getType() != TypeEnum.UINT) {
-                throw new InvalidParameterException("calcLength field the type must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
-            }
-        }
-    }
 
 
     private void linkField(Field field, FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo) {

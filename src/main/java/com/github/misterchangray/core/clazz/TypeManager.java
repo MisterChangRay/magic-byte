@@ -191,11 +191,11 @@ public class TypeManager {
     }
 
     public static boolean isCollection(TypeEnum type) {
-        return TypeEnum.LIST == type || TypeEnum.ARRAY == type;
+        return type.is( TypeEnum.LIST, TypeEnum.ARRAY);
     }
 
     public static boolean isVariable(TypeEnum type) {
-        return TypeEnum.STRING == type || TypeEnum.LIST == type || TypeEnum.ARRAY == type;
+        return type.is(TypeEnum.STRING, TypeEnum.LIST, TypeEnum.ARRAY);
     }
 
 
