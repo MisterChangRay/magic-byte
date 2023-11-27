@@ -65,5 +65,10 @@ public class CollectionWriter extends MWriter {
 
     }
 
+    @Override
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
+        buffer.position(writeOffset);
 
+        this.writeToBuffer(buffer, val, parent);
+    }
 }
