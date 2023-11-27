@@ -360,4 +360,8 @@ public class FieldMetaInfo implements MField {
     public void setReader(MReader reader) {
         this.reader = reader;
     }
+
+    public boolean isCollection() {
+        return this.type == TypeEnum.ARRAY || this.type == TypeEnum.LIST;
+    }
 }

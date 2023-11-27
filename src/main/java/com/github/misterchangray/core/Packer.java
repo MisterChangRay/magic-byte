@@ -15,6 +15,7 @@ import com.github.misterchangray.core.util.DynamicByteBuffer;
 import com.github.misterchangray.core.util.OGNLUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -122,11 +123,20 @@ public class Packer {
             return;
         }
 
+        boolean checkerPass = true;
         byte[] array = data.array();
-        long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), (Number) val);
-        long expect = ConverterUtil.toNumber(fieldMetaInfo.getType(), checker.calcCheckCode(array));
-        if(actually != expect && fieldMetaInfo.getOwnerClazz().isStrict()) {
-            throw new InvalidCheckCodeException("the checkCode isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
+        if(val instanceof Number) {
+            long actually = ConverterUtil.toNumber(fieldMetaInfo.getType(), (Number) val);
+            long expect = ConverterUtil.byteToNumber(checker.calcCheckCode(array));
+            checkerPass = actually == expect;
+        } else {
+            byte[] actually = (byte[]) val;
+            byte[] expect = checker.calcCheckCode(array);
+            checkerPass = Arrays.equals(actually, expect);
+        }
+
+        if(!checkerPass && fieldMetaInfo.getOwnerClazz().isStrict()) {
+            throw new InvalidCheckCodeException("the checkCode isn't match, data:" + Base64.getEncoder().encodeToString(array));
         }
     }
 

@@ -329,15 +329,23 @@ public class DynamicByteBuffer {
 
         }
         if(Objects.nonNull(this.checkCodeFieldWrapper) && Objects.nonNull(magicChecker)) {
-            long val = 0;
+            byte[] val = null;
             try {
                 val = magicChecker.calcCheckCode(this.array());
             } catch (Exception ae) {
                 throw ae;
             }
+
             fieldMetaInfo = this.checkCodeFieldWrapper.getFieldMetaInfo();
-            fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), val),
-                    null, this.checkCodeFieldWrapper.getStartOffset());
+
+
+            Object data = null;
+            if(!fieldMetaInfo.isCollection()) {
+                data = ConverterUtil.toTargetObject(fieldMetaInfo.getType(), ConverterUtil.byteToNumber(val));
+            } else {
+                data = val;
+            }
+            fieldMetaInfo.getWriter().writeToBuffer(this, data, null, this.checkCodeFieldWrapper.getStartOffset());
 
         }
     }
