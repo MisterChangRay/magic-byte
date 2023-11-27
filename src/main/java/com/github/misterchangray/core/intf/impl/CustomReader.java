@@ -39,7 +39,8 @@ public class CustomReader extends MReader {
         MResult pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams(), this.fieldMetaInfo.getClazz(), entity);
 
         if((Objects.isNull(pack) || Objects.isNull(pack.getBytes())) && !converterInfo.isFixsize()) {
-            throw new InvalidLengthException("you should return actually read bytes length when you not set fixSize property, at: " + converter.getClass().getTypeName());
+            throw new InvalidLengthException(entity,
+                    "you should return actually read bytes length when you not set fixSize property, at: " + converter.getClass().getTypeName());
         }
 
         Integer length = pack.getBytes();
@@ -48,7 +49,8 @@ public class CustomReader extends MReader {
         }
         int newPosition = buffer.position() + length;
         if(newPosition > buffer.capacity()) {
-            throw new InvalidLengthException("the data incomplete, maybe you custom read or custom write error, at: " + converter.getClass().getTypeName());
+            throw new InvalidLengthException(entity,
+                    "the data incomplete, maybe you custom read or custom write error, at: " + converter.getClass().getTypeName());
         }
         buffer.position(newPosition);
 
