@@ -384,9 +384,9 @@ public class FieldMetaInfo implements MField {
     }
 
 
-    private boolean isByteCollection() {
+    public boolean isByteCollection() {
         boolean isCollection = this.isCollection();
-        boolean isByte = this.type.is(TypeEnum.BYTE ,TypeEnum.UBYTE);
+        boolean isByte = this.getGenericsField().getType().is(TypeEnum.BYTE ,TypeEnum.UBYTE);
         return isCollection && isByte;
     }
 
