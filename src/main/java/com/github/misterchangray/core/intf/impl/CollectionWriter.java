@@ -29,7 +29,7 @@ public class CollectionWriter extends MWriter {
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
+            Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getId());
             count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), (Number) o);
         }
 
