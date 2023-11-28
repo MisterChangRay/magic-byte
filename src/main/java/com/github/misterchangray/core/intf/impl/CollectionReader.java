@@ -31,7 +31,7 @@ public class CollectionReader extends MReader {
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws  IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(entity);
+            Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getId());
             count = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), (Number) o);
         }
 
