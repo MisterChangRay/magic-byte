@@ -24,10 +24,12 @@ public class DynamicByteBuffer {
     private boolean isDynamic;
     private static final int STEP  = 1024;
 
+    private Map<String, FieldMetaInfoWrapper> delayCache = new HashMap<>();
     // 保存长度偏移, 方便滞后计算并重置值
-    private FieldMetaInfoWrapper lengthFieldWrapper;
+    private String LENGTH_FIELD_WRAPPER = "LENGTH_FIELD_WRAPPER";
     // 保存 校验位 偏移, 方便滞后计算并重置值
-    private FieldMetaInfoWrapper checkCodeFieldWrapper;
+    private String  CHECK_CODE_FIELD_WRAPPER = "CHECK_CODE_FIELD_WRAPPER";
+
 
     public static DynamicByteBuffer allocate(int bytes) {
         ExceptionUtil.throwIFOOM(bytes, "DynamicByteBuffer allocate field!");
@@ -302,43 +304,59 @@ public class DynamicByteBuffer {
         this.byteBuffer.position(0);
     }
 
-    public FieldMetaInfoWrapper getLengthFieldWrapper() {
-        return lengthFieldWrapper;
-    }
 
     public void setLengthFieldWrapper(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcLength() && Objects.isNull(this.lengthFieldWrapper)) {
-            this.lengthFieldWrapper = new FieldMetaInfoWrapper(fieldMetaInfo, this.position());
+        if(fieldMetaInfo.isCalcLength()) {
+            this.registerDelayWrapper(LENGTH_FIELD_WRAPPER,
+                    new FieldMetaInfoWrapper(fieldMetaInfo, this.position()));
         }
 
     }
 
-    public FieldMetaInfoWrapper getCheckCodeFieldWrapper() {
-        return checkCodeFieldWrapper;
+    public void registerDelayWrapper(String name, FieldMetaInfoWrapper fieldMetaInfo) {
+        this.delayCache.put(name, fieldMetaInfo);
     }
+
 
     public void setCheckCodeFieldWrapper(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isCalcCheckCode() && Objects.isNull(this.checkCodeFieldWrapper)) {
-            this.checkCodeFieldWrapper = new FieldMetaInfoWrapper(fieldMetaInfo, this.position());
+        if(fieldMetaInfo.isCalcCheckCode()) {
+            this.registerDelayWrapper(CHECK_CODE_FIELD_WRAPPER,
+                    new FieldMetaInfoWrapper(fieldMetaInfo, this.position()));
         }
+    }
+
+    public Object delayCalc(String name) throws IllegalAccessException {
+        if(delayCache.containsKey(name)) {
+            FieldMetaInfoWrapper fieldMetaInfoWrapper = this.delayCache.get(name);
+            FieldMetaInfo fieldMetaInfo = fieldMetaInfoWrapper.getFieldMetaInfo();
+
+            int p = this.position();
+            this.position(fieldMetaInfoWrapper.getStartOffset());
+            Object o = fieldMetaInfo.getReader().readFormBuffer(this, fieldMetaInfo);
+            this.position(p);
+            return o;
+        }
+        return null;
     }
 
     public void delayCalc(MagicChecker magicChecker) throws IllegalAccessException {
         FieldMetaInfo fieldMetaInfo = null;
-        if(Objects.nonNull(this.lengthFieldWrapper)) {
-            fieldMetaInfo = this.lengthFieldWrapper.getFieldMetaInfo();
-            fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(), this.position()), null, this.lengthFieldWrapper.getStartOffset());
+        if(delayCache.containsKey(LENGTH_FIELD_WRAPPER)) {
+            FieldMetaInfoWrapper fieldMetaInfoWrapper = this.delayCache.get(LENGTH_FIELD_WRAPPER);
+            fieldMetaInfo = fieldMetaInfoWrapper.getFieldMetaInfo();
+            fieldMetaInfo.getWriter().writeToBuffer(this,   ConverterUtil.toTargetObject(fieldMetaInfo.getType(),
+                            this.position()), null, fieldMetaInfoWrapper.getStartOffset());
 
         }
-        if(Objects.nonNull(this.checkCodeFieldWrapper) && Objects.nonNull(magicChecker)) {
+        if(delayCache.containsKey(CHECK_CODE_FIELD_WRAPPER) && Objects.nonNull(magicChecker)) {
             byte[] val = null;
             try {
                 val = magicChecker.calcCheckCode(this.array());
             } catch (Exception ae) {
                 throw ae;
             }
-
-            fieldMetaInfo = this.checkCodeFieldWrapper.getFieldMetaInfo();
+            FieldMetaInfoWrapper fieldMetaInfoWrapper = this.delayCache.get(CHECK_CODE_FIELD_WRAPPER);
+            fieldMetaInfo = fieldMetaInfoWrapper.getFieldMetaInfo();
 
 
             Object data = null;
@@ -348,7 +366,7 @@ public class DynamicByteBuffer {
             } else {
                 data = ConverterUtil.toTargetObject(fieldMetaInfo.getType(), fieldMetaInfo.getGenericsField().getType(), val);;
             }
-            fieldMetaInfo.getWriter().writeToBuffer(this, data, null, this.checkCodeFieldWrapper.getStartOffset());
+            fieldMetaInfo.getWriter().writeToBuffer(this, data, null, fieldMetaInfoWrapper.getStartOffset());
 
         }
     }
