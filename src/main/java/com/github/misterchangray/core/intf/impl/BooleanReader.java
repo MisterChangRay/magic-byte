@@ -20,7 +20,8 @@ public class BooleanReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
+        super.readFormBuffer(buffer, entity);
         return (boolean) (buffer.get() > 0);
     }
 
