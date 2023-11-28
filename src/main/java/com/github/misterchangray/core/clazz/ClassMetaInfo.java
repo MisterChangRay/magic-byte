@@ -28,9 +28,14 @@ public class ClassMetaInfo implements MClass {
     private ClassMetaInfo parent;
 
     /**
+     * 上级引用
+     */
+    private FieldMetaInfo parentField;
+
+    /**
      * 展开模式下的所有字段
      *
-     * 只有最上级有维护此值
+     *
      */
     private List<FieldMetaInfo> flatFields = new ArrayList<>();
 
@@ -65,6 +70,13 @@ public class ClassMetaInfo implements MClass {
 
     private CustomConverterInfo customConverter ;
 
+    public FieldMetaInfo getParentField() {
+        return parentField;
+    }
+
+    public void setParentField(FieldMetaInfo parentField) {
+        this.parentField = parentField;
+    }
 
     public MWriter getWriter() {
         return writer;
@@ -124,6 +136,16 @@ public class ClassMetaInfo implements MClass {
         this.flatFields = flatFields;
     }
 
+    public void addField(FieldMetaInfo field) {
+        this.fields.add(field);
+        ClassMetaInfo tmp = this;
+        while (tmp != null) {
+            tmp.getFlatFields().add(field);
+            tmp = tmp.parent;
+        }
+    }
+
+
     public ClassMetaInfo getParent() {
         return parent;
     }
@@ -163,6 +185,16 @@ public class ClassMetaInfo implements MClass {
     public FieldMetaInfo getFieldMetaInfoByOrderId(int orderId) {
         for (FieldMetaInfo field : this.getFields()) {
             if( field.getOrderId() == orderId) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public FieldMetaInfo getFieldMetaInfoById(String orderId) {
+        for (FieldMetaInfo field : this.getFlatFields()) {
+            if( field.getId().equals( orderId)) {
                 return field;
             }
         }
