@@ -50,7 +50,7 @@ public class ClassParser {
                 continue;
             }
 
-            classMetaInfo.getFields().add(fieldMetaInfo);
+            classMetaInfo.addField(fieldMetaInfo);
         }
 
         this.afterLinkClazz(classMetaInfo, clazz);
@@ -118,6 +118,7 @@ public class ClassParser {
      */
     private void afterLinkClazz(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         if(Objects.nonNull(classMetaInfo.getFields()) && classMetaInfo.getFields().size() == 0) return;
+        this.genFieldId(classMetaInfo, null);
 
         int
                 totalBytes = 0, // 总字节
@@ -135,20 +136,38 @@ public class ClassParser {
         if(totalBytes > classMetaInfo.getElementBytes()) {
             classMetaInfo.setElementBytes(totalBytes);
         }
-        classMetaInfo.getRoot().getFlatFields().addAll(classMetaInfo.getFields());
+
+    }
+
+    private void genFieldId(ClassMetaInfo classMetaInfo, String contextPath) {
+        if(Objects.isNull(classMetaInfo.getFields()) || classMetaInfo.getFields().size() == 0) return;
+
+        contextPath = Objects.isNull(contextPath) ? "" : contextPath + ".";
+        for (FieldMetaInfo field : classMetaInfo.getFields()) {
+            String tmp = contextPath + field.getField().getName();
+
+            field.setAccessPath(tmp);
+            if(field.isIdHasInit() == false) {
+                field.setId(tmp);
+            }
+
+            ClassMetaInfo clz = field.isCollection() ? field.getGenericsField().getClazzMetaInfo() : field.getClazzMetaInfo();
+            this.genFieldId(clz, tmp);
+        }
+
 
     }
 
     private boolean verifyDynamicSizeOf(FieldMetaInfo fieldMetaInfo) {
         if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()){
             FieldMetaInfo dynamicRef =
-                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByOrderId(fieldMetaInfo.getDynamicSizeOf());
+                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoById(fieldMetaInfo.getDynamicSizeOfId());
             if(Objects.isNull(dynamicRef)) {
-                throw new InvalidParameterException("not found  target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
+                throw new InvalidParameterException("not found  target field of dynamicSizeOfId value; at: " + fieldMetaInfo.getFullName());
             }
 
             if(dynamicRef.getOrderId() > fieldMetaInfo.getOrderId()) {
-                throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
+                throw new InvalidParameterException("dynamicSizeOfId property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
             }
 
             fieldMetaInfo.setDynamicRef(dynamicRef);
