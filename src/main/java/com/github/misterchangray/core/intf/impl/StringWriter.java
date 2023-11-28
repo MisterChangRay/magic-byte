@@ -28,7 +28,7 @@ public class StringWriter extends MWriter {
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            Object o = this.fieldMetaInfo.getDynamicRef().getReader().readFormObject(parent);
+            Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getId());
             byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), (Number) o);
         }
         // direct write fill byte if the value is null
