@@ -11,13 +11,13 @@ import java.util.List;
  * @create: 2021-12-21 16:33
  **/
 public class DynamicClasses {
-    @MagicField(order = 1)
+    @MagicField(id="1", order = 1)
     private int teacherLen;
-    @MagicField(order = 2, dynamicSizeOf = 1)
+    @MagicField(order = 2, dynamicSizeOfId = "1")
     private DynamicTeacher[] teacher;
-    @MagicField(order = 3)
+    @MagicField(id="3", order = 3)
     private short studentLen;
-    @MagicField(order = 4, dynamicSizeOf = 3)
+    @MagicField(order = 4, dynamicSizeOfId = "3")
     private ArrayList<DynamicStudent> studentList;
 
 
