@@ -1,7 +1,10 @@
 package com.github.misterchangray.core.intf;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
+
+import java.util.Objects;
 
 /**
  * @description:
@@ -18,7 +21,12 @@ public abstract class MWriter {
     public void writeToObject(Object target, Object val) throws IllegalAccessException {
         this.fieldMetaInfo.getField().set(target, val);
     }
-    public abstract void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException;
+    public  void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+        if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
+            buffer.registerDelayWrapper(fieldMetaInfo.getId(),
+                    new FieldMetaInfoWrapper(this.fieldMetaInfo, buffer.position()));
+        }
+    }
 
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {};
 }

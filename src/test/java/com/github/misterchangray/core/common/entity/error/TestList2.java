@@ -10,7 +10,7 @@ import java.util.List;
  * @create: 2021-12-17 17:28
  **/
 public class TestList2 {
-   @MagicField(order = 1, size = 1, dynamicSizeOf = 3)
+   @MagicField(order = 1, size = 1, dynamicSizeOfId = "3")
    private List<Integer> a;
 
     public List<Integer> getA() {

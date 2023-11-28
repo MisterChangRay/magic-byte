@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @description:
@@ -35,6 +36,7 @@ public class FieldParser {
         if(!beforeVerify(field)) {
             return null;
         }
+
         FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
         linkField(field, fieldMetaInfo, classMetaInfo);
         this.linkCustomConverter(field, fieldMetaInfo);
@@ -69,18 +71,18 @@ public class FieldParser {
         }
 
         // dynamicSize 和 size 不能共存
-        if(field.getMagicField().size() > 0 && field.getMagicField().dynamicSizeOf() > 0) {
+        if(field.getMagicField().size() > 0 && field.getMagicField().dynamicSizeOfId().length() > 0) {
             throw new InvalidParameterException("size or dynamicSize only can be use one; at: " + field.getFullName());
         }
 
         // list string array 必须配置 size or dynamicSize
-        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 && field.getMagicField().dynamicSizeOf() < 0) {
+        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 &&  field.getMagicField().dynamicSizeOfId().length() == 0 ) {
             throw new InvalidParameterException("not yet configuration size or dynamicSize of the field; at: " + field.getFullName());
         }
 
         // dynamicSize only use the list string and array
-        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSizeOf() > 0) {
-            throw new InvalidParameterException("dynamicSize only use the list string and array; at: " + field.getFullName());
+        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSizeOfId().length() > 0) {
+            throw new InvalidParameterException("dynamicSize only use the list,string and array; at: " + field.getFullName());
         }
 
         // dynamicSize only use the list string and array
@@ -119,14 +121,17 @@ public class FieldParser {
             fieldMetaInfo.setElementBytes(fieldMetaInfo.getGenericsField().getElementBytes());
         }
 
+        fieldMetaInfo.configFieldType();
     }
 
 
     private void initField( FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo, Class<?> clazz) {
         fieldMetaInfo.setType(TypeManager.getType(clazz));
+
         ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassFieldMetaInfo(clazz, classMetaInfo);
         fieldMetaInfo.setClazzMetaInfo(fieldClassMetaInfo);
         fieldClassMetaInfo.setParent(classMetaInfo);
+        fieldClassMetaInfo.setParentField(fieldMetaInfo);
         fieldMetaInfo.setElementBytes(fieldClassMetaInfo.getElementBytes());
         // set parent isDynamic flag if the child true
         if(fieldClassMetaInfo.isDynamic()) {
@@ -143,7 +148,7 @@ public class FieldParser {
             fieldMetaInfo.setSize(1);
         }
 
-        if(fieldMetaInfo.getDynamicSizeOf() > 0 ){
+        if(fieldMetaInfo.getDynamicSizeOfId().length() > 0 ){
             fieldMetaInfo.setSize(0);
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
@@ -241,6 +246,10 @@ public class FieldParser {
             }
         }
 
+        fieldMetaInfo.setId(magicField.id());
+        if(magicField.id().length() > 0) {
+            fieldMetaInfo.setIdHasInit(true);
+        }
         fieldMetaInfo.setCharset(charset);
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
@@ -253,7 +262,7 @@ public class FieldParser {
         }
 
         fieldMetaInfo.setSize(magicField.size());
-        fieldMetaInfo.setDynamicSizeOf(magicField.dynamicSizeOf());
+        fieldMetaInfo.setDynamicSizeOfId(magicField.dynamicSizeOfId());
         fieldMetaInfo.setCmdField(magicField.cmdField());
         if(magicField.ognl().length() > 0) {
             fieldMetaInfo.setOgnl(magicField.ognl());

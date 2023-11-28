@@ -15,15 +15,15 @@ public class OfficeWithUnsigend {
     private int head;
     @MagicField(order = 3, calcLength = true)
     private UInt length;
-    @MagicField(order = 4)
+    @MagicField(id="4", order = 4)
     private UByte nameLen;
-    @MagicField(order = 5, dynamicSizeOf = 4)
+    @MagicField(order = 5, dynamicSizeOfId = "4")
     private String name;
     @MagicField(order = 7, size = 10)
     private String addr;
-    @MagicField(order = 8)
+    @MagicField(id="8", order = 8)
     private UInt stafLen;
-    @MagicField(order = 9, dynamicSizeOf = 8)
+    @MagicField(order = 9, dynamicSizeOfId = "8")
     private List<Staff> staffs;
     @MagicField(order = 13, calcCheckCode = true)
     private UShort checkCode;

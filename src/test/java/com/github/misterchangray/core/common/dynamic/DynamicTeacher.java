@@ -15,9 +15,9 @@ public class DynamicTeacher {
     private int id;
     @MagicField(order = 2, size = 10)
     private String name;
-    @MagicField(order = 3)
+    @MagicField(id = "13", order = 3)
     private int phoneSize;
-    @MagicField(order = 4, dynamicSizeOf = 3)
+    @MagicField(order = 4, dynamicSizeOfId = "13")
     private long[] phones;
 
 

@@ -28,10 +28,11 @@ public class IntWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
+        super.writeToBuffer(buffer, val, parent);
+
         if(Objects.isNull(val)) {
             val = (int) this.fieldMetaInfo.getDefaultVal();
         }
-
 
         buffer.putInt(writeOffset, (int) val);
     }

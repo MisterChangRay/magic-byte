@@ -24,6 +24,7 @@ public class UIntWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+        super.writeToBuffer(buffer, val, parent);
         writeToBuffer(buffer, val, parent, buffer.position());
 
     }

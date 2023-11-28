@@ -5,9 +5,9 @@ import com.github.misterchangray.core.annotation.MagicField;
 
 @MagicClass()
 public class DynamicString {
-    @MagicField(order = 1)
+    @MagicField(order = 1, id="1")
    private int len;
-    @MagicField(order = 2, dynamicSizeOf = 1)
+    @MagicField(order = 2, dynamicSizeOfId = "1")
    private String email;
 
     public int getLen() {

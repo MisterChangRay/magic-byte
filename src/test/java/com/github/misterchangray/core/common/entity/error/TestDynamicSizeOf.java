@@ -8,9 +8,9 @@ import com.github.misterchangray.core.annotation.MagicField;
  * @create: 2021-12-17 17:28
  **/
 public class TestDynamicSizeOf {
-    @MagicField(order = 1)
+    @MagicField(order = 1, id="1")
     private int a;
-    @MagicField(order = 2, dynamicSizeOf = 1)
+    @MagicField(order = 2, dynamicSizeOfId = "1")
     private int b;
 
     public int getA() {

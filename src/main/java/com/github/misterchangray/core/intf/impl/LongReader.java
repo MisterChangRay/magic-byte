@@ -20,7 +20,8 @@ public class LongReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
+        super.readFormBuffer(buffer, entity);
         return buffer.getLong();
     }
 }

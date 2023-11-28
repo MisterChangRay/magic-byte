@@ -82,7 +82,9 @@ public class UnPacker {
      * @return
      */
     private  void decodeField(FieldMetaInfo fieldMetaInfo, Object object, DynamicByteBuffer res, Object root) throws IllegalAccessException {
-        if(fieldMetaInfo.isCalcLength()) res.setLengthFieldWrapper(fieldMetaInfo);
+        if(fieldMetaInfo.isCalcLength()) {
+            res.setLengthFieldWrapper(fieldMetaInfo);
+        }
         if(fieldMetaInfo.isCalcCheckCode()) res.setCheckCodeFieldWrapper(fieldMetaInfo);
 
         Object val = fieldMetaInfo.getReader().readFormObject(object);

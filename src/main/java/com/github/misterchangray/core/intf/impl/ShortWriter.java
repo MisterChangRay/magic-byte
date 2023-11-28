@@ -29,6 +29,8 @@ public class ShortWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
+        super.writeToBuffer(buffer, val, parent);
+
         if(Objects.isNull(val)) {
             val = (short) this.fieldMetaInfo.getDefaultVal();
         }

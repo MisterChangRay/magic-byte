@@ -10,9 +10,9 @@ import java.util.List;
  * @create: 2021-12-17 17:28
  **/
 public class TestDynamicSizeOf2 {
-    @MagicField(order = 1, size = 2)
+    @MagicField(order = 1, size = 2, id="1")
     private long a;
-    @MagicField(order = 2, dynamicSizeOf = 1)
+    @MagicField(order = 2, dynamicSizeOfId = "1")
     private List<Integer> b;
 
     public long getA() {

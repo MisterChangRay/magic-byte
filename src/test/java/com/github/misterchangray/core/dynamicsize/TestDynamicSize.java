@@ -1,9 +1,15 @@
 package com.github.misterchangray.core.dynamicsize;
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.warpper.UByte;
 import com.github.misterchangray.core.dynamicsize.pojo.*;
 import com.github.misterchangray.core.common.dynamic.DynamicStudent;
 import com.github.misterchangray.core.common.simple.ByteObj;
+import com.github.misterchangray.core.dynamicsize.pojo.error.DynamicSizeDuplicatedId;
+import com.github.misterchangray.core.dynamicsize.pojo.error.SimpleDuplicatedId;
+import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead;
+import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead2;
+import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicSizeFromId;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,6 +18,61 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class TestDynamicSize {
+
+    /**
+     * 测试 dynamicSizeOf id 为嵌套对象
+     * id重复是否会报错
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSimpleDuplicateIdNested() throws InterruptedException {
+        DynamicSizeDuplicatedId simpleDuplicatedId = new DynamicSizeDuplicatedId();
+        Assert.assertThrows(InvalidParameterException.class , () -> {
+            MagicByte.unpack(simpleDuplicatedId);
+        });
+    }
+
+    /**
+     * 测试 dynamicSizeOf id 为嵌套对象
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSimpleDuplicateId() throws InterruptedException {
+        SimpleDuplicatedId simpleDuplicatedId = new SimpleDuplicatedId();
+        Assert.assertThrows(InvalidParameterException.class , () -> {
+            MagicByte.unpack(simpleDuplicatedId);
+        });
+    }
+    /**
+     * 测试 dynamicSizeOf id 为嵌套对象
+     * @throws InterruptedException
+     */
+    @Test
+    public void testDynamicSizeLenNesting() throws InterruptedException {
+        DynamicHead2 dynamicHead2 = new DynamicHead2();
+        dynamicHead2.setLen(UByte.valueOf(3));
+        dynamicHead2.setFu("w3");
+        DynamicHead dynamicHead = new DynamicHead();
+        dynamicHead.setLen((short) 2);
+        dynamicHead.setHead2(dynamicHead2);
+
+
+        DynamicSizeFromId dynamicSizeFromId = new DynamicSizeFromId();
+        dynamicSizeFromId.setAge(33);
+        dynamicSizeFromId.setName("f33");
+        dynamicSizeFromId.setHead(dynamicHead);
+        dynamicSizeFromId.setBoodsId(new int[]{11,22,33,44,55});
+
+        byte[] bytes = MagicByte.unpackToByte(dynamicSizeFromId);
+        DynamicSizeFromId pack = MagicByte.pack(bytes, DynamicSizeFromId.class);
+
+        Assert.assertEquals(pack.getAge(), dynamicSizeFromId.getAge());
+        Assert.assertEquals(pack.getHead().getLen(), dynamicSizeFromId.getHead().getLen());
+        Assert.assertEquals(pack.getBoodsId().length, dynamicSizeFromId.getHead().getLen());
+        Assert.assertEquals(pack.getHead().getHead2().getFu(), dynamicSizeFromId.getHead().getHead2().getFu());
+        Assert.assertEquals(pack.getHead().getHead2().getLen(), dynamicSizeFromId.getHead().getHead2().getLen());
+    }
+
 
     /**
      * 测试 dynamicSize 嵌套使用是否正常

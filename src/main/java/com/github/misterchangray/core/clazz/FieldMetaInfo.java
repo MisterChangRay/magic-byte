@@ -12,13 +12,27 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 
 public class FieldMetaInfo implements MField {
+
+    private String id;
+    // id 是否初始化
+    private boolean idHasInit;
     private ClassMetaInfo ownerClazz;
     private MagicField magicField;
     private Field field;
 
+    /**
+     * 访问路径
+     */
+    private String accessPath;
+
     private MWriter writer;
     private MReader reader;
-
+    /**
+     * 字段类型
+     * 1 数据字段
+     * 2 嵌套字段
+     */
+    private int fieldType;
     /**
      * 字段大小,
      * 字符串指字节数
@@ -63,9 +77,9 @@ public class FieldMetaInfo implements MField {
     private int orderId;
 
     /**
-     *
+     * 这里使用id进行引用
      */
-    private int dynamicSizeOf;
+    private String dynamicSizeOfId;
 
     /**
      * 全限定名
@@ -140,12 +154,37 @@ public class FieldMetaInfo implements MField {
      */
     private String ognl;
 
+
+    public String getAccessPath() {
+        return accessPath;
+    }
+
+    public void setAccessPath(String accessPath) {
+        this.accessPath = accessPath;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getOgnl() {
         return ognl;
     }
 
     public void setOgnl(String ognl) {
         this.ognl = ognl;
+    }
+
+    public boolean isIdHasInit() {
+        return idHasInit;
+    }
+
+    public void setIdHasInit(boolean idHasInit) {
+        this.idHasInit = idHasInit;
     }
 
     public boolean isCmdField() {
@@ -162,6 +201,14 @@ public class FieldMetaInfo implements MField {
 
     public void setFormatPattern(String formatPattern) {
         this.formatPattern = formatPattern;
+    }
+
+    public int getFieldType() {
+        return fieldType;
+    }
+
+    public void setFieldType(int fieldType) {
+        this.fieldType = fieldType;
     }
 
     public TimestampFormatter getTimestampFormatter() {
@@ -189,7 +236,7 @@ public class FieldMetaInfo implements MField {
     }
 
     public boolean isDynamicSizeOf() {
-        return dynamicSizeOf > -1;
+        return dynamicSizeOfId.length() > 0;
     }
 
     public ClassMetaInfo getClazzMetaInfo() {
@@ -248,12 +295,12 @@ public class FieldMetaInfo implements MField {
         this.fullName = fullName;
     }
 
-    public int getDynamicSizeOf() {
-        return dynamicSizeOf;
+    public String getDynamicSizeOfId() {
+        return dynamicSizeOfId;
     }
 
-    public void setDynamicSizeOf(int dynamicSizeOf) {
-        this.dynamicSizeOf = dynamicSizeOf;
+    public void setDynamicSizeOfId(String dynamicSizeOf) {
+        this.dynamicSizeOfId = dynamicSizeOf;
     }
 
     public ClassMetaInfo getOwnerClazz() {
@@ -398,4 +445,12 @@ public class FieldMetaInfo implements MField {
             }
         }
     }
+
+    public void configFieldType() {
+        this.fieldType = 1;
+        if(this.type.is(TypeEnum.OBJECT) || ( this.isCollection() && this.getGenericsField().type.is(TypeEnum.OBJECT))) {
+            this.fieldType = 2;
+        }
+    }
+
 }

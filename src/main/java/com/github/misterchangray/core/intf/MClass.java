@@ -13,4 +13,6 @@ public interface MClass {
     List<FieldMetaInfo> getFields();
 
     FieldMetaInfo getFieldMetaInfoByOrderId(int orderId);
+
+    FieldMetaInfo getFieldMetaInfoById(String fieldId);
 }
