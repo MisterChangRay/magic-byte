@@ -78,9 +78,9 @@ public class FieldMetaInfo implements MField {
     private int orderId;
 
     /**
-     * 这里使用id进行引用
+     * 这里使用 accessPath 进行引用
      */
-    private String dynamicSizeOfId;
+    private String dynamicSizeOf;
 
     /**
      * 全限定名
@@ -226,7 +226,7 @@ public class FieldMetaInfo implements MField {
     }
 
     public boolean isDynamicSizeOf() {
-        return dynamicSizeOfId.length() > 0;
+        return dynamicSizeOf.length() > 0;
     }
 
     public ClassMetaInfo getClazzMetaInfo() {
@@ -285,12 +285,12 @@ public class FieldMetaInfo implements MField {
         this.fullName = fullName;
     }
 
-    public String getDynamicSizeOfId() {
-        return dynamicSizeOfId;
+    public String getDynamicSizeOf() {
+        return dynamicSizeOf;
     }
 
-    public void setDynamicSizeOfId(String dynamicSizeOf) {
-        this.dynamicSizeOfId = dynamicSizeOf;
+    public void setDynamicSizeOf(String dynamicSizeOf) {
+        this.dynamicSizeOf = dynamicSizeOf;
     }
 
     public ClassMetaInfo getOwnerClazz() {

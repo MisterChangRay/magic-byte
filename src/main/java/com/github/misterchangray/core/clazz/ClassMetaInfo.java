@@ -192,7 +192,7 @@ public class ClassMetaInfo implements MClass {
     }
 
     @Override
-    public FieldMetaInfo getFieldMetaInfoById(String accessPath) {
+    public FieldMetaInfo getFieldMetaInfoByAccessPath(String accessPath) {
         for (FieldMetaInfo field : this.getFlatFields()) {
             if( field.getAccessPath().equals( accessPath)) {
                 return field;

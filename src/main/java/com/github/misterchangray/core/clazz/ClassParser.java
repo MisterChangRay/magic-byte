@@ -159,13 +159,13 @@ public class ClassParser {
     private boolean verifyDynamicSizeOf(FieldMetaInfo fieldMetaInfo) {
         if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()){
             FieldMetaInfo dynamicRef =
-                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoById(fieldMetaInfo.getDynamicSizeOfId());
+                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByAccessPath(fieldMetaInfo.getDynamicSizeOf());
             if(Objects.isNull(dynamicRef)) {
-                throw new InvalidParameterException("not found  target field of dynamicSizeOfId value; at: " + fieldMetaInfo.getFullName());
+                throw new InvalidParameterException("not found  target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
             }
 
             if(dynamicRef.getOrderId() > fieldMetaInfo.getOrderId()) {
-                throw new InvalidParameterException("dynamicSizeOfId property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
+                throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
             }
 
             fieldMetaInfo.setDynamicRef(dynamicRef);

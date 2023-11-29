@@ -87,7 +87,7 @@ public class ClassManager {
         }
 
         if(dynamicFields.size() > 0 && dynamicSizeFields.size() > 0) {
-            throw new InvalidParameterException("dynamicSize & dynamicSizeOfId only use one in the class; at: " + classMetaInfo.getFullName());
+            throw new InvalidParameterException("dynamicSize & dynamicSizeOf only use one in the class; at: " + classMetaInfo.getFullName());
         }
     }
 

@@ -147,7 +147,7 @@ public class FieldParser {
             fieldMetaInfo.setSize(1);
         }
 
-        if(fieldMetaInfo.getDynamicSizeOfId().length() > 0 ){
+        if(fieldMetaInfo.getDynamicSizeOf().length() > 0 ){
             fieldMetaInfo.setSize(0);
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
@@ -259,7 +259,7 @@ public class FieldParser {
         }
 
         fieldMetaInfo.setSize(magicField.size());
-        fieldMetaInfo.setDynamicSizeOfId(magicField.dynamicSizeOf());
+        fieldMetaInfo.setDynamicSizeOf(magicField.dynamicSizeOf());
         fieldMetaInfo.setCmdField(magicField.cmdField());
     }
 

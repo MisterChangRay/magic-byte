@@ -14,5 +14,5 @@ public interface MClass {
 
     FieldMetaInfo getFieldMetaInfoByOrderId(int orderId);
 
-    FieldMetaInfo getFieldMetaInfoById(String fieldId);
+    FieldMetaInfo getFieldMetaInfoByAccessPath(String fieldId);
 }
