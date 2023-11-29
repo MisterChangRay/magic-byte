@@ -171,7 +171,7 @@ public class ClassParser {
             fieldMetaInfo.setDynamicRef(dynamicRef);
             dynamicRef.setDynamicRef(fieldMetaInfo);
 
-            if(!dynamicRef.getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT)) {
+            if(!dynamicRef.getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
                 throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
             }
 
