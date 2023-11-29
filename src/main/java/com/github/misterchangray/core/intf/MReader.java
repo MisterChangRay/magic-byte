@@ -21,7 +21,7 @@ public abstract class MReader {
 
     public void saveDelayCalcIfDynamic(DynamicByteBuffer buffer, Object entity) {
         if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
-            buffer.registerDelayWrapper(fieldMetaInfo.getId(),
+            buffer.registerDelayWrapper(fieldMetaInfo.getAccessPath(),
                     new FieldMetaInfoWrapper(this.fieldMetaInfo, buffer.position()));
         }
     }

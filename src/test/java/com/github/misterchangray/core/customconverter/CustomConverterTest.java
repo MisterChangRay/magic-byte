@@ -50,6 +50,7 @@ public class CustomConverterTest {
         Staff14 pack = MagicByte.pack(bytes, Staff14.class);
         Assert.assertEquals(pack.getBoodId1(), 11);
         Assert.assertEquals(pack.getNameLen(), 10);
+        Assert.assertEquals(staff14.getName(), pack.getName());
 
     }
 

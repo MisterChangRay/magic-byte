@@ -4,9 +4,9 @@ import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.clazz.warpper.UByte;
 
 public class DynamicHead2 {
-    @MagicField(id = "len2", order = 1)
+    @MagicField( order = 1)
     private UByte len;
-    @MagicField(id = "len3", order = 2, size = 10)
+    @MagicField(order = 2, size = 10)
     private String fu;
 
     public UByte getLen() {

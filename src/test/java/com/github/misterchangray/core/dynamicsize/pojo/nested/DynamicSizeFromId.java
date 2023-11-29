@@ -8,7 +8,7 @@ public class DynamicSizeFromId {
     @MagicField(order = 2)
     private DynamicHead head;
 
-    @MagicField(order = 3, dynamicSizeOfId ="len1")
+    @MagicField(order = 3, dynamicSizeOf ="head.len")
     private int[] boodsId;
     @MagicField(order = 5)
     private int age;

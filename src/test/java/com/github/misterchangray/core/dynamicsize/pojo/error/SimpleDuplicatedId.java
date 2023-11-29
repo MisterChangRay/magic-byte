@@ -8,11 +8,11 @@ import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead2;
 
 @MagicClass
 public class SimpleDuplicatedId {
-    @MagicField(id = "len1", order = 1)
+    @MagicField( order = 1)
     private short len;
     @MagicField( order = 2)
     private int len2;
-    @MagicField( id = "len1",order = 3)
+    @MagicField( order = 3)
     private UInt len3;
 
     public short getLen() {

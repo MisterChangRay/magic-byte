@@ -42,7 +42,6 @@ public class ClassManager {
                 calcCheckCodeFields =  new ArrayList<>(), //  all checkCode = true fields
                 cmdFields =  new ArrayList<>() //  all cmd = true fields
                         ;
-        Set<String> ids = new HashSet<>();
         int suffixBytes = 0;
 
         for (int i = 0; i < classMetaInfo.getFlatFields().size(); i++) {
@@ -67,10 +66,6 @@ public class ClassManager {
                 calcLengthFields.add(fieldMetaInfo);
             }
 
-            if(ids.contains(fieldMetaInfo.getId())) {
-                throw new InvalidParameterException("field id should global unique!; at: " + fieldMetaInfo.getFullName());
-            }
-            ids.add(fieldMetaInfo.getId());
         }
 
         if(dynamicSizeFields.size() > 1) {

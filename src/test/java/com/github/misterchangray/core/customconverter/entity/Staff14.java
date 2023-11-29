@@ -3,7 +3,6 @@ package com.github.misterchangray.core.customconverter.entity;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
-import com.github.misterchangray.core.customconverter.customconverter.CustomBookConverter;
 import com.github.misterchangray.core.customconverter.customconverter.CustomIntConverter;
 import com.github.misterchangray.core.customconverter.customconverter.CustomIntConverter2;
 
@@ -23,7 +22,7 @@ public class Staff14 {
     @MagicConverter(converter = CustomIntConverter2.class, attachParams = {"2"})
     @MagicField(order = 4)
     private int nameLen;
-    @MagicField(order = 5, dynamicSizeOfId = "nameLen")
+    @MagicField(order = 5, dynamicSizeOf = "nameLen")
     private String name;
 
     public int getBoodId1() {

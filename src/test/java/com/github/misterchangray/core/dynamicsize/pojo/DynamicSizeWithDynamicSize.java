@@ -9,7 +9,7 @@ public class DynamicSizeWithDynamicSize {
     private String name;
     @MagicField(order = 3)
     private int age;
-    @MagicField(order = 5, dynamicSize = true, dynamicSizeOfId = "3")
+    @MagicField(order = 5, dynamicSize = true, dynamicSizeOf = "3")
     private int[] boodsId;
 
 

@@ -13,10 +13,6 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class FieldMetaInfo implements MField {
-
-    private String id;
-    // id 是否初始化
-    private boolean idHasInit;
     private ClassMetaInfo ownerClazz;
     private MagicField magicField;
     private Field field;
@@ -179,22 +175,7 @@ public class FieldMetaInfo implements MField {
         this.accessPath = accessPath;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-
-    public boolean isIdHasInit() {
-        return idHasInit;
-    }
-
-    public void setIdHasInit(boolean idHasInit) {
-        this.idHasInit = idHasInit;
-    }
 
     public boolean isCmdField() {
         return cmdField;

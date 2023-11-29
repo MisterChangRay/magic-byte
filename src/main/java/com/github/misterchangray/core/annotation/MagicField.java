@@ -8,12 +8,6 @@ import java.lang.annotation.*;
 @Target({ ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MagicField {
-    /**
-     * 结合 dynamicSizeOfId 使用
-     *
-     * @return
-     */
-    String id() default "";
 
     /**
      * 序列号序号; 此序号使用后不能进行修改
@@ -50,7 +44,7 @@ public @interface MagicField {
      * take size from another field id
      * @return
      */
-    String dynamicSizeOfId() default "";
+    String dynamicSizeOf() default "";
 
 
     /**

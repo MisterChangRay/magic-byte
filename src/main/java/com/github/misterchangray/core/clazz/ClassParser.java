@@ -148,9 +148,6 @@ public class ClassParser {
             String tmp = contextPath + field.getField().getName();
 
             field.setAccessPath(tmp);
-            if(field.isIdHasInit() == false) {
-                field.setId(tmp);
-            }
 
             ClassMetaInfo clz = field.isCollection() ? field.getGenericsField().getClazzMetaInfo() : field.getClazzMetaInfo();
             this.genFieldId(clz, tmp);

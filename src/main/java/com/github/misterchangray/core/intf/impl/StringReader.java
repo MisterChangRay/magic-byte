@@ -27,7 +27,7 @@ public class StringReader extends MReader {
     public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws  IllegalAccessException {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
-            Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getId());
+            Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getAccessPath());
             byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getRealType(), (Number) o);
         }
 

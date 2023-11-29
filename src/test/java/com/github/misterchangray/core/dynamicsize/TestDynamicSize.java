@@ -20,8 +20,10 @@ import java.util.ArrayList;
 public class TestDynamicSize {
 
     /**
-     * 测试 dynamicSizeOf id 为嵌套对象
-     * id重复是否会报错
+     * 测试 dynamicSizeOf 为嵌套对象
+     *
+     * 这里会找不到指定的属性
+     * 
      * @throws InterruptedException
      */
     @Test
@@ -32,19 +34,9 @@ public class TestDynamicSize {
         });
     }
 
+
     /**
-     * 测试 dynamicSizeOf id 为嵌套对象
-     * @throws InterruptedException
-     */
-    @Test
-    public void testSimpleDuplicateId() throws InterruptedException {
-        SimpleDuplicatedId simpleDuplicatedId = new SimpleDuplicatedId();
-        Assert.assertThrows(InvalidParameterException.class , () -> {
-            MagicByte.unpack(simpleDuplicatedId);
-        });
-    }
-    /**
-     * 测试 dynamicSizeOf id 为嵌套对象
+     * 测试 dynamicSizeOf 为嵌套对象
      * @throws InterruptedException
      */
     @Test

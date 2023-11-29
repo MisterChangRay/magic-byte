@@ -18,13 +18,13 @@ public class DynamicStudent {
     @MagicField(order = 3)
     private ULong phone;
 
-    @MagicField(id="81", order = 8)
+    @MagicField(order = 8)
     private Byte bookLen;
-    @MagicField(order = 12, dynamicSizeOfId = "81")
+    @MagicField(order = 12, dynamicSizeOf = "bookLen")
     private int[] bookids;
-    @MagicField(id="14", order = 14)
+    @MagicField( order = 14)
     private byte emailLen;
-    @MagicField(order = 16, dynamicSizeOfId = "14")
+    @MagicField(order = 16, dynamicSizeOf = "emailLen")
     private String email;
 
     public static ArrayList<DynamicStudent> build(int count) {

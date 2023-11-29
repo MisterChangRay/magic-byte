@@ -8,7 +8,7 @@ public class DynamicSizeDuplicatedId {
     @MagicField(order = 2)
     private DuplicatedNestedHead2 head;
 
-    @MagicField(order = 3, dynamicSizeOfId ="len1")
+    @MagicField(order = 3, dynamicSizeOf ="len1")
     private int[] boodsId;
     @MagicField(order = 5)
     private int age;

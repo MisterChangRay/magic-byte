@@ -10,7 +10,7 @@ public class Classes {
     @MagicField(order = 3, size = 1)
     private Student[] student;
 
-    @MagicField(order = 4)
+    @MagicField( order = 4)
     private Book book;
 
     public Book getBook() {

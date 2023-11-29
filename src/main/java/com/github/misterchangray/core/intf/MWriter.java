@@ -25,7 +25,7 @@ public abstract class MWriter {
 
     public void saveDelayCalcIfDynamic(DynamicByteBuffer buffer, Object val, Object parent) {
         if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
-            buffer.registerDelayWrapper(fieldMetaInfo.getId(),
+            buffer.registerDelayWrapper(fieldMetaInfo.getAccessPath(),
                     new FieldMetaInfoWrapper(this.fieldMetaInfo, buffer.position()));
         }
     }

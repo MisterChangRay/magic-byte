@@ -5,7 +5,7 @@ import com.github.misterchangray.core.annotation.MagicField;
 
 @MagicClass
 public class DynamicHead {
-    @MagicField(id = "len1", order = 1)
+    @MagicField( order = 1)
     private short len;
     @MagicField( order = 2)
     private DynamicHead2 head2;

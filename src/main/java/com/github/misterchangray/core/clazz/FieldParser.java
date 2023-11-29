@@ -14,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @description:
@@ -71,17 +70,17 @@ public class FieldParser {
         }
 
         // dynamicSize 和 size 不能共存
-        if(field.getMagicField().size() > 0 && field.getMagicField().dynamicSizeOfId().length() > 0) {
+        if(field.getMagicField().size() > 0 && field.getMagicField().dynamicSizeOf().length() > 0) {
             throw new InvalidParameterException("size or dynamicSize only can be use one; at: " + field.getFullName());
         }
 
         // list string array 必须配置 size or dynamicSize
-        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 &&  field.getMagicField().dynamicSizeOfId().length() == 0 ) {
+        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 &&  field.getMagicField().dynamicSizeOf().length() == 0 ) {
             throw new InvalidParameterException("not yet configuration size or dynamicSize of the field; at: " + field.getFullName());
         }
 
         // dynamicSize only use the list string and array
-        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSizeOfId().length() > 0) {
+        if(!TypeManager.isVariable(field.getType()) && field.getMagicField().dynamicSizeOf().length() > 0) {
             throw new InvalidParameterException("dynamicSize only use the list,string and array; at: " + field.getFullName());
         }
 
@@ -247,10 +246,7 @@ public class FieldParser {
             }
         }
 
-        fieldMetaInfo.setId(magicField.id());
-        if(magicField.id().length() > 0) {
-            fieldMetaInfo.setIdHasInit(true);
-        }
+
         fieldMetaInfo.setCharset(charset);
         fieldMetaInfo.setDynamicSize(magicField.dynamicSize());
         fieldMetaInfo.setCalcCheckCode(magicField.calcCheckCode());
@@ -263,7 +259,7 @@ public class FieldParser {
         }
 
         fieldMetaInfo.setSize(magicField.size());
-        fieldMetaInfo.setDynamicSizeOfId(magicField.dynamicSizeOfId());
+        fieldMetaInfo.setDynamicSizeOfId(magicField.dynamicSizeOf());
         fieldMetaInfo.setCmdField(magicField.cmdField());
     }
 

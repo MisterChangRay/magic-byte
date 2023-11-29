@@ -5,7 +5,7 @@ import com.github.misterchangray.core.annotation.MagicField;
 
 @MagicClass
 public class DuplicatedNestedHead2 {
-    @MagicField(id = "len1", order = 1)
+    @MagicField( order = 1)
     private short len;
     @MagicField( order = 2)
     private DuplicatedNestedHead head2;

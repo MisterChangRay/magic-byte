@@ -12,7 +12,7 @@ import java.util.List;
 public class TestDynamicSizeOf3 {
     @MagicField(order = 1, size = 2)
     private long a;
-    @MagicField(order = 2, dynamicSizeOfId = "3")
+    @MagicField(order = 2, dynamicSizeOf = "3")
     private List<Integer> b;
     @MagicField(order = 6)
     private long c;
