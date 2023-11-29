@@ -10,6 +10,7 @@ import com.github.misterchangray.core.intf.MWriter;
 
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Objects;
 
 public class FieldMetaInfo implements MField {
@@ -365,6 +366,30 @@ public class FieldMetaInfo implements MField {
         isDynamic = dynamic;
     }
 
+    public FieldMetaInfo tryGetDynamicRef() {
+        if(Objects.nonNull(this.dynamicRef)) {
+            return dynamicRef;
+        }
+        if(this.isDynamic &&
+                Objects.nonNull(this.dynamicSizeOf)) {
+            List<FieldMetaInfo> flatFields = null;
+            if(this.dynamicSizeOf.startsWith("#")) {
+                flatFields = this.getOwnerClazz().getRoot().getFlatFields();
+            } else {
+                flatFields = this.getOwnerClazz().getFlatFields();
+            }
+            if(Objects.isNull(flatFields) || flatFields.size() == 0) {
+                return null;
+            }
+            for (FieldMetaInfo flatField : flatFields) {
+                if(flatField.getAccessPath().equals(this.dynamicSizeOf)) {
+                    return flatField;
+                }
+            }
+
+        }
+        return null;
+    }
     public FieldMetaInfo getDynamicRef() {
         return dynamicRef;
     }

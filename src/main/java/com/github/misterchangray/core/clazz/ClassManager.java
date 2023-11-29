@@ -69,24 +69,18 @@ public class ClassManager {
 
             if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()
                     && Objects.isNull(fieldMetaInfo.getDynamicRef())){
-                boolean founded = false;
-                for(int j =i; j>=0; j--) {
-                    FieldMetaInfo tmp1 = classMetaInfo.getFlatFields().get(j);
-                    if(tmp1.getAccessPath().equals(fieldMetaInfo.getDynamicSizeOf())) {
-                        fieldMetaInfo.setDynamicRef(tmp1);
-                        tmp1.setDynamicRef(fieldMetaInfo);
-                        founded = true;
-                        break;
-                    }
-                }
+                FieldMetaInfo dynamicRef = fieldMetaInfo.tryGetDynamicRef();
 
-                if(!founded) {
+                if(Objects.isNull(dynamicRef)) {
                     throw new InvalidParameterException("not found target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
                 }
 
-                if(!fieldMetaInfo.getDynamicRef().getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
+                if(!dynamicRef.getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
                     throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
                 }
+
+                fieldMetaInfo.setDynamicRef(dynamicRef);
+                dynamicRef.setDynamicRef(fieldMetaInfo);
             }
 
         }
