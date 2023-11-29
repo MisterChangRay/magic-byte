@@ -149,12 +149,6 @@ public class FieldMetaInfo implements MField {
     private String formatPattern;
 
 
-    /**
-     * ognl表达式
-     */
-    private String ognl;
-
-
     public String getAccessPath() {
         return accessPath;
     }
@@ -171,13 +165,6 @@ public class FieldMetaInfo implements MField {
         this.id = id;
     }
 
-    public String getOgnl() {
-        return ognl;
-    }
-
-    public void setOgnl(String ognl) {
-        this.ognl = ognl;
-    }
 
     public boolean isIdHasInit() {
         return idHasInit;

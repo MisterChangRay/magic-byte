@@ -8,16 +8,13 @@ import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.exception.MagicParseException;
-import com.github.misterchangray.core.intf.MagicMessage;
 import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
-import com.github.misterchangray.core.util.OGNLUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 import java.util.Objects;
 
 public class Packer {
@@ -92,11 +89,6 @@ public class Packer {
 
         verifyLength(fieldMetaInfo, data, val, root);
         verifyCheckCode(fieldMetaInfo, data, val, checker, root);
-
-        if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
-            val = OGNLUtil.eval(object, root, 1, fieldMetaInfo.getOgnl());
-            fieldMetaInfo.getWriter().writeToObject(object, val);
-        }
 
     }
 

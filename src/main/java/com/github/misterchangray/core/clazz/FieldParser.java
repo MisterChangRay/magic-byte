@@ -264,9 +264,6 @@ public class FieldParser {
         fieldMetaInfo.setSize(magicField.size());
         fieldMetaInfo.setDynamicSizeOfId(magicField.dynamicSizeOfId());
         fieldMetaInfo.setCmdField(magicField.cmdField());
-        if(magicField.ognl().length() > 0) {
-            fieldMetaInfo.setOgnl(magicField.ognl());
-        }
     }
 
 

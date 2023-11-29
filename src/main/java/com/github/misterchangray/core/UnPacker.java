@@ -6,7 +6,6 @@ import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.exception.MagicParseException;
 import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
-import com.github.misterchangray.core.util.OGNLUtil;
 
 import java.util.Objects;
 
@@ -89,9 +88,6 @@ public class UnPacker {
 
         Object val = fieldMetaInfo.getReader().readFormObject(object);
 
-        if(Objects.nonNull(fieldMetaInfo.getOgnl())) {
-            val = OGNLUtil.eval(object, root, 2, fieldMetaInfo.getOgnl());
-        }
         fieldMetaInfo.getWriter().writeToBuffer(res, val, object);
     }
 
