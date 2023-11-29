@@ -129,9 +129,6 @@ public class ClassParser {
         for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
             fieldBytes =  fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
 
-
-            verifyDynamicSizeOf(fieldMetaInfo);
-
             totalBytes += fieldBytes;
         }
         if(totalBytes > classMetaInfo.getElementBytes()) {
@@ -156,31 +153,7 @@ public class ClassParser {
 
     }
 
-    private boolean verifyDynamicSizeOf(FieldMetaInfo fieldMetaInfo) {
-        if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()){
-            FieldMetaInfo dynamicRef =
-                    fieldMetaInfo.getOwnerClazz().getFieldMetaInfoByAccessPath(fieldMetaInfo.getDynamicSizeOf());
-            if(Objects.isNull(dynamicRef)) {
-                throw new InvalidParameterException("not found  target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
-            }
 
-            if(dynamicRef.getOrderId() > fieldMetaInfo.getOrderId()) {
-                throw new InvalidParameterException("dynamicSizeOf property value should be less than itself order; at: " + fieldMetaInfo.getFullName());
-            }
-
-            fieldMetaInfo.setDynamicRef(dynamicRef);
-            dynamicRef.setDynamicRef(fieldMetaInfo);
-
-            if(!dynamicRef.getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
-                throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
-            }
-
-
-            return true;
-        }
-
-        return false;
-    }
 
     private void copyConfiguration(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         MagicClass magicClass = AnnotationUtil.getMagicClassAnnotation(clazz);

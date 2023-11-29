@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.clazz;
 
+import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 
 import java.util.*;
@@ -64,6 +65,28 @@ public class ClassManager {
             }
             if(fieldMetaInfo.isCalcLength()) {
                 calcLengthFields.add(fieldMetaInfo);
+            }
+
+            if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()
+                    && Objects.isNull(fieldMetaInfo.getDynamicRef())){
+                boolean founded = false;
+                for(int j =i; j>=0; j--) {
+                    FieldMetaInfo tmp1 = classMetaInfo.getFlatFields().get(j);
+                    if(tmp1.getAccessPath().equals(fieldMetaInfo.getDynamicSizeOf())) {
+                        fieldMetaInfo.setDynamicRef(tmp1);
+                        tmp1.setDynamicRef(fieldMetaInfo);
+                        founded = true;
+                        break;
+                    }
+                }
+
+                if(!founded) {
+                    throw new InvalidParameterException("not found target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
+                }
+
+                if(!fieldMetaInfo.getDynamicRef().getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
+                    throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+                }
             }
 
         }
