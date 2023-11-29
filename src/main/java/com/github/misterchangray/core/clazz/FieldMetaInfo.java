@@ -10,6 +10,7 @@ import com.github.misterchangray.core.intf.MWriter;
 
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 public class FieldMetaInfo implements MField {
 
@@ -50,6 +51,10 @@ public class FieldMetaInfo implements MField {
      * 字段类型
      */
     private TypeEnum type;
+    /**
+     * 自定义序列化时 customType 储存字段类型
+     */
+    private TypeEnum customType;
     /**
      * 字段class
      */
@@ -147,6 +152,23 @@ public class FieldMetaInfo implements MField {
      */
     private TimestampFormatter timestampFormatter;
     private String formatPattern;
+
+
+    public TypeEnum getCustomType() {
+        return customType;
+    }
+    public TypeEnum getRealType() {
+        if(Objects.nonNull(customType)) {
+            return customType;
+        }
+        return type;
+    }
+
+
+    public void setCustomType(TypeEnum customType) {
+        this.customType = customType;
+    }
+
 
 
     public String getAccessPath() {

@@ -23,7 +23,7 @@ public class BooleanWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
-        super.writeToBuffer(buffer, val, parent);
+        super.saveDelayCalcIfDynamic(buffer, val, parent);
         if(Objects.isNull(val)) {
             val = (boolean) (this.fieldMetaInfo.getDefaultVal() > 0);
         }

@@ -21,7 +21,9 @@ public abstract class MWriter {
     public void writeToObject(Object target, Object val) throws IllegalAccessException {
         this.fieldMetaInfo.getField().set(target, val);
     }
-    public  void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+    public abstract void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException;
+
+    public void saveDelayCalcIfDynamic(DynamicByteBuffer buffer, Object val, Object parent) {
         if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
             buffer.registerDelayWrapper(fieldMetaInfo.getId(),
                     new FieldMetaInfoWrapper(this.fieldMetaInfo, buffer.position()));

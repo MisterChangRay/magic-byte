@@ -26,7 +26,7 @@ public class CustomWriter extends MWriter {
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
-
+        super.saveDelayCalcIfDynamic(buffer, val, parent);
         CustomConverterInfo customConverter = this.fieldMetaInfo.getCustomConverter();
 
         byte[] unpack = customConverter.getConverter().unpack(val, customConverter.getAttachParams());

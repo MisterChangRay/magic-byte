@@ -29,7 +29,7 @@ public class StringWriter extends MWriter {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getId());
-            byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getType(), (Number) o);
+            byteLen = (int) ConverterUtil.toNumber(this.fieldMetaInfo.getDynamicRef().getRealType(), (Number) o);
         }
         // direct write fill byte if the value is null
         byte[] data = new byte[byteLen];

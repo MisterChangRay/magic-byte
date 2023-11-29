@@ -332,7 +332,7 @@ public class DynamicByteBuffer {
 
             int p = this.position();
             this.position(fieldMetaInfoWrapper.getStartOffset());
-            Object o = fieldMetaInfo.getReader().readFormBuffer(this, fieldMetaInfo);
+            Object o = fieldMetaInfo.getReader().readFormBuffer(this, null);
             this.position(p);
             return o;
         }

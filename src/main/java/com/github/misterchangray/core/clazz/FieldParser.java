@@ -181,6 +181,7 @@ public class FieldParser {
 
         } else {
             fieldMetaInfo.setType(TypeEnum.CUSTOM);
+            fieldMetaInfo.setCustomType(TypeManager.getType(clazz));
             fieldMetaInfo.setWriter(TypeManager.newWriter(fieldMetaInfo));
             fieldMetaInfo.setReader(TypeManager.newReader(fieldMetaInfo));
             if(magicConverter.fixSize() == -1) {

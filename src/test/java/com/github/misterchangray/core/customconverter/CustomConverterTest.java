@@ -28,6 +28,31 @@ import java.util.Date;
 public class CustomConverterTest {
    static SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
 
+
+
+    /**
+     * 测试同一个类多个相同类型字段使用序列化时，是否会相互影响
+     * 以及序列化时dynamicSizeOf 时修改值, 是否能生效
+     *
+     * @throws ParseException
+     */
+    @Test
+    public void testStaff14() throws ParseException {
+        Staff14 staff14 = new Staff14();
+        staff14.setId(13);
+        staff14.setBoodId1(13);
+        staff14.setNameLen(8);
+        staff14.setName("0123456789");
+
+
+        byte[] bytes = MagicByte.unpackToByte(staff14);
+//        Assert.assertEquals(bytes.length, 22);
+        Staff14 pack = MagicByte.pack(bytes, Staff14.class);
+        Assert.assertEquals(pack.getBoodId1(), 11);
+        Assert.assertEquals(pack.getNameLen(), 10);
+
+    }
+
     /**
      * 测试fixsize 在成员上使用
      *

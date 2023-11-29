@@ -8,7 +8,7 @@ import com.github.misterchangray.core.util.DynamicByteBuffer;
 import java.io.UnsupportedEncodingException;
 
 /**
- * @description: read collection data
+ * @description: read object data
  * @author: Ray.chang
  * @create: 2021-12-20 13:15
  **/

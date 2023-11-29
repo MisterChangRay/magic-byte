@@ -32,7 +32,9 @@ public class CustomReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  {
+    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException  {
+        super.saveDelayCalcIfDynamic(buffer, entity);
+
         CustomConverterInfo converterInfo = this.fieldMetaInfo.getCustomConverter();
         MConverter converter = converterInfo.getConverter();
 

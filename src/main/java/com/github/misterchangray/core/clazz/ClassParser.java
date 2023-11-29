@@ -93,6 +93,7 @@ public class ClassParser {
             FieldMetaInfo virtualField = new FieldMetaInfo();
             virtualField.setClazz(clazz);
             virtualField.setType(TypeEnum.CUSTOM);
+            virtualField.setCustomType(TypeManager.getType(clazz));
             virtualField.setCustomConverter(magicConverterInfo);
             classMetaInfo.setWriter(TypeManager.newWriter(virtualField));
             classMetaInfo.setReader(TypeManager.newReader(virtualField));
@@ -173,7 +174,7 @@ public class ClassParser {
             fieldMetaInfo.setDynamicRef(dynamicRef);
             dynamicRef.setDynamicRef(fieldMetaInfo);
 
-            if(!dynamicRef.getType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT)) {
+            if(!dynamicRef.getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT)) {
                 throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
             }
 
