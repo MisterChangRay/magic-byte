@@ -22,7 +22,7 @@ public class TestDynamicSize {
     /**
      * 测试 dynamicSizeOf 为嵌套对象
      *
-     * 这里会找不到指定的属性
+     * 这里会找不到指定的属性，并且抛出异常
      * 
      * @throws InterruptedException
      */
@@ -37,6 +37,9 @@ public class TestDynamicSize {
 
     /**
      * 测试 dynamicSizeOf 为嵌套对象
+     * 这里引用的长度字段再另一个封装对象里
+     * classA
+     *
      * @throws InterruptedException
      */
     @Test
