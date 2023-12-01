@@ -12,6 +12,14 @@ public class FieldMetaInfoWrapper {
         this.val = val;
     }
 
+    public Object getVal() {
+        return val;
+    }
+
+    public void setVal(Object val) {
+        this.val = val;
+    }
+
     public FieldMetaInfo getFieldMetaInfo() {
         return fieldMetaInfo;
     }
