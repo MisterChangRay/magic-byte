@@ -157,14 +157,14 @@ public class Checker {
     - fixSize, 固定数据字节长度, 可以统一指定自定义数据的长度,也可忽略然后在序列化时返回实际数据长度
     
 #### 5. 支持的数据类型及字节大小;
-| 数据类型 |数据类型 | 扩展类型(无符号数)  |字节大小|
-|--------|--------|--------|--------|
-|byte|boolean|UByte|1|
-|short|char|UShort|2|
-|int|float|UInt|4|
-|long|double|ULong|8|
-|String| | UNumber |custom|
-|Date,Instant,DateTime|LocalTime,LocalDate,LocalDateTime| |6|
+| 数据类型 |数据类型 | 扩展类型(无符号数)  | 字节大小             |
+|--------|--------|--------|------------------|
+|byte|boolean|UByte| 1                |
+|short|char|UShort| 2                |
+|int|float|UInt| 4                |
+|long|double|ULong| 8                |
+|String| | UNumber | custom(配合size指定) |
+|Date,Instant,DateTime|LocalTime,LocalDate,LocalDateTime| | 6                |
 
 
 #### 6. 注意事项
