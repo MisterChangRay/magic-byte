@@ -142,7 +142,7 @@ public class Checker {
 	- strict 严格模式, 默认false, 严格模式将会抛出更多的异常
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
 	- order 定义对象属性的序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始递增,建议跳跃配置如:1,3,5...)</b>
-	- size 属性大小, 仅String和List需要设置, String 代表字节长度. List和Array代表成员个数
+	- size 属性大小, 仅UNumber&String&List需要设置, String/UNumber 代表字节长度. List和Array代表成员个数
     - cmdField 标记此字段为消息类型, 此配置结合消息注册使用. 默认false
 	- charset 字符集设置,可全局配置, 仅`String`设置有效; 默认ASCII
 	- dynamicSize 标记字段为动态长度, 整条消息只能标记一次且仅能标记`String&List&Array`类型字段; [点击查看详情](https://github.com/MisterChangRay/magic-byte/wiki/dynamicSize-%E5%B1%9E%E6%80%A7%E8%AF%A6%E8%A7%A3)
