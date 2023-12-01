@@ -21,8 +21,7 @@ public class UIntReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, entity);
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
         return UInt.build().signed(buffer.getInt());
     }
 }

@@ -20,7 +20,7 @@ public class DoubleReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) {
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity) {
         return buffer.getDouble();
     }
 }

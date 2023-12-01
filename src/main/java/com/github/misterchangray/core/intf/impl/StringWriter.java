@@ -25,7 +25,7 @@ public class StringWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int byteLen = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef().getAccessPath());

@@ -21,14 +21,16 @@ public abstract class MWriter {
     public void writeToObject(Object target, Object val) throws IllegalAccessException {
         this.fieldMetaInfo.getField().set(target, val);
     }
-    public abstract void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException;
-
-    public void saveDelayCalcIfDynamic(DynamicByteBuffer buffer, Object val, Object parent) {
+    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+        int position = buffer.position();
+        this.doWriteToBuffer(buffer,val,parent);
         if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
             buffer.registerDelayWrapper(fieldMetaInfo.getAccessPath(),
-                    new FieldMetaInfoWrapper(this.fieldMetaInfo, buffer.position()));
+                    new FieldMetaInfoWrapper(this.fieldMetaInfo, position, null));
         }
     }
+
+    public abstract void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException;
 
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {};
 }

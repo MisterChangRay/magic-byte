@@ -27,7 +27,7 @@ public class ObjectWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         if(Objects.isNull(val)) {
             // direct write fill byte if the value is null
             byte[] data = new byte[this.fieldMetaInfo.getElementBytes()];

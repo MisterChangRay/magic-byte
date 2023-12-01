@@ -23,13 +23,12 @@ public class ByteWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent)  throws IllegalAccessException {
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent)  throws IllegalAccessException {
         this.writeToBuffer(buffer, val, parent, buffer.position());
     }
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, val, parent);
 
         if(Objects.isNull(val)) {
             val = (byte) this.fieldMetaInfo.getDefaultVal();

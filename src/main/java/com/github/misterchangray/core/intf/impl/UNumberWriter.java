@@ -24,8 +24,7 @@ public class UNumberWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, val, parent);
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         writeToBuffer(buffer, val, parent, buffer.position());
 
     }

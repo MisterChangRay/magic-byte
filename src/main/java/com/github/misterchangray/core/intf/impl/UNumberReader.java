@@ -22,9 +22,7 @@ public class UNumberReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, entity);
-
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
         byte[] tmp = new byte[this.fieldMetaInfo.getSize()];
         for (int i=0; i<fieldMetaInfo.getSize(); i++){
             tmp[i] = buffer.get();

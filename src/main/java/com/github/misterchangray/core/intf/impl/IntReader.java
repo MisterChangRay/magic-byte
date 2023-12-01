@@ -20,8 +20,7 @@ public class IntReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity) throws IllegalAccessException  {
-        super.saveDelayCalcIfDynamic(buffer, entity);
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity) throws IllegalAccessException  {
         return buffer.getInt();
     }
 }

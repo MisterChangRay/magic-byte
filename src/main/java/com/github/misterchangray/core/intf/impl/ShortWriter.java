@@ -22,15 +22,13 @@ public class ShortWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         writeToBuffer(buffer, val, parent, buffer.position());
 
     }
 
     @Override
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent, int writeOffset) throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, val, parent);
-
         if(Objects.isNull(val)) {
             val = (short) this.fieldMetaInfo.getDefaultVal();
         }

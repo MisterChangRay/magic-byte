@@ -21,9 +21,7 @@ public class UShortReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, entity);
-
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
         return UShort.build().signed(buffer.getShort());
     }
 }

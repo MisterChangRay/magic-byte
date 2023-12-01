@@ -308,7 +308,7 @@ public class DynamicByteBuffer {
     public void setLengthFieldWrapper(FieldMetaInfo fieldMetaInfo) {
         if(fieldMetaInfo.isCalcLength()) {
             this.registerDelayWrapper(LENGTH_FIELD_WRAPPER,
-                    new FieldMetaInfoWrapper(fieldMetaInfo, this.position()));
+                    new FieldMetaInfoWrapper(fieldMetaInfo, this.position(), null));
         }
 
     }
@@ -321,7 +321,7 @@ public class DynamicByteBuffer {
     public void setCheckCodeFieldWrapper(FieldMetaInfo fieldMetaInfo) {
         if(fieldMetaInfo.isCalcCheckCode()) {
             this.registerDelayWrapper(CHECK_CODE_FIELD_WRAPPER,
-                    new FieldMetaInfoWrapper(fieldMetaInfo, this.position()));
+                    new FieldMetaInfoWrapper(fieldMetaInfo, this.position(), null));
         }
     }
 

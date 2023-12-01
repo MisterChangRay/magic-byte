@@ -23,7 +23,7 @@ public class ObjectReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  {
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity)  {
         return Packer.getInstance().doPackObject(buffer, this.fieldMetaInfo.getClazzMetaInfo(), null, entity);
     }
 

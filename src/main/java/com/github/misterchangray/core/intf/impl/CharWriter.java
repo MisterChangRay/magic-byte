@@ -22,9 +22,7 @@ public class CharWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, val, parent);
-
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         if(Objects.isNull(val)) {
             val = (char) this.fieldMetaInfo.getDefaultVal();
         }

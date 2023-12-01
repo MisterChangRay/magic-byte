@@ -17,14 +17,18 @@ public abstract class MReader {
 
     public abstract Object readFormObject(Object object) throws IllegalAccessException;
 
-    public abstract   Object  readFormBuffer(DynamicByteBuffer buffer, Object entity) throws IllegalAccessException;
-
-    public void saveDelayCalcIfDynamic(DynamicByteBuffer buffer, Object entity) {
+    public  Object  readFormBuffer(DynamicByteBuffer buffer, Object entity) throws IllegalAccessException {
+        int position = buffer.position();
+        Object o = this.doReadFormBuffer(buffer, entity);
         if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
             buffer.registerDelayWrapper(fieldMetaInfo.getAccessPath(),
-                    new FieldMetaInfoWrapper(this.fieldMetaInfo, buffer.position()));
+                    new FieldMetaInfoWrapper(this.fieldMetaInfo, position, o));
         }
+        return o;
     }
+
+    public  abstract Object  doReadFormBuffer(DynamicByteBuffer buffer, Object entity) throws IllegalAccessException;
+
 
     public MReader(FieldMetaInfo _fieldMetaInfo) {
         this.fieldMetaInfo = _fieldMetaInfo;

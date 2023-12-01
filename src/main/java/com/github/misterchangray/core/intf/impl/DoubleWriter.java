@@ -22,7 +22,7 @@ public class DoubleWriter extends MWriter {
     }
 
     @Override
-    public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
+    public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) {
         if(Objects.isNull(val)) {
             val = (double) this.fieldMetaInfo.getDefaultVal();
         }

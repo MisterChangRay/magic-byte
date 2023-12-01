@@ -21,8 +21,7 @@ public class UByteReader extends MReader {
     }
 
     @Override
-    public Object readFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
-        super.saveDelayCalcIfDynamic(buffer, entity);
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity)  throws IllegalAccessException {
         return UByte.build().signed(buffer.get());
     }
 }

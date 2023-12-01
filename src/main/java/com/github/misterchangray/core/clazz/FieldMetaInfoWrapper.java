@@ -4,10 +4,12 @@ package com.github.misterchangray.core.clazz;
 public class FieldMetaInfoWrapper {
     private FieldMetaInfo fieldMetaInfo;
     private int startOffset;
+    private Object val;
 
-    public FieldMetaInfoWrapper(FieldMetaInfo fieldMetaInfo, int startOffset) {
+    public FieldMetaInfoWrapper(FieldMetaInfo fieldMetaInfo, int startOffset, Object val) {
         this.fieldMetaInfo = fieldMetaInfo;
         this.startOffset = startOffset;
+        this.val = val;
     }
 
     public FieldMetaInfo getFieldMetaInfo() {
