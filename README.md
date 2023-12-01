@@ -92,7 +92,7 @@ public class Student {
     private int length;
     // 总字节数 = phones.size * length
     // 单个元素 8 byte, 此List并未直接指定大小, 大小由 length 字段决定. length字段数据类型只能为 byte, short, int
-    @MagicField(order = 10, dynamicSizeOf = 5)
+    @MagicField(order = 10, dynamicSizeOf = "length")
     private List<Long> phones;
     // 1 byte
     @MagicField(order = 15)
@@ -146,7 +146,7 @@ public class Checker {
     - cmdField 标记此字段为消息类型, 此配置结合消息注册使用. 默认false
 	- charset 字符集设置,可全局配置, 仅`String`设置有效; 默认ASCII
 	- dynamicSize 标记字段为动态长度, 整条消息只能标记一次且仅能标记`String&List&Array`类型字段; [点击查看详情](https://github.com/MisterChangRay/magic-byte/wiki/dynamicSize-%E5%B1%9E%E6%80%A7%E8%AF%A6%E8%A7%A3)
-	- dynamicSizeOf 从指定的 order 中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
+	- dynamicSizeOf 从指定的属性中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
     - calcLength 标记字段为长度字段, 反序列化时将自动将数据总长度(字节数)填充到此字段;  可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
     - timestampFormat 可指定时间格式,时间戳或者文本,时间戳可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可使用size进行调整;如秒级时间戳4个字节就足够储存传输

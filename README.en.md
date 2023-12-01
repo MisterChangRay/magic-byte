@@ -74,7 +74,7 @@ public class Student {
     private int length;
     // totalBytes = phones.size * length
     // unit 8 byte, the list size equals length value
-    @MagicField(order = 10, dynamicSizeOf = 5)
+    @MagicField(order = 10, dynamicSizeOf = "length")
     private List<Long> phones;
     // 1 byte
     @MagicField(order = 15)
@@ -121,7 +121,7 @@ public class Checker {
 2. `@MagicField()` used on field
 - size: declare the bytes length, if used on array/list, that means size of list or array
 - order: the field Serialized order,  the smaller it's will be first serialize
-- dynamicSizeOf: another field order number, only used on array/list, the data size will get by other field  
+- dynamicSizeOf: take array or string size from another field, only used on array/list, the data size will get by other field  
 3. `@MagicConverter()` used on field, if you want custom serialize some object
 - converter, the converter must implements `MConverter`
 - attachParams, the data will use by call converter methods
