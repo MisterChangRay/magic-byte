@@ -8,6 +8,7 @@ public class TestFunctional {
 
 
     /**
+     *
      * 序列化时： data数据中包含所有已序列化的数据(包括 calcLength 也已经调用并序列化)
      * 反序列化时: data数据为传入数据的副本
      * @param data
