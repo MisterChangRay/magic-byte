@@ -366,30 +366,6 @@ public class FieldMetaInfo implements MField {
         isDynamic = dynamic;
     }
 
-    public FieldMetaInfo tryGetDynamicRef() {
-        if(Objects.nonNull(this.dynamicRef)) {
-            return dynamicRef;
-        }
-        if(this.isDynamic &&
-                Objects.nonNull(this.dynamicSizeOf)) {
-            List<FieldMetaInfo> flatFields = null;
-            if(this.dynamicSizeOf.startsWith("#")) {
-                flatFields = this.getOwnerClazz().getRoot().getFlatFields();
-            } else {
-                flatFields = this.getOwnerClazz().getFlatFields();
-            }
-            if(Objects.isNull(flatFields) || flatFields.size() == 0) {
-                return null;
-            }
-            for (FieldMetaInfo flatField : flatFields) {
-                if(flatField.getAccessPath().equals(this.dynamicSizeOf)) {
-                    return flatField;
-                }
-            }
-
-        }
-        return null;
-    }
     public FieldMetaInfo getDynamicRef() {
         return dynamicRef;
     }
@@ -466,6 +442,43 @@ public class FieldMetaInfo implements MField {
         if(this.type.is(TypeEnum.OBJECT) || ( this.isCollection() && this.getGenericsField().type.is(TypeEnum.OBJECT))) {
             this.fieldType = 2;
         }
+    }
+
+
+    /**
+     * 查找 dynamicSizeOf 对象
+     *
+     * @param classMetaInfo
+     */
+    public void linkDynamicSizeOf(ClassMetaInfo classMetaInfo) {
+        if(!this.isDynamic || !this.isDynamicSizeOf()) {
+            return;
+        }
+        if(!dynamicSizeOf.startsWith("#") && Objects.nonNull(this.dynamicRef)) {
+            return;
+        }
+
+        List<FieldMetaInfo> flatFields = classMetaInfo.getFlatFields();;
+        String dynamicSizeOf = this.dynamicSizeOf;
+
+        if(dynamicSizeOf.startsWith("#")) {
+            dynamicSizeOf = dynamicSizeOf.substring(1);
+        }
+        if(Objects.isNull(flatFields) || flatFields.size() == 0) {
+            return;
+        }
+        FieldMetaInfo dynamicRefTmp = null;
+        for (FieldMetaInfo flatField : flatFields) {
+            if(flatField.getAccessPath().equals(dynamicSizeOf)) {
+                dynamicRefTmp = flatField;
+            }
+        }
+
+        if(Objects.nonNull(dynamicRefTmp)) {
+            this.setDynamicRef(dynamicRefTmp);
+            dynamicRefTmp.setDynamicRef(this);
+        }
+
     }
 
 }

@@ -2,6 +2,9 @@ package com.github.misterchangray.core.common;
 
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.ClassManager;
+import com.github.misterchangray.core.clazz.ClassMetaInfo;
+import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.common.entity.Classes;
 import com.github.misterchangray.core.common.entity.Student;
 import com.github.misterchangray.core.common.entity.Teacher;
@@ -52,6 +55,7 @@ public class NormalTest {
         Classes classes = Classes.build(1).get(0);
 
 
+        ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(Classes.class);
         byte[] unpack = MagicByte.unpackToByte(classes);
         Classes pack = MagicByte.pack(unpack, Classes.class);
 

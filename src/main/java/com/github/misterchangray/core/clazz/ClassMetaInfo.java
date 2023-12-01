@@ -21,16 +21,17 @@ public class ClassMetaInfo implements MClass {
 
 
     /**
+     * 持有此类的属性
+     */
+    private FieldMetaInfo ownerField;
+
+    /**
      * 类嵌套
      *
      * 值为上级信息
      */
     private ClassMetaInfo parent;
 
-    /**
-     * 上级引用
-     */
-    private FieldMetaInfo parentField;
 
     /**
      * 展开模式下的所有字段
@@ -70,13 +71,15 @@ public class ClassMetaInfo implements MClass {
 
     private CustomConverterInfo customConverter ;
 
-    public FieldMetaInfo getParentField() {
-        return parentField;
+    public FieldMetaInfo getOwnerField() {
+        return ownerField;
     }
 
-    public void setParentField(FieldMetaInfo parentField) {
-        this.parentField = parentField;
+    public void setOwnerField(FieldMetaInfo ownerField) {
+        this.ownerField = ownerField;
     }
+
+
 
     public MWriter getWriter() {
         return writer;

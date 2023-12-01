@@ -119,7 +119,8 @@ public class ClassParser {
      */
     private void afterLinkClazz(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         if(Objects.nonNull(classMetaInfo.getFields()) && classMetaInfo.getFields().size() == 0) return;
-        this.genFieldId(classMetaInfo, null);
+
+        this.initAccessInfo(classMetaInfo, "");
 
         int
                 totalBytes = 0, // 总字节
@@ -137,22 +138,26 @@ public class ClassParser {
 
     }
 
-    private void genFieldId(ClassMetaInfo classMetaInfo, String contextPath) {
-        if(Objects.isNull(classMetaInfo.getFields()) || classMetaInfo.getFields().size() == 0) return;
-
-        contextPath = Objects.isNull(contextPath) ? "" : contextPath + ".";
-        for (FieldMetaInfo field : classMetaInfo.getFields()) {
-            String tmp = contextPath + field.getField().getName();
-
-            field.setAccessPath(tmp);
-
-            ClassMetaInfo clz = field.isCollection() ? field.getGenericsField().getClazzMetaInfo() : field.getClazzMetaInfo();
-            this.genFieldId(clz, tmp);
+    /**
+     * 递归解析当前类的所有属性
+     * 即每个类解析完成后，只有当前类的所有属性的访问路径
+     * @param classMetaInfo
+     * @param accessPath
+     */
+    private void initAccessInfo(ClassMetaInfo classMetaInfo, String accessPath) {
+        if(Objects.isNull(classMetaInfo.getFields()) || classMetaInfo.getFields().size() == 0) {
+            return;
         }
 
+        if(accessPath.length() > 0) {
+            accessPath += '.';
+        }
+        for (FieldMetaInfo field : classMetaInfo.getFields()) {
+            field.setAccessPath(accessPath  + field.getField().getName());
+            initAccessInfo(field.getClazzMetaInfo(), field.getAccessPath());
+        }
 
     }
-
 
 
     private void copyConfiguration(ClassMetaInfo classMetaInfo, Class<?> clazz) {

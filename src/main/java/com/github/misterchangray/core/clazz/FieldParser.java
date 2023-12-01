@@ -38,7 +38,7 @@ public class FieldParser {
 
         FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
         linkField(field, fieldMetaInfo, classMetaInfo);
-        this.linkCustomConverter(field, fieldMetaInfo);
+        linkCustomConverter(field, fieldMetaInfo);
 
         afterVerify(fieldMetaInfo);
 
@@ -111,7 +111,6 @@ public class FieldParser {
         fieldMetaInfo.setClazz(field.getType());
 
         this.copyConfiguration(field, fieldMetaInfo, classMetaInfo);
-
         this.initField(fieldMetaInfo, classMetaInfo, field.getType());
 
         if(TypeManager.isCollection(fieldMetaInfo.getType())) {
@@ -127,10 +126,9 @@ public class FieldParser {
     private void initField( FieldMetaInfo fieldMetaInfo, ClassMetaInfo classMetaInfo, Class<?> clazz) {
         fieldMetaInfo.setType(TypeManager.getType(clazz));
 
-        ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassFieldMetaInfo(clazz, classMetaInfo);
+        ClassMetaInfo fieldClassMetaInfo = ClassManager.getClassFieldMetaInfo(clazz, classMetaInfo, fieldMetaInfo);
         fieldMetaInfo.setClazzMetaInfo(fieldClassMetaInfo);
         fieldClassMetaInfo.setParent(classMetaInfo);
-        fieldClassMetaInfo.setParentField(fieldMetaInfo);
         fieldMetaInfo.setElementBytes(fieldClassMetaInfo.getElementBytes());
         // set parent isDynamic flag if the child true
         if(fieldClassMetaInfo.isDynamic()) {
@@ -159,6 +157,7 @@ public class FieldParser {
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
         }
+
 
     }
 
@@ -218,7 +217,9 @@ public class FieldParser {
     private FieldMetaInfo newGenericsField(FieldMetaInfo origin) {
         FieldMetaInfo fieldMetaInfo = new FieldMetaInfo();
         Class<?> clazz = TypeManager.getGenericsFieldType(origin);
+        fieldMetaInfo.setOwnerClazz(origin.getOwnerClazz());
         fieldMetaInfo.setClazz(clazz);
+        fieldMetaInfo.setField(origin.getField());
         this.copyConfiguration(origin.getField(), fieldMetaInfo, origin.getOwnerClazz());
         this.initField( fieldMetaInfo, origin.getOwnerClazz(), fieldMetaInfo.getClazz());
 
@@ -261,6 +262,7 @@ public class FieldParser {
         fieldMetaInfo.setSize(magicField.size());
         fieldMetaInfo.setDynamicSizeOf(magicField.dynamicSizeOf());
         fieldMetaInfo.setCmdField(magicField.cmdField());
+
     }
 
 

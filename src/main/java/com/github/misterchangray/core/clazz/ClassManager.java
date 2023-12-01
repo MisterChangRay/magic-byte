@@ -67,22 +67,20 @@ public class ClassManager {
                 calcLengthFields.add(fieldMetaInfo);
             }
 
-            if(fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()
-                    && Objects.isNull(fieldMetaInfo.getDynamicRef())){
-                FieldMetaInfo dynamicRef = fieldMetaInfo.tryGetDynamicRef();
+            // 解析 dynamicSizeOf 引用持有
+            fieldMetaInfo.linkDynamicSizeOf(classMetaInfo);
 
-                if(Objects.isNull(dynamicRef)) {
+            // 当前为根节点时, 检查所有 dynamicSizeOf 引用持有是否正确
+            if(Objects.isNull(classMetaInfo.getParent()) && fieldMetaInfo.isDynamic() && fieldMetaInfo.isDynamicSizeOf()) {
+                if(Objects.isNull(fieldMetaInfo.getDynamicRef())) {
                     throw new InvalidParameterException("not found target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
                 }
 
-                if(!dynamicRef.getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
+                if(!fieldMetaInfo.getDynamicRef().getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
                     throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
                 }
 
-                fieldMetaInfo.setDynamicRef(dynamicRef);
-                dynamicRef.setDynamicRef(fieldMetaInfo);
             }
-
         }
 
         if(dynamicSizeFields.size() > 1) {
@@ -109,9 +107,10 @@ public class ClassManager {
     }
 
 
-    public static ClassMetaInfo getClassFieldMetaInfo(Class<?> clazz, ClassMetaInfo parent) {
+    public static ClassMetaInfo getClassFieldMetaInfo(Class<?> clazz, ClassMetaInfo parent, FieldMetaInfo fieldMetaInfo) {
         ClassMetaInfo classMetaInfo = new ClassMetaInfo(clazz);
         classMetaInfo.setParent(parent);
+        classMetaInfo.setOwnerField(fieldMetaInfo);
 
         parseClass(classMetaInfo);
         afterLink(classMetaInfo);

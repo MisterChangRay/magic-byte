@@ -1,6 +1,8 @@
 package com.github.misterchangray.core.dynamicsize;
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.ClassManager;
+import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.warpper.UByte;
 import com.github.misterchangray.core.dynamicsize.pojo.*;
 import com.github.misterchangray.core.common.dynamic.DynamicStudent;
@@ -10,6 +12,13 @@ import com.github.misterchangray.core.dynamicsize.pojo.error.SimpleDuplicatedId;
 import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead;
 import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead2;
 import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicSizeFromId;
+import com.github.misterchangray.core.dynamicsize.pojo.nested2.DynamicSizeBox;
+import com.github.misterchangray.core.dynamicsize.pojo.nested2.HeadBox1;
+import com.github.misterchangray.core.dynamicsize.pojo.nested2.HeadBox2;
+import com.github.misterchangray.core.dynamicsize.pojo.nested3.Box1;
+import com.github.misterchangray.core.dynamicsize.pojo.nested3.Box2;
+import com.github.misterchangray.core.dynamicsize.pojo.nested3.Box3;
+import com.github.misterchangray.core.dynamicsize.pojo.nested3.BoxRoot;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,6 +27,101 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class TestDynamicSize {
+
+
+    /**
+     * 测试 dynamicSizeOf 为嵌套对象
+     *
+     * 更复杂的测试相对引用和绝对引用
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void testBoxRoot() throws InterruptedException {
+        Box1 box1= new Box1();
+        box1.setLenStr("qwertyuio");
+        box1.setLen2Str("asdfghjkl");
+        box1.setLen(UByte.valueOf(6));
+
+
+        Box3 box3 = new Box3();
+        box3.setParentlen("!@#$%^^&*(");
+        box3.setLen(UByte.valueOf(5));
+
+        Box2 box2= new Box2();
+        box2.setBox3(box3);
+        box2.setParentlen("zxcvbnm<>");
+        box2.setLen(UByte.valueOf(4));
+        box2.setBox3Str("987654321");
+
+        BoxRoot boxRoot = new BoxRoot();
+        boxRoot.setBox1(box1);
+        boxRoot.setBox2(box2);
+        boxRoot.setBox2_box3lenStr("abcdefghijk");
+        boxRoot.setLen((byte) 2);
+        boxRoot.setRootLenStr("MNBHJKIU");
+
+        byte[] bytes = MagicByte.unpackToByte(boxRoot);
+        BoxRoot pack = MagicByte.pack(bytes, BoxRoot.class);
+
+        Assert.assertEquals(pack.getBox2().getBox3().getTotalLen(), UByte.valueOf(bytes.length));
+        Assert.assertEquals(boxRoot.getLen(), pack.getLen());
+        Assert.assertEquals(pack.getBox2_box3lenStr(), "abcde");
+        Assert.assertEquals(pack.getBox1().getLenStr(), "qw");
+        Assert.assertEquals(pack.getBox1().getLen2Str(), "asdfgh");
+
+        Assert.assertEquals(pack.getBox2().getBox3Str(), "98765");
+        Assert.assertEquals(pack.getBox2().getParentlen(), "zxcv");
+        Assert.assertEquals(pack.getBox2().getBox3().getParentlen(), "!@#$%^");
+        Assert.assertEquals(pack.getRootLenStr(), "MN");
+
+
+    }
+
+
+
+    /**
+     * 测试 dynamicSizeOf 为嵌套对象
+     *
+     * 测试相对引用和绝对引用
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void testDynamicSizeBox() throws InterruptedException {
+        HeadBox1 box1 = new HeadBox1();
+        box1.setLen((short) 3);
+
+        HeadBox2 box2 = new HeadBox2();
+        box2.setLen(UByte.valueOf(5));
+        box2.setFu("abcdefghijk");
+
+        DynamicSizeBox dynamicSizeBox = new DynamicSizeBox();
+        dynamicSizeBox.setAge(989);
+        dynamicSizeBox.setHead1(box1);
+        dynamicSizeBox.setHead2(box2);
+        dynamicSizeBox.setData(new byte[]{1,2,3,4,5,6,7});
+        dynamicSizeBox.setData2(new byte[]{11,22,33,44,55,66,77});
+
+        byte[] bytes = MagicByte.unpackToByte(dynamicSizeBox);
+        Assert.assertEquals(bytes.length, 28);
+
+        DynamicSizeBox pack = MagicByte.pack(bytes, DynamicSizeBox.class);
+
+        ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(DynamicSizeBox.class);
+
+
+        Assert.assertEquals(dynamicSizeBox.getAge(), pack.getAge());
+        Assert.assertEquals(dynamicSizeBox.getHead1().getLen(), pack.getData().length);
+        Assert.assertEquals(dynamicSizeBox.getHead2().getLen().intValue(), pack.getData2().length);
+        Assert.assertEquals(dynamicSizeBox.getHead1().getLen(), pack.getHead2().getFu().length());
+        Assert.assertArrayEquals(pack.getData(), new byte[] {1,2,3});
+        Assert.assertArrayEquals(pack.getData2(), new byte[] {11,22,33,44,55});
+        Assert.assertEquals(pack.getHead2().getFu(), "abc");
+
+
+    }
+
 
     /**
      * 测试 dynamicSizeOf 为嵌套对象

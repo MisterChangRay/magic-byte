@@ -19,7 +19,6 @@ import java.util.Objects;
  * @create: 2021-12-17 15:11
  **/
 public class TypeManager {
-//    private static Map<Class, CustomConverterInfo> customConverterCache = new HashMap<>();
 
     /**
      * fast get class type
