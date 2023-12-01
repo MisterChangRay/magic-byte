@@ -5,7 +5,6 @@ import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.annotation.MagicField;
 import com.github.misterchangray.core.clazz.warpper.UNumber;
 import com.github.misterchangray.core.customconverter.customconverter.CustomIntConverter;
-import com.github.misterchangray.core.customconverter.customconverter.CustomIntConverter2;
 
 /**
  * 测试自定义序列化
@@ -13,12 +12,13 @@ import com.github.misterchangray.core.customconverter.customconverter.CustomIntC
  * 当配置到字段级别时，应该相互不影响
  */
 @MagicClass
-public class Staff14 {
+public class Staff15 {
     @MagicField(order = 1)
     private int id;
     @MagicField(order = 3, size = 3)
     private UNumber boodId1;
 
+    @MagicConverter(converter = CustomIntConverter.class,  attachParams = {"1"})
     @MagicField(order = 4, size = 2)
     private UNumber nameLen;
     @MagicField(order = 5, dynamicSizeOf = "nameLen")

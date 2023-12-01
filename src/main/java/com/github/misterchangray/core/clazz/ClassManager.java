@@ -76,8 +76,9 @@ public class ClassManager {
                     throw new InvalidParameterException("not found target field of dynamicSizeOf value; at: " + fieldMetaInfo.getFullName());
                 }
 
-                if(!fieldMetaInfo.getDynamicRef().getRealType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT, TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
-                    throw new InvalidParameterException("dynamic refs the type of filed must be primitive and only be byte, short, int; at: " + fieldMetaInfo.getFullName());
+                if(!fieldMetaInfo.getDynamicRef().getType().is(TypeEnum.BYTE, TypeEnum.SHORT, TypeEnum.INT,
+                        TypeEnum.UBYTE, TypeEnum.USHORT, TypeEnum.UINT, TypeEnum.UNUMBER)) {
+                    throw new InvalidParameterException("dynamic refs the type of filed only be (byte, short, int, UByte, UShort, UInt, UNumber); at: " + fieldMetaInfo.getFullName());
                 }
 
             }

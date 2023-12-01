@@ -194,7 +194,7 @@ public class TypeManager {
     }
 
     public static boolean isVariable(TypeEnum type) {
-        return type.is(TypeEnum.STRING, TypeEnum.LIST, TypeEnum.ARRAY);
+        return type.is(TypeEnum.STRING, TypeEnum.LIST, TypeEnum.ARRAY, TypeEnum.UNUMBER);
     }
 
 
