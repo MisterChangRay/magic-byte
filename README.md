@@ -47,7 +47,7 @@ Maven项目可直接导入:
 #### 3. 代码示例
 以下为简单的框架功能展示，实际项目中数据实体类定义建议参考 [数据实体定义的最佳实践](https://github.com/MisterChangRay/magic-byte/wiki/%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BD%93%E5%AE%9A%E4%B9%89%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
 
-下面的对象中, 共有 Student 和 School 两个对象
+下面的报文示例中, 共有 Student 和 School 两个数据报文：
 ```java
 // declare class must use public
 // 使用大端模式， 默认为大端
@@ -177,7 +177,7 @@ public class Checker {
 	1. 四类八种基础类型(byte/char/short/int/long/float/double/boolean)
 	2. 无符号包装类型(UByte/UShort/Uint/ULong/UNumber) [关于无符号数类型](https://github.com/MisterChangRay/magic-byte/wiki/%E5%85%B3%E4%BA%8E%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B)
 	3. 支持 String, 但必须申明 Size
-	4. 支持 List & Array, 可以使用泛型; 仅支持一维数组且不能使用`List<String>`或`String[]`
+	4. 支持 List & Array, 可以使用泛型; 仅支持一维数组且不能使用可变数据类型,如：`List<String>`或`String[]`或`List<UNumber>`
 6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 将序列化集合前5个元素
 7. 字符串默认使用ASCII编码
 8. 不支持一维以上的List或者Array
