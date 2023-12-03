@@ -139,7 +139,7 @@ public class Checker {
 #### 4. 注解和属性说明
 工具存在三个注解:
 1. `@MagicClass()` 类注解; 主要用于数据全局配置
-	- byteOrder 配置序列化大小端
+	- byteOrder 配置序列化大小端,可全局配置
 	- strict 严格模式, 默认false, 严格模式将会抛出更多的异常
 2. `@MagicField()` 属性注解, 未注解的属性不参与序列化/反序列化过程
 	- order 定义对象属性的序列化顺序<b>(重要, 投入使用后请勿修改, 从1开始递增,建议跳跃配置如:1,3,5...)</b>
@@ -147,7 +147,7 @@ public class Checker {
     - cmdField 标记此字段为消息类型, 此配置结合消息注册使用. 默认false
 	- charset 字符集设置,可全局配置, 仅`String`设置有效; 默认ASCII
 	- dynamicSize 标记字段为动态长度, 整条消息只能标记一次且仅能标记`String&List&Array`类型字段; [点击查看详情](https://github.com/MisterChangRay/magic-byte/wiki/dynamicSize-%E5%B1%9E%E6%80%A7%E8%AF%A6%E8%A7%A3)
-	- dynamicSizeOf 从指定的属性中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int`
+	- dynamicSizeOf 从指定的属性中获取`List或Array`的长度, 仅`List,Array,String`有效；引用字段类型只能为`byte, short, int, UNumber`
     - calcLength 标记字段为长度字段, 反序列化时将自动将数据总长度(字节数)填充到此字段;  可能抛出: InvalidLengthException
     - calcCheckCode 标记字段为校验和字段, 序列化或反序列化时将会校验或自动填充; 可能抛出: InvalidCheckCodeException
     - timestampFormat 可指定时间格式,时间戳或者文本,时间戳可指定为毫秒,秒,分钟,小时,天;日期类型默认6字节储存空间，可使用size进行调整;如秒级时间戳4个字节就足够储存传输
@@ -172,13 +172,13 @@ public class Checker {
 1. 本工具仅用于对象和数据的转换, 报文的效验需在转换前进行; 一般来说有报文头效验和效验和效验
 2. <b>因为`order`属性为对象序列化顺序,所以已投入使用的字段请不要随意修改`order`属性(重要)</b>,这样可能会影响已有业务;新增字段请递增使用新的`order`值
 3. 大端小端使用`@MagicClass`进行配置
-4. 基本数据类型使用下表默认字节长度, `String/List/Array` 需要使用`size`属性指定成员长度或字符串字节长度
+4. 基本数据类型使用下表默认字节长度, `String/List/Array/UNumber` 需要使用`size`属性指定成员长度或字符串字节长度
 5. 请使用基础类型定义报文结构,目前仅支持以下数据类型:
 	1. 四类八种基础类型(byte/char/short/int/long/float/double/boolean)
 	2. 无符号包装类型(UByte/UShort/Uint/ULong/UNumber) [关于无符号数类型](https://github.com/MisterChangRay/magic-byte/wiki/%E5%85%B3%E4%BA%8E%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B)
 	3. 支持 String, 但必须申明 Size
 	4. 支持 List & Array, 可以使用泛型; 仅支持一维数组且不能使用可变数据类型,如：`List<String>`或`String[]`或`List<UNumber>`
-6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 将序列化集合前5个元素
+6. 数据溢出时工具会自动对数据进行裁剪,如字符串或数组长度声明为5, 则只会序列化集合前5个元素
 7. 字符串默认使用ASCII编码
 8. 不支持一维以上的List或者Array
 9. boolean值 0=false/非0=true
@@ -186,7 +186,7 @@ public class Checker {
 11. 不支持类继承的序列化和反序列化;支持类的嵌套组合使用
 12. 序列化null值,如果是包装数据类型,则使用原始类型默认值;如`Short a = null;` 序列化为 `0`; 其他数据类型将会直接填充,如数组，对象等。
 13. 更多问题请前往WIKI页面查看 >> [WIKI_HOME](https://github.com/MisterChangRay/magic-byte/wiki)
-14. 内置枚举类序列化转换器`SimpleEnumConverter`,原理是根据枚举定义顺序进行序列化/反序列化.故使用后请不要更改定义顺序。
+14. 内置枚举类序列化转换器`SimpleEnumConverter`,原理是根据枚举定义顺序进行序列化/反序列化.故使用后请不要更改定义顺序。建议自行实现
 
 #### 7. 开发建议
 
