@@ -12,7 +12,7 @@
 ，流程如下图：
  ![](https://github.com/MisterChangRay/magic-byte/blob/master/introduce.png?raw=true)
 
-在这看似简单的转译过程中其实会伴随很多人头疼的问题，例如：
+在这看似简单的编码/解码过程中其实会伴随很多人头疼的问题，例如：
 - 大小端/网络字节序的处理
 - 无符号数/有符号数的处理
 - 多字节整数转换处理
@@ -20,8 +20,9 @@
 - 空指针/填充数据的处理
 - 数组对象/嵌套对象的处理
 
-所以此项目项目来了，此项目将尽可能的解决上述问题，在`MagicByte`中，你可以在类的定义时便通过注解申明好这复杂的序列化流程。
-并且序列化也只需要简单的调用两个方法，用于对象转字节的`MagicByte.unpack();`和用于字节转对象的`MagicByte.pack()`。
+此项目的目的便是尽可能的解决上述问题，让大家将更多的时间聚焦在业务中。
+在引入`MagicByte`后，你只需要在类的定义的时同时使用注解声明字段的数据类型。
+然后调用两个简单的方法即可进行序列化：用于对象转字节的`MagicByte.unpack();`和用于字节转对象的`MagicByte.pack()`。
 是不是很简单？马上试试吧！
 
 
@@ -29,8 +30,8 @@
 1. 引入Jar包;
 2. `@MagicClass`对当前类进行全局配置
 2. `@MagicField`对需要转换的JAVA对象属性进行标注,支持对象组合嵌套，注意：不支持继承
-3. 使用`MagicByte.registerCMD`注册消息到magicByte
-4. 现在可以使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
+3. 使用`MagicByte.registerCMD`注册消息到 MagicByte
+4. 使用`MagicByte.pack()`或`MagicByte.unpack()`对数据或对象进行快速的序列化或反序列化
 5. 支持使用`@MagicConverter()`注解来实现自定义序列化;[前往查看枚举类自定义序列化示例](https://github.com/MisterChangRay/magic-byte/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5)
 
 Maven项目可直接导入:
