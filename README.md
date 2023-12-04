@@ -164,8 +164,9 @@ public class Checker {
 |short|char|UShort| 2                |
 |int|float|UInt| 4                |
 |long|double|ULong| 8                |
+|Date,Instant,DateTime|LocalTime,LocalDate,LocalDateTime| | 6(配合size修改)      |
 |String| | UNumber | custom(配合size指定) |
-|Date,Instant,DateTime|LocalTime,LocalDate,LocalDateTime| | 6                |
+
 
 
 #### 6. 注意事项
