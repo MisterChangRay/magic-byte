@@ -4,11 +4,10 @@ import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.warpper.UByte;
-import com.github.misterchangray.core.dynamicsize.pojo.*;
 import com.github.misterchangray.core.common.dynamic.DynamicStudent;
 import com.github.misterchangray.core.common.simple.ByteObj;
+import com.github.misterchangray.core.dynamicsize.pojo.*;
 import com.github.misterchangray.core.dynamicsize.pojo.error.DynamicSizeDuplicatedId;
-import com.github.misterchangray.core.dynamicsize.pojo.error.SimpleDuplicatedId;
 import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead;
 import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicHead2;
 import com.github.misterchangray.core.dynamicsize.pojo.nested.DynamicSizeFromId;
@@ -19,14 +18,51 @@ import com.github.misterchangray.core.dynamicsize.pojo.nested3.Box1;
 import com.github.misterchangray.core.dynamicsize.pojo.nested3.Box2;
 import com.github.misterchangray.core.dynamicsize.pojo.nested3.Box3;
 import com.github.misterchangray.core.dynamicsize.pojo.nested3.BoxRoot;
+import com.github.misterchangray.core.dynamicsize.pojo.nested4.Box41;
+import com.github.misterchangray.core.dynamicsize.pojo.nested4.BoxRoot4;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestDynamicSize {
+    /**
+     * 测试跨级出现相同length
+     *
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void testBoxRoot4() throws InterruptedException {
+
+        BoxRoot4 a  = new BoxRoot4();
+        Box41 b = new Box41();
+        b.data = new byte[]{1,2,3,4};
+        b.length = 2;
+        List<Box41> objects = new ArrayList<>();
+        objects.add(b);
+
+        a.length = 3;
+        a.value = "abcdefh";
+        a.dataLength = 1;
+        a.data = objects;
+
+        ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(BoxRoot4.class);
+        byte[] bytes = MagicByte.unpackToByte(a);
+        BoxRoot4 pack = MagicByte.pack(bytes, BoxRoot4.class);
+        Assert.assertEquals(bytes.length, 17);
+        Assert.assertEquals(pack.length, 3);
+        Assert.assertEquals(pack.value, "abc");
+        Assert.assertEquals(pack.dataLength, 1);
+        Assert.assertEquals(pack.data.get(0).length, a.data.get(0).length);
+        Assert.assertArrayEquals(pack.data.get(0).data,  new byte[]{1,2});
+
+
+    }
+
 
 
     /**
