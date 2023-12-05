@@ -319,7 +319,7 @@ public class DynamicByteBuffer {
 
     public void registerDelayWrapper(FieldMetaInfoWrapper fieldMetaInfoWrapper) {
         FieldMetaInfo fieldMetaInfo = fieldMetaInfoWrapper.getFieldMetaInfo();
-        this.delayCache.put(fieldMetaInfo.getNameForRegister(), fieldMetaInfoWrapper);
+        this.registerDelayWrapper(fieldMetaInfo.getNameForRegister(), fieldMetaInfoWrapper);
     }
 
     public void setCheckCodeFieldWrapper(FieldMetaInfo fieldMetaInfo) {
