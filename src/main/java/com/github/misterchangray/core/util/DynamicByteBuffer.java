@@ -317,6 +317,10 @@ public class DynamicByteBuffer {
         this.delayCache.put(name, fieldMetaInfo);
     }
 
+    public void registerDelayWrapper(FieldMetaInfoWrapper fieldMetaInfoWrapper) {
+        FieldMetaInfo fieldMetaInfo = fieldMetaInfoWrapper.getFieldMetaInfo();
+        this.delayCache.put(fieldMetaInfo.getNameForRegister(), fieldMetaInfoWrapper);
+    }
 
     public void setCheckCodeFieldWrapper(FieldMetaInfo fieldMetaInfo) {
         if(fieldMetaInfo.isCalcCheckCode()) {
@@ -325,6 +329,9 @@ public class DynamicByteBuffer {
         }
     }
 
+    public Object delayCalc(FieldMetaInfo fieldMetaInfo) throws IllegalAccessException {
+        return this.delayCalc(fieldMetaInfo.getNameForRegister());
+    }
     public Object delayCalc(String name) throws IllegalAccessException {
         if(delayCache.containsKey(name)) {
             FieldMetaInfoWrapper fieldMetaInfoWrapper = this.delayCache.get(name);

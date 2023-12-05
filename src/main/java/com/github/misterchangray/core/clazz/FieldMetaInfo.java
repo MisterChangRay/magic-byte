@@ -468,11 +468,13 @@ public class FieldMetaInfo implements MField {
             return;
         }
         FieldMetaInfo dynamicRefTmp = null;
-        for (FieldMetaInfo flatField : flatFields) {
+        for (int i = flatFields.size() - 1; i >= 0; i--) {
+            FieldMetaInfo flatField = flatFields.get(i);
             if(flatField.getAccessPath().equals(dynamicSizeOf)) {
                 dynamicRefTmp = flatField;
             }
         }
+
 
         if(Objects.nonNull(dynamicRefTmp)) {
             this.setDynamicRef(dynamicRefTmp);
@@ -481,4 +483,7 @@ public class FieldMetaInfo implements MField {
 
     }
 
+    public String getNameForRegister() {
+        return this.getOwnerClazz().getClazz().getName() + '_' + this.getAccessPath();
+    }
 }

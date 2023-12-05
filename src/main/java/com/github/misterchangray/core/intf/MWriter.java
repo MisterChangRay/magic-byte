@@ -24,9 +24,8 @@ public abstract class MWriter {
     public void writeToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         int position = buffer.position();
         this.doWriteToBuffer(buffer,val,parent);
-        if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef())) {
-            buffer.registerDelayWrapper(fieldMetaInfo.getAccessPath(),
-                    new FieldMetaInfoWrapper(this.fieldMetaInfo, position, null));
+        if(Objects.nonNull(this.fieldMetaInfo.getDynamicRef()) && !this.fieldMetaInfo.isDynamic()) {
+            buffer.registerDelayWrapper(new FieldMetaInfoWrapper(this.fieldMetaInfo, position, null));
         }
     }
 
