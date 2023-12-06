@@ -3,6 +3,7 @@ package com.github.misterchangray.core.dynamicsize;
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
+import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.warpper.UByte;
 import com.github.misterchangray.core.common.dynamic.DynamicStudent;
 import com.github.misterchangray.core.common.simple.ByteObj;
@@ -51,6 +52,10 @@ public class TestDynamicSize {
         a.data = objects;
 
         ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(BoxRoot4.class);
+
+        for (FieldMetaInfo flatField : classMetaInfo.getFlatFields()) {
+            Assert.assertEquals(flatField.getAccessPath(), flatField.getField().getName());
+        }
         byte[] bytes = MagicByte.unpackToByte(a);
         BoxRoot4 pack = MagicByte.pack(bytes, BoxRoot4.class);
         Assert.assertEquals(bytes.length, 17);
