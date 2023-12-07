@@ -19,23 +19,6 @@ public class MagicByte {
     private static MagicChecker magicChecker;
 
     /**
-     * 全局配置默认字符集
-     */
-    public static void configDefaultCharset(Charset charset) {
-        GlobalConfigs.setGlobalDefaultCharset(charset);
-    }
-
-    /**
-     * 设置全局默认端序
-     * <p>注：如果传入的类型是 AUTO 则自动转为 BIG_ENDIAN</p>
-     *
-     * @param order 端序
-     */
-    public static void configDefaultByteOrder(ByteOrder order) {
-        GlobalConfigs.setGlobalDefaultByteOrder(order);
-    }
-
-    /**
      * 返回结构体总字节数
      * 注意：如果结构体有动态大小，那么返回值为最小字节数
      * @return
@@ -150,6 +133,12 @@ public class MagicByte {
 
     /**
      * 注册消息
+     *
+     * 普通的消息进行`pack`操作时需要传入两个参数, 字节数据和类结构.
+     *
+     * 消息进行注册后，调用`pack`则只需传一个参数：字节数据。
+     * 框架将会根据类定义的命令字节自动查询注册的消息进行解码操作。
+     *
      * @param msgClazz 消息类,必须实现 MagicMessage 接口
      */
     public static void registerCMD(Class<? extends  MagicMessage> msgClazz) {
@@ -158,6 +147,9 @@ public class MagicByte {
 
     /**
      * 注册指定命令的消息
+     *
+     * 此方式提供显示的命令注册，即将参数1 的 cmd 命令和 类进行绑定，以供`pack`操作时使用。
+     *
      * @param cmd  命令值
      * @param msgClazz 消息类,必须实现 MagicMessage 接口
      */
@@ -165,8 +157,31 @@ public class MagicByte {
         MessageManager.register(cmd, msgClazz);
     }
 
+
+    /**
+     * 配置全局的校验和操作
+     * @param checker
+     */
     public static void configMagicChecker(MagicChecker checker) {
         magicChecker = checker;
+    }
+
+
+    /**
+     * 全局配置默认字符集
+     */
+    public static void configDefaultCharset(Charset charset) {
+        GlobalConfigs.setGlobalDefaultCharset(charset);
+    }
+
+    /**
+     * 设置全局默认端序
+     * <p>注：如果传入的类型是 AUTO 则自动转为 BIG_ENDIAN</p>
+     *
+     * @param order 端序
+     */
+    public static void configDefaultByteOrder(ByteOrder order) {
+        GlobalConfigs.setGlobalDefaultByteOrder(order);
     }
 
 }
