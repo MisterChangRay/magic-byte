@@ -17,6 +17,12 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
 
+/**
+ * 反序列化/封包类
+ *
+ * 此类提供了一系列将字节数组转为对象的操作方法
+ *
+ */
 public class Packer {
     private static Packer packer;
 

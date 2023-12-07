@@ -9,6 +9,12 @@ import com.github.misterchangray.core.util.DynamicByteBuffer;
 
 import java.util.Objects;
 
+/**
+ * 序列化类
+ *
+ * 此类提供了对象转化为字节数组的操作方法
+ *
+ */
 public class UnPacker {
 
     private static UnPacker unPacker;
