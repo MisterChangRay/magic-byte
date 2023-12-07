@@ -16,6 +16,14 @@ import java.util.stream.Collectors;
 public class ClassManager {
     private static Map<Class<?>, ClassMetaInfo> cache = new HashMap<>();
 
+
+    /**
+     * 解析框架核心注解，包装为 <p>ClasMetaInfo</p>返回
+     * 其中解析的大概流程为：
+     *
+     * @param clazz
+     * @return
+     */
     public static ClassMetaInfo getClassMetaInfo(Class<?> clazz) {
         ClassMetaInfo classMetaInfo = cache.get(clazz);
         if (null != classMetaInfo) {

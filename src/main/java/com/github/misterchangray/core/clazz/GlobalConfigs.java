@@ -4,6 +4,9 @@ import com.github.misterchangray.core.enums.ByteOrder;
 
 import java.nio.charset.Charset;
 
+/**
+ * 框架配置类
+ */
 public class GlobalConfigs {
     private static Charset GLOBAL_DEFAULT_CHARSET = Charset.forName("ASCII");
 
