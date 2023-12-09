@@ -19,7 +19,6 @@ public class ClassManager {
 
     /**
      * 解析框架核心注解，包装为 <p>ClasMetaInfo</p>返回
-     * 其中解析的大概流程为：
      *
      * @param clazz
      * @return
@@ -37,12 +36,26 @@ public class ClassManager {
         return classMetaInfo;
     }
 
+    /**
+     * 对 clasmetainfo 进行解析
+     *
+     * 这里略过了缓存注册，主要用于类的属性 class 解析
+     *
+     * @param classMetaInfo
+     * @return
+     */
     private static ClassMetaInfo parseClass(ClassMetaInfo classMetaInfo) {
         ClassParser.getInstance().parse(classMetaInfo);
         afterLink(classMetaInfo);
         return classMetaInfo;
     }
 
+    /**
+     * 和 classparser 相同的作用
+     * 对于类解析完成后进行一些收尾工作
+     *
+     * @param classMetaInfo
+     */
     private static void afterLink(ClassMetaInfo classMetaInfo) {
         List<FieldMetaInfo>
                 dynamicFields =  new ArrayList<>(),  // all dynamicSizeOf > 0 fields
