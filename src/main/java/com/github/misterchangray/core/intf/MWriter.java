@@ -7,7 +7,7 @@ import com.github.misterchangray.core.util.DynamicByteBuffer;
 import java.util.Objects;
 
 /**
- * @description:
+ * @description: 数据写出接口，所有Writer父类
  * @author: Ray.chang
  * @create: 2021-12-19 12:54
  **/

@@ -1,6 +1,9 @@
 package com.github.misterchangray.core.enums;
 
 
+/**
+ * 字节序
+ */
 public enum ByteOrder {
     /**
      * 大端序

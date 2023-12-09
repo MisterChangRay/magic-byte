@@ -5,7 +5,9 @@ import com.github.misterchangray.core.intf.MConverter;
 
 import java.lang.annotation.*;
 
-
+/**
+ * 自定义序列化接口类
+ */
 @Documented
 @Target({ ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

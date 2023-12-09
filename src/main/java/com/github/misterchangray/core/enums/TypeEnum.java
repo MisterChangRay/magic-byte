@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * 所有支持的数据类型枚举
+ */
 public enum TypeEnum {
     BYTE(1, Byte.class, byte.class),
     BOOLEAN(1, Boolean.class, boolean.class),

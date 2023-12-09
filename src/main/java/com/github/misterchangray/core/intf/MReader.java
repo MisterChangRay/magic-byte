@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
 /**
- * @description:
+ * @description: 数据读取接口，所有Reader父类
  * @author: Ray.chang
  * @create: 2021-12-19 12:54
  **/
