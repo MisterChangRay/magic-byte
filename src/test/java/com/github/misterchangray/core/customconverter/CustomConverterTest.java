@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -29,6 +31,39 @@ import java.util.Date;
  */
 public class CustomConverterTest {
    static SimpleDateFormat timestampFormatter =  new SimpleDateFormat("yyyyMMddHHmmss");
+
+
+    /**
+     *
+     * 测试constom converter 配置 dynamicsize 使用
+     *
+     * @throws ParseException
+     */
+    @Test
+    public void testCustomConverterOfDynamicSize() throws ParseException {
+        ConverterWithDynamicSize converter = new ConverterWithDynamicSize();
+        converter.setAge(11);
+        converter.setId(22);
+        Book3 book3 = new Book3();
+        book3.setCode(111);
+        book3.setId(222);
+        converter.setName(Stream.of(book3).collect(Collectors.toList()));
+
+
+        byte[] bytes = MagicByte.unpackToByte(converter);
+        Assert.assertEquals(bytes[6], 8);
+        Assert.assertEquals(bytes[7], 9);
+        Assert.assertEquals(bytes[8], 6);
+        Assert.assertEquals(bytes[9], 7);
+        ConverterWithDynamicSize pack = MagicByte.pack(bytes, ConverterWithDynamicSize.class);
+
+        Assert.assertEquals(converter.getAge(), pack.getAge());
+        Assert.assertEquals(converter.getId(), pack.getId());
+
+        Assert.assertEquals(pack.getName().get(0).getId(),1111);
+        Assert.assertEquals(pack.getName().get(0).getCode(),2222);
+
+    }
 
 
 
