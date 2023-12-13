@@ -75,7 +75,7 @@ public class ClassManager {
             if(fieldMetaInfo.isCmdField()) {
                 cmdFields.add(fieldMetaInfo);
             }
-            if(fieldMetaInfo.isDynamic()) {
+            if(fieldMetaInfo.isDynamicSizeOf()) {
                 dynamicFields.add(fieldMetaInfo);
             }
             if(fieldMetaInfo.isDynamicSize()) {
