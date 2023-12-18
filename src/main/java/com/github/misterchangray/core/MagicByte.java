@@ -1,9 +1,6 @@
 package com.github.misterchangray.core;
 
-import com.github.misterchangray.core.clazz.ClassManager;
-import com.github.misterchangray.core.clazz.ClassMetaInfo;
-import com.github.misterchangray.core.clazz.GlobalConfigs;
-import com.github.misterchangray.core.clazz.MessageManager;
+import com.github.misterchangray.core.clazz.*;
 import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.intf.MagicMessage;
@@ -28,6 +25,23 @@ public class MagicByte {
         return classMetaInfo.getElementBytes();
     }
 
+
+    /**
+     * 尝试使用命令委托进行解析,解析失败则返回null
+     * @param data
+     * @return
+     * @param <T>
+     * @throws MagicByteException
+     */
+    public static <T extends MagicMessage> T pack(byte[] data) throws MagicByteException {
+        if(!MessageManager.hasMessage()) {
+            return null;
+        }
+        return pack(data, null, magicChecker);
+    }
+
+
+
     /**
      *
      * 将字节数组按照Class的定义封装成对象
@@ -42,7 +56,6 @@ public class MagicByte {
         return pack(data, clazz, magicChecker);
     }
 
-
     /**
      *
      * 将字节数组按照Class的定义封装成对象
@@ -54,13 +67,74 @@ public class MagicByte {
      * @return
      */
     public static <T> T pack(byte[] data, Class<?> clazz, MagicChecker checker) throws MagicByteException {
+        MResult<T> mResult = doPack(data, clazz, checker);
+        return mResult.getData();
+    }
+
+
+    /**
+     * 尝试使用命令委托进行解析
+     * 解析失败则返回null
+     * @param data
+     * @return MResult, 包含解析的字节数和对象
+     * @param <T>
+     * @throws MagicByteException
+     */
+    public static  <T extends MagicMessage> MResult<T>  packExt(byte[] data) throws MagicByteException {
+        if(!MessageManager.hasMessage()) {
+            return null;
+        }
+        return packExt(data, null, magicChecker);
+    }
+
+
+
+    /**
+     *
+     * 将字节数组按照Class的定义封装成对象
+     * 本方法不对字节进行效验; 如果字节缺失也可进行转换, 但是转换后的对象将会不完整
+     *
+     * @param data
+     * @param clazz
+     * @param <T>
+     * @return MResult, 包含解析的字节数和对象
+     */
+    public static <T> MResult<T> packExt(byte[] data, Class<?> clazz) throws MagicByteException {
+        return packExt(data, clazz, magicChecker);
+    }
+
+    /**
+     *
+     * 将字节数组按照Class的定义封装成对象
+     *
+     * @param data
+     * @param clazz
+     * @param <T>
+     * @param checker
+     * @return  MResult, 包含解析的字节数和对象
+     */
+    public static <T> MResult<T> packExt(byte[] data, Class<?> clazz, MagicChecker checker) throws MagicByteException {
+        return doPack(data, clazz, checker);
+    }
+
+
+    /**
+     * 执行 pack 操作
+     * @param data
+     * @param clazz
+     * @param checker
+     * @return
+     * @param <T>
+     */
+    private static <T> MResult<T> doPack(byte[] data, Class<?> clazz, MagicChecker checker) {
         if(null == data || 0 == data.length) return null;
 
         DynamicByteBuffer res = DynamicByteBuffer.allocate(data.length);
         res.put(data);
         res.position(0);
 
-        return packer.packObject(res, clazz, checker);
+        Object o = packer.packObject(res, clazz, checker);
+        return MResult.build(res.position(), o);
     }
 
     /**
@@ -115,21 +189,6 @@ public class MagicByte {
         DynamicByteBuffer res = unPacker.unpackObject(data, checker);
         return res.buffer();
     }
-
-    /**
-     * 尝试使用命令委托进行解析,解析失败则返回null
-     * @param data
-     * @return
-     * @param <T>
-     * @throws MagicByteException
-     */
-    public static <T extends MagicMessage> T pack(byte[] data) throws MagicByteException {
-        if(!MessageManager.hasMessage()) {
-            return null;
-        }
-        return pack(data, null, magicChecker);
-    }
-
 
     /**
      * 注册消息
