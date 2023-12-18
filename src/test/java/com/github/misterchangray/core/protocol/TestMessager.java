@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.protocol;
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.MResult;
 import com.github.misterchangray.core.clazz.warpper.UInt;
 import com.github.misterchangray.core.protocol.bean.Head;
 import com.github.misterchangray.core.protocol.bean.Protocol;
@@ -49,8 +50,10 @@ public class TestMessager {
 
         // 序列化和反序列化
         bytes = MagicByte.unpackToByte(protocol);
-        s = MagicByte.pack(bytes, Protocol.class);
+        MResult<Protocol> protocolMResult = MagicByte.<Protocol>packExt(bytes, Protocol.class);
+        s = protocolMResult.getData();
 
+        Assert.assertEquals(Integer.valueOf(bytes.length),protocolMResult.getBytes());
         Assert.assertEquals(s.getHead(),head);
         Assert.assertEquals(s.getBody(),teacher);
         Assert.assertEquals(s.getHead().getCmd(),teacher.cmd());

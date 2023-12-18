@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.example;
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.MResult;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,7 +10,9 @@ public class TestExample {
     public void testExample() {
         byte[] tmp = buildDeviceMessage();
 
-        Head head = MagicByte.pack(tmp, Head.class);
+        MResult<Head> headMResult = MagicByte.<Head>packExt(tmp, Head.class);
+        Assert.assertEquals(Integer.valueOf(3) ,headMResult.getBytes());
+        Head head = headMResult.getData();
         Assert.assertEquals(head.getCmd(), (byte)0x01);
         Assert.assertEquals(head.getHeader(), (byte)0xA1);
         Assert.assertEquals(head.getLength(), 12);

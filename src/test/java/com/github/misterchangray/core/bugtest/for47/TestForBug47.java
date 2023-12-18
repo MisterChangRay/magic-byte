@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.bugtest.for47;
 
 import com.github.misterchangray.core.MagicByte;
+import com.github.misterchangray.core.clazz.MResult;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 public class TestForBug47 {
     @Test
     public void testDynamicSizeWithConvert() {
-        System.out.println(1);
         MagicByte.configDefaultCharset(StandardCharsets.UTF_8);
         A a = new A();
         a.setId(1);
@@ -31,7 +31,9 @@ public class TestForBug47 {
         b.setCheck(new byte[4]);
 
         data = MagicByte.unpackToByte(b);
-        B b1 = MagicByte.pack(data, B.class);
+        MResult<B> bmResult = MagicByte.<B>packExt(data, B.class);
+        B b1 = bmResult.getData();
+        Assert.assertEquals(bmResult.getBytes(), Integer.valueOf(data.length));
         Assert.assertEquals(b, b1);
 
     }

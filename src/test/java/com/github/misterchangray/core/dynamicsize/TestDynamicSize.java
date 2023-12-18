@@ -4,6 +4,7 @@ import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.MResult;
 import com.github.misterchangray.core.clazz.warpper.UByte;
 import com.github.misterchangray.core.common.dynamic.DynamicStudent;
 import com.github.misterchangray.core.common.simple.ByteObj;
@@ -147,7 +148,9 @@ public class TestDynamicSize {
         byte[] bytes = MagicByte.unpackToByte(dynamicSizeBox);
         Assert.assertEquals(bytes.length, 28);
 
-        DynamicSizeBox pack = MagicByte.pack(bytes, DynamicSizeBox.class);
+        MResult<DynamicSizeBox> dynamicSizeBoxMResult = MagicByte.<DynamicSizeBox>packExt(bytes, DynamicSizeBox.class);
+        Assert.assertEquals(dynamicSizeBoxMResult.getBytes(), Integer.valueOf(bytes.length));
+        DynamicSizeBox pack = dynamicSizeBoxMResult.getData();
 
         ClassMetaInfo classMetaInfo = ClassManager.getClassMetaInfo(DynamicSizeBox.class);
 
