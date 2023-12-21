@@ -25,6 +25,12 @@ import java.util.ArrayList;
  * calcLength & calcCheckCode
  */
 public class TestAutoCalc {
+    /**
+     * 测试自动填充长度和校验和
+     *
+     * 两个字段使用 ubyte 的情况
+     * @throws InterruptedException
+     */
     @Test
     public void testCalcLengthAndCheckCodeWithUnsigend() throws InterruptedException {
         OfficeWithUnsigend office = new OfficeWithUnsigend();
@@ -76,6 +82,11 @@ public class TestAutoCalc {
 
     }
 
+    /**
+     * 测试同一个类使用两个 checkcode 的情况
+     * 此时将会抛出异常
+     * @throws InterruptedException
+     */
     @Test
     public void testOfficeWith2CalcCheckCode() throws InterruptedException {
         OfficeWith2CheckCode officeStrict = new OfficeWith2CheckCode();
