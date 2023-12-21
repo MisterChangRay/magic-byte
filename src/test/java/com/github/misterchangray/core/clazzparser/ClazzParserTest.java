@@ -15,6 +15,9 @@ import java.util.List;
 
 public class ClazzParserTest {
 
+    /**
+     * 测试 classMetaInfo 解析功能
+     */
     @Test
     public void testClassMetainfoParser() {
 
