@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
+/**
+ * 工具类的单元测试用例
+ */
 public class ConverterUtilTest {
 
     @Test

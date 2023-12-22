@@ -6,6 +6,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestExample {
+    /**
+     * 一个简单的使用例子
+     *
+     * 介绍框架的基本使用方式： 定义一个head, 和body, 解析时先解析head, 然后根据head中的类容进行业务处理
+     *
+     * v2.4.0 后新增消息注册功能，即可直接解析到目标消息
+     */
     @Test
     public void testExample() {
         byte[] tmp = buildDeviceMessage();

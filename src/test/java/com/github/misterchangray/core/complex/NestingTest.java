@@ -10,7 +10,9 @@ import java.nio.ByteBuffer;
 public class NestingTest {
 
 
-
+    /**
+     * 测试对象组合使用
+     */
     @Test
     public void testNestingObject() {
         NestingObject nestingObject = new NestingObject();
