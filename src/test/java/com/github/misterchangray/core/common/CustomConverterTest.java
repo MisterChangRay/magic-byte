@@ -18,6 +18,9 @@ import org.junit.Test;
 public class CustomConverterTest {
 
 
+    /**
+     * 测试在属性上使用自定义序列化注解
+     */
     @Test
     public void testCustomConverterField() {
         CustomConverterInField customObj = new CustomConverterInField();
@@ -43,6 +46,10 @@ public class CustomConverterTest {
         Assert.assertEquals(customObj2.getB(), pack2.getB());
 
     }
+
+    /**
+     * 测试在类上使用自定义序列化注解
+     */
     @Test
     public void testCustomConverterObj() {
         CustomObj customObj = new CustomObj();

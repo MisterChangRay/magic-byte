@@ -25,6 +25,7 @@ import java.util.TimeZone;
  * test simple data type
  * such as byte boolean char int short long float double
  *
+ * 一些简单的序列化测试
  */
 public class SimpleTest {
     @Test

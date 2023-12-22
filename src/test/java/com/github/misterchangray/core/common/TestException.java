@@ -17,9 +17,16 @@ import org.junit.Test;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+/**
+ * test exception
+ */
 public class TestException {
 
 
+    /**
+     * 测试解析异常错误
+     * @throws InterruptedException
+     */
     @Test
     public void testMagicParseException() throws InterruptedException {
         Assert.assertThrows(MagicParseException.class, () -> {
@@ -32,6 +39,10 @@ public class TestException {
         });
     }
 
+    /**
+     * 测试oom异常错误
+     * @throws InterruptedException
+     */
     @Test
     public void testOOM2() throws InterruptedException {
         Assert.assertThrows(OutOfMemoryDetecteException.class, () -> {
@@ -45,7 +56,10 @@ public class TestException {
     }
 
 
-
+    /**
+     * 测试oom异常错误
+     * @throws InterruptedException
+     */
     @Test
     public void testOOM() throws InterruptedException {
         Assert.assertThrows(OutOfMemoryDetecteException.class, () -> {
