@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class CustomIntConverter implements MConverter<Integer> {
     @Override
-    public MResult<Integer> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object staff14) {
+    public MResult<Integer> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object staff14, Object root) {
         return MResult.build(4, 11);
     }
 

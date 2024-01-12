@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class CustomConverterDynamicSize implements MConverter<Book3> {
     @Override
-    public MResult<Book3> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object book3) {
+    public MResult<Book3> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object book3, Object root) {
 
         Book3 book31 = new Book3();
         book31.setId(1111);

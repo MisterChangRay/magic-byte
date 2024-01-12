@@ -37,7 +37,7 @@ public class Protocol implements MConverter<MagicMessage>, MagicMessage {
     }
 
     @Override
-    public MResult<MagicMessage> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj) {
+    public MResult<MagicMessage> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj, Object root) {
         Protocol protocol = (Protocol) obj;
         switch (protocol.getHead().getCmd()) {
             case 1: return MResult.build(fullBytes.length - nextReadIndex, MagicByte.pack(Arrays.copyOfRange(fullBytes, nextReadIndex, fullBytes.length), Student.class));

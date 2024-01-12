@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class CustomBookConverter implements MConverter<Book> {
     @Override
-    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj) {
+    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj, Object root) {
         if(attachParams[0].equals("1")) {
             Book book = new Book();
             book.setCreateDate(new Date());
