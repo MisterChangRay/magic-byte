@@ -28,7 +28,7 @@ public class CollectionReader extends MReader {
     }
 
     @Override
-    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object entity) throws  IllegalAccessException {
+    public Object doReadFormBuffer(DynamicByteBuffer buffer, Object obj) throws  IllegalAccessException {
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef());
@@ -55,7 +55,7 @@ public class CollectionReader extends MReader {
             Object array = Array.newInstance(fieldMetaInfo.getGenericsField().getClazz(), count);
 
             for(int i=0; i<count; i++) {
-                Object o = fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, entity);
+                Object o = fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, obj);
                 Array.set(array, i, o);
             }
 
@@ -70,7 +70,7 @@ public class CollectionReader extends MReader {
             List<Object> list = new ArrayList<>(count);
 
             for(int i=0; i<count; i++) {
-                list.add( fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, entity));
+                list.add( fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, obj));
             }
 
             return list;

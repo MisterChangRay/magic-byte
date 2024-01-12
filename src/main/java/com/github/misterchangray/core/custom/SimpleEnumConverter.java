@@ -17,7 +17,7 @@ import com.github.misterchangray.core.intf.MConverter;
  */
 public class SimpleEnumConverter<T> implements MConverter<T> {
     @Override
-    public MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj) {
+    public MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj, Object root) {
         Class<Enum> enumClass = clz;
         Enum[] enumConstants = enumClass.getEnumConstants();
         byte enumIndex = fullBytes[nextReadIndex];

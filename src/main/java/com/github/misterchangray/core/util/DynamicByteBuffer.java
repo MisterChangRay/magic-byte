@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class DynamicByteBuffer {
     private ByteBuffer byteBuffer;
     private boolean isDynamic;
+    private Object packObj;
     private static final int STEP  = 1024;
 
     private Map<String, FieldMetaInfoWrapper> delayCache = new HashMap<>();
@@ -38,6 +39,16 @@ public class DynamicByteBuffer {
         dynamicByteBuffer.isDynamic =false;
         dynamicByteBuffer.byteBuffer = ByteBuffer.allocate(bytes);
         return dynamicByteBuffer;
+    }
+
+    public Object getPackObj() {
+        return packObj;
+    }
+
+    public void setPackObj(Object packObj) {
+        if(Objects.isNull(this.packObj)) {
+            this.packObj = packObj;
+        }
     }
 
     public static DynamicByteBuffer allocate() {

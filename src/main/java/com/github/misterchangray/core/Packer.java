@@ -48,12 +48,12 @@ public class Packer {
             return null;
         }
 
-        return doPackObject(data, classMetaInfo, checker, null);
+        return doPackObject(data, classMetaInfo, checker);
     }
 
 
 
-    public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker, Object root) throws MagicByteException {
+    public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker) throws MagicByteException {
         data.order(classMetaInfo.getByteOrder());
         T object = null;
 
@@ -64,11 +64,9 @@ public class Packer {
             }
 
             object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
-            if(Objects.isNull(root)) {
-                root = object;
-            }
+            data.setPackObj(object);
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
-                encodeField(object, fieldMetaInfo, data, checker, root);
+                encodeField(object, fieldMetaInfo, data, checker);
             }
         } catch (MagicParseException ae) {
             if(classMetaInfo.isStrict()) throw ae;
@@ -85,7 +83,7 @@ public class Packer {
     }
 
 
-    private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, MagicChecker checker, Object root) throws IllegalAccessException{
+    private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, MagicChecker checker) throws IllegalAccessException{
         if(fieldMetaInfo.getElementBytes() <= 0 && Objects.isNull(fieldMetaInfo.getCustomConverter())) return;
 
 
@@ -93,12 +91,12 @@ public class Packer {
         val = fieldMetaInfo.getReader().readFormBuffer(data, object);
         fieldMetaInfo.getWriter().writeToObject(object, val);
 
-        verifyLength(fieldMetaInfo, data, val, root);
-        verifyCheckCode(fieldMetaInfo, data, val, checker, root);
+        verifyLength(fieldMetaInfo, data, val);
+        verifyCheckCode(fieldMetaInfo, data, val, checker);
 
     }
 
-    private void verifyLength(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, Object root) {
+    private void verifyLength(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val) {
         if(!fieldMetaInfo.isCalcLength()) {
             return;
         }
@@ -108,12 +106,12 @@ public class Packer {
         long expect = data.capacity();
         if(actually != expect) {
             byte[] array = data.array();
-            throw new InvalidLengthException(root,
+            throw new InvalidLengthException(data.getPackObj(),
                     "the length isn't match, actually: " + actually + ", expect: " + expect + ", data:" + Base64.getEncoder().encodeToString(array));
         }
     }
 
-    private void verifyCheckCode(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, MagicChecker checker, Object root) {
+    private void verifyCheckCode(FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, Object val, MagicChecker checker) {
         if(checker == null) {
             return;
         }
@@ -126,7 +124,7 @@ public class Packer {
         byte[] array = data.array();
         byte[] expect = checker.calcCheckCode(array);
         if(Objects.isNull(expect) || expect.length == 0) {
-            throw new InvalidCheckCodeException(root,
+            throw new InvalidCheckCodeException(data.getPackObj(),
                     "calcCheckCode return null! data:" + Base64.getEncoder().encodeToString(array));
         }
 
@@ -142,7 +140,7 @@ public class Packer {
         }
 
         if(!checkerPass) {
-            throw new InvalidCheckCodeException(root,
+            throw new InvalidCheckCodeException(data.getPackObj(),
                     "the checkCode isn't match, data:" + Base64.getEncoder().encodeToString(array));
         }
     }
