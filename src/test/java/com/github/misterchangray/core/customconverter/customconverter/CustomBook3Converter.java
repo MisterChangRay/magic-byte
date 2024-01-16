@@ -27,7 +27,7 @@ public class CustomBook3Converter implements MConverter<Book3> {
     }
 
     @Override
-    public byte[] unpack(Book3 book3, String[] attachParams) {
+    public byte[] unpack(Book3 book3, String[] attachParams, Object rootObj) {
         if(Objects.isNull(book3)) {
             return new byte[8];
         }

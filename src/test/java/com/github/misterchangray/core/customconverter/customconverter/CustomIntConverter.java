@@ -14,7 +14,7 @@ public class CustomIntConverter implements MConverter<Integer> {
     }
 
     @Override
-    public byte[] unpack(Integer book3, String[] attachParams) {
+    public byte[] unpack(Integer book3, String[] attachParams, Object rootObj) {
 
         return new byte[]{00,00,00,11};
 

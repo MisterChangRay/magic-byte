@@ -43,7 +43,7 @@ public class CustomBookConverter implements MConverter<Book> {
     }
 
     @Override
-    public byte[] unpack(Book object, String[] attachParams) {
+    public byte[] unpack(Book object, String[] attachParams, Object rootObj) {
         if(attachParams[0].equals("14")) {
 
             return new byte[] {

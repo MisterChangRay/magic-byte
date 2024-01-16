@@ -37,7 +37,7 @@ public class CustomSexEnumSerialize implements MConverter<SexEnum> {
      * @return
      */
     @Override
-    public byte[] unpack(SexEnum sexEnum, String[] attachParams) {
+    public byte[] unpack(SexEnum sexEnum, String[] attachParams, Object rootObj) {
         for (int i = 0; i < sexEnums.length; i++) {
             if(sexEnum == sexEnums[i]) {
                 return new byte[]{(byte)i};

@@ -32,9 +32,10 @@ public interface MConverter<T> {
      *
      * @param object       泛型对应类的实例
      * @param attachParams 附加参数
+     * @param rootObj 处理的根基对象
      * @return 序列化的二进制数据
      */
-    default byte[] unpack(T object, String[] attachParams) {
+    default byte[] unpack(T object, String[] attachParams, Object rootObj) {
         return MagicByte.unpackToByte(object);
     }
 }

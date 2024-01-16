@@ -47,7 +47,7 @@ public class Protocol implements MConverter<MagicMessage>, MagicMessage {
     }
 
     @Override
-    public byte[] unpack(MagicMessage object, String[] attachParams) {
+    public byte[] unpack(MagicMessage object, String[] attachParams, Object rootObj) {
         return MagicByte.unpackToByte(object);
     }
 }

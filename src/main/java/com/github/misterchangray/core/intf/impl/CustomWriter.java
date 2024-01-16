@@ -28,7 +28,7 @@ public class CustomWriter extends MWriter {
     public void doWriteToBuffer(DynamicByteBuffer buffer, Object val, Object parent) throws IllegalAccessException {
         CustomConverterInfo customConverter = this.fieldMetaInfo.getCustomConverter();
 
-        byte[] unpack = customConverter.getConverter().unpack(val, customConverter.getAttachParams());
+        byte[] unpack = customConverter.getConverter().unpack(val, customConverter.getAttachParams(), buffer.getPackObj());
         int byteLen = customConverter.isFixsize() ? customConverter.getFixSize() : unpack.length;
 
         // direct write fill byte if the value is null

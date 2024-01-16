@@ -42,7 +42,7 @@ public class UnPacker {
         } else {
             res = DynamicByteBuffer.allocate(classMetaInfo.getElementBytes()).order(classMetaInfo.getByteOrder());
         }
-
+        res.setPackObj(object);
         this.unpackObject(res, object, classMetaInfo, object);
 
         try {

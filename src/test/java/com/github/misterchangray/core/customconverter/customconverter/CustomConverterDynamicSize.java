@@ -20,7 +20,7 @@ public class CustomConverterDynamicSize implements MConverter<Book3> {
     }
 
     @Override
-    public byte[] unpack(Book3 book3, String[] attachParams) {
+    public byte[] unpack(Book3 book3, String[] attachParams, Object rootObj) {
         return new byte[]{0x4,0x5,0x8,0x9, 0x6,0x7,0x8,0x10};
 
     }

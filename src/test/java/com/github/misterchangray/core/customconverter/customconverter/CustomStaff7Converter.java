@@ -16,7 +16,7 @@ public  class CustomStaff7Converter implements MConverter<Staff7> {
     }
 
     @Override
-    public byte[] unpack(Staff7 object, String attachParams[]) {
+    public byte[] unpack(Staff7 object, String attachParams[], Object rootObj) {
         return new byte[]{(byte) object.getId(), (byte) object.getLength()};
     }
 }

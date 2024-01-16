@@ -26,7 +26,7 @@ public class SimpleEnumConverter<T> implements MConverter<T> {
     }
 
     @Override
-    public byte[] unpack(T object, String[] attachParams) {
+    public byte[] unpack(T object, String[] attachParams, Object rootObj) {
         Class<Enum> enumClass = (Class<Enum>) object.getClass();;
         Enum[] enumConstants = enumClass.getEnumConstants();
         for (int i = 0; i < enumConstants.length; i++) {

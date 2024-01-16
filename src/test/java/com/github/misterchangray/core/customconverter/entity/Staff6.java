@@ -72,7 +72,7 @@ public class Staff6 {
         }
 
         @Override
-        public byte[] unpack(Date object, String[] attachParams) {
+        public byte[] unpack(Date object, String[] attachParams, Object rootObj) {
             String format = timestampFormatter.format(object);
             return format.getBytes();
         }

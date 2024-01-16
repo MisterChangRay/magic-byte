@@ -15,7 +15,7 @@ public class CustomSerialize implements MConverter<CustomObj> {
     }
 
     @Override
-    public byte[] unpack(CustomObj object, String[] attachParams) {
+    public byte[] unpack(CustomObj object, String[] attachParams, Object rootObj) {
         return new byte[]{(byte)object.getA(), (byte)object.getB().charValue()};
     }
 }

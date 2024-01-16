@@ -21,7 +21,7 @@ public      class BConvert implements MConverter<String> {
     }
 
     @Override
-    public byte[] unpack(String object, String[] attachParams) {
+    public byte[] unpack(String object, String[] attachParams, Object rootObj) {
         return object.getBytes(StandardCharsets.UTF_8);
     }
 }
