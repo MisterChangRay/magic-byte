@@ -2,9 +2,9 @@ package com.github.misterchangray.core.customconverter;
 
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.warpper.UNumber;
-import com.github.misterchangray.core.complex.NestingObject;
+import com.github.misterchangray.core.customconverter.customconverter.CustomClassA;
+import com.github.misterchangray.core.customconverter.customconverter.CustomClassB;
 import com.github.misterchangray.core.customconverter.entity.*;
-import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.exception.MagicParseException;
 import org.junit.Assert;
@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -471,6 +472,45 @@ public class CustomConverterTest {
 
     }
 
+    /**
+     * 测试作为属性的类内的属性都是自定义序列化实现时能否整体正确序列化
+     */
+    @Test
+    public void testConvertClassA() {
+
+        CustomClassA customClassA = new CustomClassA();
+        customClassA.setNumber(1);
+
+        CustomClassA.B b = new CustomClassA.B();
+        b.setTypeEnum(CustomClassA.TypeEnum.B);
+        customClassA.setB(b);
+
+        byte[] data = MagicByte.unpackToByte(customClassA);
+        CustomClassA customClassA1 = MagicByte.pack(data, CustomClassA.class);
+
+        Assert.assertNotNull(customClassA1.getB());
+        Assert.assertEquals(customClassA, customClassA1);
+    }
+
+    /**
+     * 测试作为属性的类内的属性都是自定义序列化实现时能否整体正确序列化
+     */
+    @Test
+    public void testConvertClassB() {
+
+        CustomClassB customClassB = new CustomClassB();
+        customClassB.setLength(1);
+
+        CustomClassB.B b = new CustomClassB.B();
+        b.setTypeEnum(CustomClassB.TypeEnum.B);
+        customClassB.setB(Collections.singletonList(b));
+
+        byte[] data = MagicByte.unpackToByte(customClassB);
+        CustomClassB customClassB1 = MagicByte.pack(data, CustomClassB.class);
+
+        Assert.assertNotNull(customClassB1.getB());
+        Assert.assertEquals(customClassB, customClassB1);
+    }
 
 
 
