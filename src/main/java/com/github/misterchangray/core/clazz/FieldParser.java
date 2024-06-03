@@ -202,6 +202,14 @@ public class FieldParser {
                 new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize());
 
         fieldMetaInfo.setCustomConverter(magicConverterInfo);
+
+        ClassMetaInfo clazzMetaInfo = fieldMetaInfo.getClazzMetaInfo();
+        fieldMetaInfo.setHasCustomConverter(true);
+        while (Objects.nonNull(clazzMetaInfo = clazzMetaInfo.getParent()) &&
+            Objects.nonNull(clazzMetaInfo.getOwnerField())) {
+            FieldMetaInfo ownerField = clazzMetaInfo.getOwnerField();
+            ownerField.setHasCustomConverter(true);
+        }
         if(TypeManager.isCollection(TypeManager.getType(clazz))) {
             fieldMetaInfo.getGenericsField().setCustomConverter(magicConverterInfo);
         }

@@ -84,7 +84,7 @@ public class Packer {
 
 
     private  void encodeField(Object object, FieldMetaInfo fieldMetaInfo, DynamicByteBuffer data, MagicChecker checker) throws IllegalAccessException{
-        if(fieldMetaInfo.getElementBytes() <= 0 && Objects.isNull(fieldMetaInfo.getCustomConverter())) return;
+        if(fieldMetaInfo.getElementBytes() <= 0 && !fieldMetaInfo.isHasCustomConverter()) return;
 
 
         Object val = null;

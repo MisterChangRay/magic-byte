@@ -151,6 +151,18 @@ public class FieldMetaInfo implements MField {
     private String formatPattern;
 
 
+    /**
+     * 是否有自定义序列化申明
+     */
+    private boolean hasCustomConverter;
+
+    public boolean isHasCustomConverter() {
+        return hasCustomConverter;
+    }
+
+    public void setHasCustomConverter(boolean hasCustomConverter) {
+        this.hasCustomConverter = hasCustomConverter;
+    }
     public TypeEnum getCustomType() {
         return customType;
     }

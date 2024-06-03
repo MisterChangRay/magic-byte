@@ -131,6 +131,10 @@ public class ClassParser {
             fieldBytes =  fieldMetaInfo.getElementBytes() * fieldMetaInfo.getSize();
 
             totalBytes += fieldBytes;
+
+            if(fieldMetaInfo.isCollection() && fieldMetaInfo.getGenericsField().isHasCustomConverter()) {
+                fieldMetaInfo.setHasCustomConverter(fieldMetaInfo.getGenericsField().isHasCustomConverter());
+            }
         }
         if(totalBytes > classMetaInfo.getElementBytes()) {
             classMetaInfo.setElementBytes(totalBytes);
