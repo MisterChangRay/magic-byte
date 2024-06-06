@@ -513,6 +513,11 @@ public class CustomConverterTest {
     }
 
 
+    /**
+     * 测试自定义集合序列化
+     *
+     * 控制整个集合序列化流程
+     */
     @Test
     public void testCustomListHandleAll() {
         CustomListHandleAll customListHandleAll = new CustomListHandleAll();
@@ -528,6 +533,12 @@ public class CustomConverterTest {
     }
 
 
+
+    /**
+     * 测试自定义集合序列化
+     *
+     * 控制整个集合序列化流程
+     */
     @Test
     public void testCustomArrayHandleAll() {
         CustomArrayHandleAll customArrayHandleAll = new CustomArrayHandleAll();
