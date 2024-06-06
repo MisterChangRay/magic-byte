@@ -75,8 +75,16 @@ public class FieldParser {
         }
 
         // list string array 必须配置 size or dynamicSize
-        if(TypeManager.isVariable(field.getType()) && field.getMagicField().size() <= 0 &&  field.getMagicField().dynamicSizeOf().length() == 0 ) {
-            throw new InvalidParameterException("not yet configuration size or dynamicSize of the field; at: " + field.getFullName());
+        if(field.getMagicField().size() <= 0 &&  field.getMagicField().dynamicSizeOf().length() == 0 ) {
+            String msg = "not yet configuration size or dynamicSize of the field; at: " + field.getFullName();
+            if(field.getType().is(TypeEnum.STRING, TypeEnum.UNUMBER)) {
+                throw new InvalidParameterException(msg);
+            }
+            if(TypeManager.isCollection(field.getType())) {
+                if(Objects.isNull(field.getCustomConverter()) || field.getCustomConverter().isHandleCollection() == false) {
+                    throw new InvalidParameterException(msg);
+                }
+            }
         }
 
         // dynamicSize only use the list string and array
@@ -199,7 +207,7 @@ public class FieldParser {
         }
 
         CustomConverterInfo magicConverterInfo =
-                new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize());
+                new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize(), magicConverter.handleCollection());
 
         fieldMetaInfo.setCustomConverter(magicConverterInfo);
 

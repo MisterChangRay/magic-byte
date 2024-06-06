@@ -1,7 +1,9 @@
 package com.github.misterchangray.core.intf.impl;
 
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.clazz.MResult;
 import com.github.misterchangray.core.enums.TypeEnum;
+import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
@@ -11,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @description: read collection data
@@ -29,6 +32,10 @@ public class CollectionReader extends MReader {
 
     @Override
     public Object doReadFormBuffer(DynamicByteBuffer buffer, Object obj) throws  IllegalAccessException {
+        if(Objects.nonNull(this.fieldMetaInfo.getCustomConverter()) && this.fieldMetaInfo.getCustomConverter().isHandleCollection()) {
+            return this.fieldMetaInfo.getGenericsField().getReader().readFormBuffer(buffer, obj);
+        }
+
         int count = this.fieldMetaInfo.getSize();
         if(this.fieldMetaInfo.isDynamic()) {
             Object o = buffer.delayCalc(this.fieldMetaInfo.getDynamicRef());

@@ -86,7 +86,7 @@ public class ClassParser {
             }
 
             CustomConverterInfo magicConverterInfo =
-                    new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize());
+                    new CustomConverterInfo(magicConverter.attachParams(), mConverter, magicConverter.fixSize(), magicConverter.handleCollection());
 
             classMetaInfo.setCustomConverter(magicConverterInfo);
 

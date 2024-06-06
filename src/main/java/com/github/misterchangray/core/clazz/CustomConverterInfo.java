@@ -23,7 +23,16 @@ public class CustomConverterInfo {
      */
     private int fixSize ;
 
+    private boolean handleCollection;
 
+
+    public boolean isHandleCollection() {
+        return handleCollection;
+    }
+
+    public void setHandleCollection(boolean handleCollection) {
+        this.handleCollection = handleCollection;
+    }
 
     public boolean isFixsize() {
         return this.fixSize >= 0;
@@ -54,9 +63,10 @@ public class CustomConverterInfo {
         this.attachParams = attachParams;
     }
 
-    public CustomConverterInfo(String[] attachParams, MConverter converter, int fixSize) {
+    public CustomConverterInfo(String[] attachParams, MConverter converter, int fixSize, boolean handleCollection) {
         this.attachParams = attachParams;
         this.converter = converter;
         this.fixSize = fixSize;
+        this.handleCollection = handleCollection;
     }
 }

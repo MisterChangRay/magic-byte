@@ -32,4 +32,14 @@ public @interface MagicConverter {
      * @return
      */
     int fixSize() default -1;
+
+    /**
+     * 集合类序列化控制
+     *
+     * 默认只需要实现单个元素的序列化过程即可
+     * 当此字段为true时, 则需要需要实现整个集合的序列化过程
+     *
+     * @return
+     */
+    boolean handleCollection() default false;
 }
