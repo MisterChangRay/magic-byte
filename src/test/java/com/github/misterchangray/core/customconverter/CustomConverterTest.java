@@ -2,8 +2,8 @@ package com.github.misterchangray.core.customconverter;
 
 import com.github.misterchangray.core.MagicByte;
 import com.github.misterchangray.core.clazz.warpper.UNumber;
-import com.github.misterchangray.core.customconverter.customconverter.CustomClassA;
-import com.github.misterchangray.core.customconverter.customconverter.CustomClassB;
+import com.github.misterchangray.core.customconverter.entity.CustomClassA;
+import com.github.misterchangray.core.customconverter.entity.CustomClassB;
 import com.github.misterchangray.core.customconverter.entity.*;
 import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.exception.MagicParseException;
@@ -510,6 +510,36 @@ public class CustomConverterTest {
 
         Assert.assertNotNull(customClassB1.getB());
         Assert.assertEquals(customClassB, customClassB1);
+    }
+
+
+    @Test
+    public void testCustomListHandleAll() {
+        CustomListHandleAll customListHandleAll = new CustomListHandleAll();
+        customListHandleAll.setBookids(Stream.of(1, 22,33).collect(Collectors.toList()));
+        customListHandleAll.setId(4);
+
+        byte[] data = MagicByte.unpackToByte(customListHandleAll);
+        CustomListHandleAll customListHandleAll1 = MagicByte.pack(data, CustomListHandleAll.class);
+
+        Assert.assertEquals(customListHandleAll1.getId(), customListHandleAll.getId());
+        Assert.assertEquals(customListHandleAll1.getBookids().toArray(new Integer[]{}), customListHandleAll.getBookids().toArray(new Integer[]{}));
+
+    }
+
+
+    @Test
+    public void testCustomArrayHandleAll() {
+        CustomArrayHandleAll customArrayHandleAll = new CustomArrayHandleAll();
+        customArrayHandleAll.setBookids(new Integer[]{77,88,99});
+        customArrayHandleAll.setId(13);
+
+        byte[] data = MagicByte.unpackToByte(customArrayHandleAll);
+        CustomArrayHandleAll customArrayHandleAll1 = MagicByte.pack(data, CustomArrayHandleAll.class);
+
+        Assert.assertEquals(customArrayHandleAll1.getId(), customArrayHandleAll1.getId());
+        Assert.assertEquals(customArrayHandleAll1.getBookids(), customArrayHandleAll1.getBookids());
+
     }
 
 

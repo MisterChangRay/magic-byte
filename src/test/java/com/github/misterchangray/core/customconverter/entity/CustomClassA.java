@@ -1,4 +1,4 @@
-package com.github.misterchangray.core.customconverter.customconverter;
+package com.github.misterchangray.core.customconverter.entity;
 
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicConverter;
