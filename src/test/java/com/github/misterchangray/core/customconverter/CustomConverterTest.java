@@ -554,5 +554,23 @@ public class CustomConverterTest {
     }
 
 
+    /**
+     * 测试自定义集合序列化
+     *
+     * 异常测试
+     */
+    @Test
+    public void testCustomArrayHandleAllExceptException() {
+        CustomArrayHandleAllExceptException customArrayHandleAll = new CustomArrayHandleAllExceptException();
+
+        Assert.assertThrows(InvalidParameterException.class, ()->{
+            byte[] data = MagicByte.unpackToByte(customArrayHandleAll);
+            CustomArrayHandleAllExceptException customArrayHandleAll1 = MagicByte.pack(data, CustomArrayHandleAllExceptException.class);
+
+        });
+
+    }
+
+
 
 }
