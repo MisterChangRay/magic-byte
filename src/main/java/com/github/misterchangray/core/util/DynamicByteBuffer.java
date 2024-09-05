@@ -6,11 +6,12 @@ import com.github.misterchangray.core.clazz.FieldMetaInfoWrapper;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicParseException;
 
-import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @description:
@@ -80,7 +81,10 @@ public class DynamicByteBuffer {
         return this;
     }
 
-    
+    public ByteOrder getOrder() {
+        return this.byteBuffer.order();
+    }
+
     public byte get() {
         if(this.byteBuffer.capacity() - this.byteBuffer.position() < TypeEnum.BYTE.getBytes()) {
             throw new MagicParseException("Missing data");
