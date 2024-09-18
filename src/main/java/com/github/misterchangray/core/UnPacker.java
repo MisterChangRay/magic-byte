@@ -3,9 +3,10 @@ package com.github.misterchangray.core;
 import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
+import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.exception.MagicParseException;
-import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
+import com.github.misterchangray.core.util.ExceptionUtil;
 
 import java.util.Objects;
 
@@ -40,6 +41,7 @@ public class UnPacker {
         if(classMetaInfo.isDynamic()) {
             res = DynamicByteBuffer.allocate().order(classMetaInfo.getByteOrder());
         } else {
+
             res = DynamicByteBuffer.allocate(classMetaInfo.getElementBytes()).order(classMetaInfo.getByteOrder());
         }
         res.setPackObj(object);
@@ -63,6 +65,13 @@ public class UnPacker {
             }
 
             for(FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
+                // 如果对属性额外配置了端序则以属性使用的端序为准，否则以全局/类配置的为准
+                if (fieldMetaInfo.getByteOrder() == ByteOrder.AUTO) {
+                    res.order(classMetaInfo.getByteOrder());
+                } else {
+                    res.order(fieldMetaInfo.getByteOrder().getBytes());
+                }
+
                 decodeField(fieldMetaInfo, object,  res, root);
             }
 

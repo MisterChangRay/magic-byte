@@ -1,11 +1,15 @@
 package com.github.misterchangray.core.util;
 
-import com.github.misterchangray.core.clazz.warpper.*;
+import com.github.misterchangray.core.clazz.GlobalConfigs;
+import com.github.misterchangray.core.clazz.warpper.UByte;
+import com.github.misterchangray.core.clazz.warpper.UInt;
+import com.github.misterchangray.core.clazz.warpper.ULong;
+import com.github.misterchangray.core.clazz.warpper.UShort;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.MagicByteException;
 
-import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,42 +22,82 @@ public class ConverterUtil {
      * 将无符号数转为字节
      * 负数则会先转为无符号数再转为字节
      *
-     * @param p
-     * @return
+     * @param p 数
+     * @return 对应的二进制
      */
     public static byte[] numberToByte(long p) {
+        return numberToByte(p, GlobalConfigs.getGlobalDefaultByteOrder().getBytes());
+    }
+
+    /**
+     * 将无符号数转为字节
+     * 负数则会先转为无符号数再转为字节
+     *
+     * @param p         数
+     * @param byteOrder 端序
+     * @return 对应的二进制
+     */
+    public static byte[] numberToByte(long p, ByteOrder byteOrder) {
         int len = 8;
 
-        if(p < 0) {
+        if (p < 0) {
             throw new MagicByteException("invalid number,this is unsigned number! try bigIntegerToByte(BigInteger)");
         }
 
         byte[] res = new byte[len];
-        int i = len - 1;
-        for (; i >= 0 && p>0 ; i--) {
-            res[i] = (byte)(p & 0xFF);
-            p = p >> len ;
+        if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
+            int i = 0;
+            for (; i < len && p > 0; i++) {
+                res[i] = (byte) (p & 0xFF);
+                p >>= Byte.SIZE;
+            }
+            return Arrays.copyOfRange(res, 0, i);
+        } else {
+            int i = len - 1;
+            for (; i >= 0 && p > 0; i--) {
+                res[i] = (byte) (p & 0xFF);
+                p = p >> len;
+            }
+            return Arrays.copyOfRange(res, i + 1, len);
         }
-
-        return Arrays.copyOfRange(res, i+1, len);
     }
-
 
     /**
      * 数组转为正整数
-     *
+     * <p>
      * 只支持正整数
-     * @param p
-     * @return
+     *
+     * @param p 二进制数据
+     * @return 十进制数
      */
     public static long byteToNumber(byte[] p) {
-        if(p.length > 8){
+        return byteToNumber(p, GlobalConfigs.getGlobalDefaultByteOrder().getBytes());
+    }
+
+    /**
+     * 数组转为正整数
+     * <p>
+     * 只支持正整数
+     *
+     * @param p         二进制数据
+     * @param byteOrder 端序
+     * @return 十进制数
+     */
+    public static long byteToNumber(byte[] p, ByteOrder byteOrder) {
+        if (p.length > 8) {
             throw new MagicByteException("invalid bytes, byte data too large, can't convert to long, try byteToBigInteger!");
         }
         long res = 0;
-        for (byte b : p) {
-            res <<= 8;
-            res |= (b & 0xFF);
+        if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
+            for (int i = p.length - 1; i >= 0; i--) {
+                res <<= Byte.SIZE;
+                res |= (p[i] & 0xff);
+            }
+        } else {
+            for (byte b : p) {
+                res <<= 8;
+                res |= (b & 0xFF);
+            }
         }
         return res;
     }
