@@ -1,5 +1,6 @@
 package com.github.misterchangray.core.annotation;
 
+import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.enums.TimestampFormatter;
 
 import java.lang.annotation.*;
@@ -93,5 +94,12 @@ public @interface MagicField {
      * @return
      */
     String formatPattern() default "yyyyMMddHHmmss";
+
+    /**
+     * 字节序
+     *
+     * @return 默认返回 AUTO，应用全局配置，如果类配置了使用类配置的端序
+     */
+    ByteOrder byteOrder() default ByteOrder.AUTO;
 
 }

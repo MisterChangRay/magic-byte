@@ -4,13 +4,14 @@ import com.github.misterchangray.core.clazz.ClassManager;
 import com.github.misterchangray.core.clazz.ClassMetaInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.MessageManager;
+import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.exception.InvalidCheckCodeException;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.exception.MagicByteException;
 import com.github.misterchangray.core.exception.MagicParseException;
-import com.github.misterchangray.core.util.ExceptionUtil;
 import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
+import com.github.misterchangray.core.util.ExceptionUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -54,7 +55,7 @@ public class Packer {
 
 
     public  <T> T doPackObject(DynamicByteBuffer data, ClassMetaInfo classMetaInfo, MagicChecker checker) throws MagicByteException {
-        data.order(classMetaInfo.getByteOrder());
+//        data.order(classMetaInfo.getByteOrder());
         T object = null;
 
         try {
@@ -66,6 +67,13 @@ public class Packer {
             object = (T) classMetaInfo.getClazz().getDeclaredConstructor().newInstance();
             data.setPackObj(object);
             for (FieldMetaInfo fieldMetaInfo : classMetaInfo.getFields()) {
+                // 如果对属性额外配置了端序则以属性使用的端序为准，否则以全局/类配置的为准
+                if (fieldMetaInfo.getByteOrder() == ByteOrder.AUTO) {
+                    data.order(classMetaInfo.getByteOrder());
+                } else {
+                    data.order(fieldMetaInfo.getByteOrder().getBytes());
+                }
+
                 encodeField(object, fieldMetaInfo, data, checker);
             }
         } catch (MagicParseException ae) {

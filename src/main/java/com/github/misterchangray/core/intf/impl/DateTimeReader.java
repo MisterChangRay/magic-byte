@@ -47,7 +47,7 @@ public class DateTimeReader extends MReader {
 
             }
         } else {
-            timestamp = ConverterUtil.byteToNumber(tmp);
+            timestamp = ConverterUtil.byteToNumber(tmp, buffer.getOrder());
         }
 
 

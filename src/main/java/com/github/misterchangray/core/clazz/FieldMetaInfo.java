@@ -1,6 +1,7 @@
 package com.github.misterchangray.core.clazz;
 
 import com.github.misterchangray.core.annotation.MagicField;
+import com.github.misterchangray.core.enums.ByteOrder;
 import com.github.misterchangray.core.enums.TimestampFormatter;
 import com.github.misterchangray.core.enums.TypeEnum;
 import com.github.misterchangray.core.exception.InvalidParameterException;
@@ -155,6 +156,13 @@ public class FieldMetaInfo implements MField {
      * 是否有自定义序列化申明
      */
     private boolean hasCustomConverter;
+
+    /**
+     * 字节序
+     *
+     * <p> 注：默认返回 AUTO，应用全局配置，如果类配置了使用类配置的端序
+     */
+    private ByteOrder byteOrder;
 
     public boolean isHasCustomConverter() {
         return hasCustomConverter;
@@ -392,6 +400,14 @@ public class FieldMetaInfo implements MField {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    public ByteOrder getByteOrder() {
+        return byteOrder;
+    }
+
+    public void setByteOrder(ByteOrder byteOrder) {
+        this.byteOrder = byteOrder;
     }
 
     @Override

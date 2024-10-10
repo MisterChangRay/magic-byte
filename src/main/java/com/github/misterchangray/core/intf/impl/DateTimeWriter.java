@@ -7,6 +7,7 @@ import com.github.misterchangray.core.util.ConverterUtil;
 import com.github.misterchangray.core.util.DateUtil;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class DateTimeWriter extends MWriter {
                 }
                 timestamp = DateUtil.timestampConvert(timestamp, TimestampFormatter.TO_TIMESTAMP_MILLIS, fieldMetaInfo.getTimestampFormatter());
             }
-            byte[] res = new byte[0];
+            byte[] res;
             if(this.fieldMetaInfo.getTimestampFormatter() == TimestampFormatter.TO_TIMESTAMP_STRING ){
                 if(clazz.isAssignableFrom(LocalTime.class)){
                     res =  DateUtil.localTimeToTxt(timestamp, this.fieldMetaInfo.getFormatPattern()).getBytes(StandardCharsets.UTF_8);
@@ -64,11 +65,18 @@ public class DateTimeWriter extends MWriter {
 
                 }
             } else {
-                res = ConverterUtil.numberToByte(timestamp);
-
+                res = ConverterUtil.numberToByte(timestamp, buffer.getOrder());
             }
-            for (int i = data.length - 1, j=res.length - 1; i>=0 & j>=0;  i--, j--) {
-                data[i] = res[j];
+
+            // 如果是大端序，从后往前赋值，在数据前方补零；小端序从前往后赋值，在数据后方补零
+            if (buffer.getOrder() == ByteOrder.BIG_ENDIAN) {
+                for (int i = data.length - 1, j = res.length - 1; i >= 0 & j >= 0; i--, j--) {
+                    data[i] = res[j];
+                }
+            } else {
+                for (int i = 0, j = 0; i < data.length & j < res.length; i++, j++) {
+                    data[i] = res[j];
+                }
             }
         }
 
