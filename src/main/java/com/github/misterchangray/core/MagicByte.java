@@ -187,6 +187,7 @@ public class MagicByte {
     public static <T> ByteBuffer unpack(T data, MagicChecker checker) throws MagicByteException {
         if (null == data) return null;
         DynamicByteBuffer res = unPacker.unpackObject(data, checker);
+        res.flip();
         return res.buffer();
     }
 
