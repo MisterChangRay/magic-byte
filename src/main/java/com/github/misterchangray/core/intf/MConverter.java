@@ -23,7 +23,7 @@ public interface MConverter<T> {
      * @param rootObj       处理的根基对象
      * @return 反序列化用的数据长度和对象
      */
-    MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object fieldObj, Object rootObj);
+    MResult<T> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<T> clz, Object fieldObj, Object rootObj);
 
     /**
      * 将对象拆包为字节
