@@ -6,7 +6,6 @@ public class CustomConverterInfo {
 
     /**
      * 附加参数
-     * @return
      */
     private String[] attachParams;
 
@@ -19,7 +18,6 @@ public class CustomConverterInfo {
 
     /**
      * 固定长度
-     * @return
      */
     private int fixSize ;
 
