@@ -18,7 +18,7 @@ public class MResult<T> {
         return bytes;
     }
 
-    public MResult setBytes(Integer bytes) {
+    public MResult<T> setBytes(Integer bytes) {
         this.bytes = bytes;
         return this;
     }
@@ -27,20 +27,20 @@ public class MResult<T> {
         return data;
     }
 
-    public MResult setData(T data) {
+    public MResult<T> setData(T data) {
         this.data = data;
         return this;
     }
 
-    public static <T> MResult build(Integer bytes, T data) {
-        MResult result = new MResult();
+    public static <T> MResult<T> build(Integer bytes, T data) {
+        MResult<T> result = new MResult<>();
         result.bytes = bytes;
         result.data = data;
         return result;
     }
 
-    public static <T> MResult build( T data) {
-        MResult result = new MResult();
+    public static <T> MResult<T> build(T data) {
+        MResult<T> result = new MResult<>();
         result.data = data;
         return result;
     }
