@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CustomArrayHandleAllConverter implements MConverter<Integer[]> {
     @Override
-    public MResult<Integer[]> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object fieldObj, Object rootObj) {
+    public MResult<Integer[]> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<Integer[]> clz, Object fieldObj, Object rootObj) {
         Integer[] res = new Integer[3];
         res[0] = (Integer.valueOf( fullBytes[nextReadIndex]));
         res[1] = (Integer.valueOf( fullBytes[nextReadIndex + 1]));
