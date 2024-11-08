@@ -199,7 +199,7 @@ public class FieldParser {
             }
         }
 
-        MConverter mConverter = null;
+        MConverter<?> mConverter = null;
         try {
             mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
         } catch (IllegalAccessException ae) {

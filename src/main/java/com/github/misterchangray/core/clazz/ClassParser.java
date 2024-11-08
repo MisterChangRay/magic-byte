@@ -4,7 +4,6 @@ package com.github.misterchangray.core.clazz;
 import com.github.misterchangray.core.annotation.MagicClass;
 import com.github.misterchangray.core.annotation.MagicConverter;
 import com.github.misterchangray.core.enums.TypeEnum;
-import com.github.misterchangray.core.exception.InvalidParameterException;
 import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.util.AnnotationUtil;
 import com.github.misterchangray.core.util.ExceptionUtil;
@@ -76,7 +75,7 @@ public class ClassParser {
     private void linkCustomConverter(ClassMetaInfo classMetaInfo, Class<?> clazz) {
         MagicConverter magicConverter = AnnotationUtil.getMagicClassConverterAnnotation(clazz);
         if(Objects.nonNull(magicConverter)) {
-            MConverter mConverter = null;
+            MConverter<?> mConverter = null;
             try {
                 mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
             } catch (IllegalAccessException ae) {
