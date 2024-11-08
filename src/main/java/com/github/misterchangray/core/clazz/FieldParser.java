@@ -162,7 +162,7 @@ public class FieldParser {
         }
 
         if(Objects.nonNull(fieldMetaInfo.getCustomConverter()) &&
-                !fieldMetaInfo.getCustomConverter().isFixsize()) {
+                !fieldMetaInfo.getCustomConverter().isFixSize()) {
             fieldMetaInfo.setElementBytes(1);
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);

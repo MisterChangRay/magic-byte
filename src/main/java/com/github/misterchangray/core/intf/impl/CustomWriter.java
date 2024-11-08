@@ -29,7 +29,7 @@ public class CustomWriter extends MWriter {
         CustomConverterInfo customConverter = this.fieldMetaInfo.getCustomConverter();
 
         byte[] unpack = customConverter.getConverter().unpack(val, customConverter.getAttachParams(), buffer.getPackObj());
-        int byteLen = customConverter.isFixsize() ? customConverter.getFixSize() : unpack.length;
+        int byteLen = customConverter.isFixSize() ? customConverter.getFixSize() : unpack.length;
 
         // direct write fill byte if the value is null
         byte[] data = new byte[byteLen];

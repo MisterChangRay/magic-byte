@@ -34,7 +34,7 @@ public class CustomConverterInfo {
         this.handleCollection = handleCollection;
     }
 
-    public boolean isFixsize() {
+    public boolean isFixSize() {
         return this.fixSize >= 0;
     }
 

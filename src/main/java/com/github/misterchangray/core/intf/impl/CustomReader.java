@@ -38,13 +38,13 @@ public class CustomReader extends MReader {
 
         MResult pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams(), this.fieldMetaInfo.getClazz(),obj, buffer.getPackObj());
 
-        if((Objects.isNull(pack) || Objects.isNull(pack.getBytes())) && !converterInfo.isFixsize()) {
+        if ((Objects.isNull(pack) || Objects.isNull(pack.getBytes())) && !converterInfo.isFixSize()) {
             throw new InvalidLengthException(null,
                     "you should return actually read bytes length when you not set fixSize property, at: " + converter.getClass().getTypeName());
         }
 
         Integer length = pack.getBytes();
-        if(Objects.nonNull(converter) && converterInfo.isFixsize()) {
+        if (Objects.nonNull(converter) && converterInfo.isFixSize()) {
             length = converterInfo.getFixSize();
         }
         int newPosition = buffer.position() + length;
