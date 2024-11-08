@@ -7,7 +7,7 @@ import com.github.misterchangray.core.enums.TimestampFormatter;
 import java.util.Date;
 
 @MagicClass
-public class Book {
+public class Book implements IBook {
     @MagicField(order = 1)
     private int id;
     @MagicField(order = 2, timestampFormat = TimestampFormatter.TO_TIMESTAMP_SECONDS)
