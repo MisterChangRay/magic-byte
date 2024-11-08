@@ -133,7 +133,7 @@ public class MagicByte {
         res.put(data);
         res.position(0);
 
-        Object o = packer.packObject(res, clazz, checker);
+        T o = packer.packObject(res, clazz, checker);
         return MResult.build(res.position(), o);
     }
 
