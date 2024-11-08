@@ -181,7 +181,7 @@ public class FieldParser {
         MagicConverter magicConverter = AnnotationUtil.getMagicFieldConverterAnnotation(field);
         if(Objects.isNull(magicConverter)) return;
 
-        Class clazz = field.getType();
+        Class<?> clazz = field.getType();
         if(TypeManager.isCollection(TypeManager.getType(clazz))) {
             fieldMetaInfo.getGenericsField().setType(TypeEnum.CUSTOM);
             fieldMetaInfo.getGenericsField().setWriter(TypeManager.newWriter(fieldMetaInfo.getGenericsField()));
