@@ -1,15 +1,13 @@
 package com.github.misterchangray.core.intf.impl;
 
+import com.github.misterchangray.core.clazz.CustomConverterInfo;
 import com.github.misterchangray.core.clazz.FieldMetaInfo;
 import com.github.misterchangray.core.clazz.MResult;
-import com.github.misterchangray.core.clazz.CustomConverterInfo;
-import com.github.misterchangray.core.clazz.TypeManager;
 import com.github.misterchangray.core.exception.InvalidLengthException;
 import com.github.misterchangray.core.intf.MConverter;
 import com.github.misterchangray.core.intf.MReader;
 import com.github.misterchangray.core.util.DynamicByteBuffer;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
 /**
@@ -36,7 +34,7 @@ public class CustomReader extends MReader {
         CustomConverterInfo converterInfo = this.fieldMetaInfo.getCustomConverter();
         MConverter converter = converterInfo.getConverter();
 
-        MResult pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams(), this.fieldMetaInfo.getClazz(),obj, buffer.getPackObj());
+        MResult<?> pack = converter.pack(buffer.position(), buffer.bytes(), converterInfo.getAttachParams(), this.fieldMetaInfo.getClazz(), obj, buffer.getPackObj());
 
         if ((Objects.isNull(pack) || Objects.isNull(pack.getBytes())) && !converterInfo.isFixSize()) {
             throw new InvalidLengthException(null,
