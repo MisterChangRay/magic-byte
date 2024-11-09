@@ -8,11 +8,11 @@ import java.util.List;
 
 public class CustomListHandleAllConverter  implements MConverter<List<Integer>> {
     @Override
-    public MResult<List<Integer>> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object fieldObj, Object rootObj) {
+    public MResult<List<Integer>> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<List<Integer>> clz, Object fieldObj, Object rootObj) {
         List<Integer> res = new ArrayList<>();
-        res.add(Integer.valueOf( fullBytes[nextReadIndex]));
-        res.add(Integer.valueOf( fullBytes[nextReadIndex + 1]));
-        res.add(Integer.valueOf( fullBytes[nextReadIndex + 2]));
+        res.add((int) fullBytes[nextReadIndex]);
+        res.add((int) fullBytes[nextReadIndex + 1]);
+        res.add((int) fullBytes[nextReadIndex + 2]);
 
 
         return MResult.build(3, res);

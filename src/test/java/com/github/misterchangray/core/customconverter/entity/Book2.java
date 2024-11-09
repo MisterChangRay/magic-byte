@@ -1,12 +1,8 @@
 package com.github.misterchangray.core.customconverter.entity;
 
-import com.github.misterchangray.core.annotation.MagicClass;
-import com.github.misterchangray.core.annotation.MagicField;
-import com.github.misterchangray.core.enums.TimestampFormatter;
-
 import java.util.Date;
 
-public class Book2 {
+public class Book2 implements IBook {
     private int id;
     private Date createDate;
 

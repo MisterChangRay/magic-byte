@@ -11,7 +11,7 @@ public      class BConvert implements MConverter<String> {
     }
 
     @Override
-    public MResult<String> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj, Object root) {
+    public MResult<String> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<String> clz, Object obj, Object root) {
         A a = (A) obj;
         if (a.getId() == 1) {
             return MResult.build(1,  new String(Arrays.copyOfRange(fullBytes, nextReadIndex, nextReadIndex + 1)));

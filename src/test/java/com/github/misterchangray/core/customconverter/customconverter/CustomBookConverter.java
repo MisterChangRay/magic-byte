@@ -3,15 +3,14 @@ package com.github.misterchangray.core.customconverter.customconverter;
 import com.github.misterchangray.core.clazz.MResult;
 import com.github.misterchangray.core.customconverter.entity.Book;
 import com.github.misterchangray.core.customconverter.entity.Book2;
-import com.github.misterchangray.core.customconverter.entity.Staff1;
+import com.github.misterchangray.core.customconverter.entity.IBook;
 import com.github.misterchangray.core.intf.MConverter;
 
-import java.math.BigInteger;
 import java.util.Date;
 
-public class CustomBookConverter implements MConverter<Book> {
+public class CustomBookConverter implements MConverter<IBook> {
     @Override
-    public MResult<Book> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj, Object root) {
+    public MResult<IBook> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<IBook> clz, Object obj, Object root) {
         if(attachParams[0].equals("1")) {
             Book book = new Book();
             book.setCreateDate(new Date());
@@ -43,7 +42,7 @@ public class CustomBookConverter implements MConverter<Book> {
     }
 
     @Override
-    public byte[] unpack(Book object, String[] attachParams, Object rootObj) {
+    public byte[] unpack(IBook object, String[] attachParams, Object rootObj) {
         if(attachParams[0].equals("14")) {
 
             return new byte[] {

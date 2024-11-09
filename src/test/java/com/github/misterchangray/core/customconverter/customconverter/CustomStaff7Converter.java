@@ -8,7 +8,7 @@ import com.github.misterchangray.core.intf.MConverter;
 public  class CustomStaff7Converter implements MConverter<Staff7> {
 
     @Override
-    public MResult<Staff7> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object obj, Object root) {
+    public MResult<Staff7> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<Staff7> clz, Object obj, Object root) {
         Staff7 staff7 = new Staff7();
         staff7.setId(fullBytes[0]);
         staff7.setLength(fullBytes[1]);

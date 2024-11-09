@@ -55,7 +55,7 @@ public class CustomClassA {
 
 
         @Override
-        public MResult<TypeEnum> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class clz, Object fieldObj, Object rootObj) {
+        public MResult<TypeEnum> pack(int nextReadIndex, byte[] fullBytes, String[] attachParams, Class<TypeEnum> clz, Object fieldObj, Object rootObj) {
             return MResult.build(1, fullBytes[nextReadIndex] == 0 ? TypeEnum.A : TypeEnum.B);
         }
 

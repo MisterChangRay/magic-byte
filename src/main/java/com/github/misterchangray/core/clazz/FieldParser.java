@@ -162,7 +162,7 @@ public class FieldParser {
         }
 
         if(Objects.nonNull(fieldMetaInfo.getCustomConverter()) &&
-                !fieldMetaInfo.getCustomConverter().isFixsize()) {
+                !fieldMetaInfo.getCustomConverter().isFixSize()) {
             fieldMetaInfo.setElementBytes(1);
             fieldMetaInfo.setDynamic(true);
             classMetaInfo.setDynamic(true);
@@ -181,7 +181,7 @@ public class FieldParser {
         MagicConverter magicConverter = AnnotationUtil.getMagicFieldConverterAnnotation(field);
         if(Objects.isNull(magicConverter)) return;
 
-        Class clazz = field.getType();
+        Class<?> clazz = field.getType();
         if(TypeManager.isCollection(TypeManager.getType(clazz))) {
             fieldMetaInfo.getGenericsField().setType(TypeEnum.CUSTOM);
             fieldMetaInfo.getGenericsField().setWriter(TypeManager.newWriter(fieldMetaInfo.getGenericsField()));
@@ -199,7 +199,7 @@ public class FieldParser {
             }
         }
 
-        MConverter mConverter = null;
+        MConverter<?> mConverter = null;
         try {
             mConverter = magicConverter.converter().getDeclaredConstructor().newInstance();
         } catch (IllegalAccessException ae) {
